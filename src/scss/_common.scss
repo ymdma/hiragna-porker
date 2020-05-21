@@ -1,0 +1,51 @@
+content{
+  @include flex--center;
+}
+
+.p-start-button{
+  margin: 10px 0 10px 0 ;
+  background: #3995ae;
+}
+
+
+// プレーヤーの切り替えボタン
+// (ステートの表示)
+.l-turn-state{
+  position: absolute;
+  top: 100px;
+  left: auto;
+  right: auto;
+  background: $basePinkColor;
+  &:after{
+    content: "プレイヤー１";
+  }
+  &[aria-expanded="true"]{
+    background: $baseBlueColor;
+  }
+  &[aria-expanded="true"]:after{
+    content:"プレイヤー２のターン";
+  }
+}
+
+// information  ***間借り中***
+.l-information{
+  width: 500px;
+  height: 50px;
+  margin: 10px 0 0;
+  @include flex--center($text:center);
+  @include with-border();
+  @include mainText($color:#000000);
+}
+
+.is-active{
+  display: block !important;
+}
+
+.is-hidden{
+  display: none !important;
+}
+
+.js_handCards > .is-select{
+  color: red;
+  background: yellow;
+}

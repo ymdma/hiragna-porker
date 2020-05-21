@@ -1,0 +1,106 @@
+// // Utility // //
+
+
+
+// // flexBoxSet
+
+// space-between
+@mixin flex--space-between{
+display: flex;
+justify-content: space-between;
+align-items: center;
+}
+// center
+@mixin flex--center(
+  $text: left
+){
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: $text;
+}
+
+
+// // borderSet
+
+// border__なしの場合
+@mixin no-border {
+  border: none;
+  box-shadow: 1 1 3px 1px $baseBlackColor;
+}
+// border__ありの場合
+@mixin with-border (
+  $type: solid,
+  $color: $baseBlackColor,
+  $width: 2px
+){
+  border: $type $color $width;
+  box-shadow: 1 1 3px 1px $baseBlackColor;
+}
+
+// // TEXT
+
+// MAIN-SET
+@mixin mainText (
+  $color: $baseBlackColor,
+  $size: $medium,
+  $weight: 400
+){
+  color: $color;
+  font-size: $size;
+  font-weight: $weight;
+  line-height: $medium;
+  letter-spacing: 0.9px;
+}
+@mixin strongText (
+  $color: $baseBlackColor,
+  $size: $large,
+  $weight: 600
+){
+  color: $color;
+  font-size: $size;
+  font-weight: $weight;
+  line-height: $large;
+  letter-spacing: 0.9px;
+}
+
+// FONT-SIZE
+$large: 40px;
+$medium: 16px;
+$small: 12px;
+
+// FONT-FAMILY
+//のちほど
+
+
+// SortWindow Animation
+.sortWindowAppearance{
+  animation-name: sort-window-height;
+  animation-duration: 3s;
+  animation-iteration-count: 1;
+  animation-fill-mode: forwards;
+}
+
+@keyframes sort-window-height {
+  0%   {top: 100%;}
+  20%  {top: 20%;}
+  50%  {top: 0%;}
+  85%  {top: 30%;}
+  90%  {top: 0%;}
+  95%  {top: 20%;}
+  100% {top: 0%;}
+
+}
+
+// p[role="title"]
+@mixin role-title() {
+  width: fit-content;
+  height: 40px;
+  margin: 0 0 40px 0;
+  @include strongText(
+    $color: rgb(0, 18, 32),
+    $size: $large - 3px
+    );
+    text-shadow: 1.5px 1.5px 1px #dbdbdbdd;
+}

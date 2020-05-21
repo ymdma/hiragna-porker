@@ -1,0 +1,34 @@
+$handCardWidth:40px;
+$handCardHeight:60px;
+$stockCardWidth:60px;
+$stockCardHeight:80px;
+$largeCardWidth:90px;
+$largeCardHeight:120px;
+
+@mixin card(
+  // $card-margin,
+  $card-w:$handCardWidth,
+  $card-h:$handCardHeight
+)
+{
+  width: $card-w;
+  height: $card-h;
+  // margin: $card-margin;
+  background: $baseWhiteColor;
+  // background: transparent;
+
+}
+
+@mixin card__large(
+  // $card-margin,
+  $card-w:$largeCardWidth,
+  $card-h:$largeCardHeight
+)
+{
+  width: $card-w;
+  height: $card-h;
+  // margin: $card-margin;
+  background: $baseWhiteColor;
+  // background: transparent;
+
+}

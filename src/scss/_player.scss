@@ -1,0 +1,105 @@
+// playerのコンポーネント化
+@mixin player(
+  $bgcolor: #777
+){
+  width: 700px;
+  height: 140px;
+  margin: 10px 0 0 0; //仮
+  background: $bgcolor;
+  @include with-border();
+}
+
+// PLAYER 1 設定
+.l-player-field{
+  @include player(
+    $bgcolor: #aaa
+  );
+  .p-player{
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+  }
+
+}
+
+// LEFT SIDE
+.p-player__left{
+  width: 100px;
+  height: 120px;
+  padding: 0 0 10px 0 ;
+  margin: 0 10px 0 0 ;
+  background: #fff;
+  @include with-border();
+  figcaption{
+    text-align: center;
+    @include mainText (
+      $color: $baseBlackColor,
+      $size: $medium,
+      $weight: 600
+      );
+    font-family: "Nico Moji";
+  }
+  figure{
+    width: inherit;
+    margin: 0;
+    img{
+      width: inherit;
+    }
+  }
+}
+
+// RIGHT SIDE
+.p-player__right{
+  width: 500px;
+  height: 120px;
+  background: #ded5ac;
+  display: flex;
+  flex-direction: column;
+
+  .c-players-hand{
+    order:2;
+    width: calc(inherit - 80px);
+    height: 80px;
+    padding: 0 40px 0;
+    background: #f2e6b1;
+  }
+  .c-player__menu{
+    order: 1;
+    width: inherit;
+    height: 40px;
+    display: flex;
+    background: rgb(203, 128, 128);
+    button{
+      margin: auto;
+      display: block;
+    }
+  }
+}
+    //詳細度下げるためツリーから独立
+    .c-hand__list{
+      width: inherit;
+      height: inherit;
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
+      li{
+        @include card(
+          $card-w:$handCardWidth,
+          $card-h:$handCardHeight
+        );
+        padding: 8px 0;
+        @include with-border();
+        @include strongText;
+      };
+      cursor: pointer;
+    }
+
+
+
+
+// PLAYER 2 設定
+
+
+

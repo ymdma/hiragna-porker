@@ -1,0 +1,53 @@
+// ゲームテーブル
+
+
+.l-table{
+  width: 500px;
+  height: 300px;
+  margin: 50px 0 0 0;
+  @include no-border();
+  background: #077;
+  @include flex--center(
+    $text: center
+    );
+  z-index: -10;
+
+}
+
+////// これをコンポーネント化する！
+.c-stock{
+  width: 60px;
+  height: 80px;
+  padding: 17px 0;
+  background: $baseWhiteColor;
+  // background: transparent;
+  @include with-border();
+  @include strongText;
+  position: relative;
+
+
+  // カードの重なり部分
+  &:before{
+    content:"";
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: -10px;
+    left: -10px;
+    background: $baseWhiteColor;
+    @include with-border();
+    z-index: -2;
+  }
+  &:after{
+    content:"";
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: -6px;
+    left: -6px;
+    background: $baseWhiteColor;
+    @include with-border();
+    z-index: -1;
+
+  }
+}

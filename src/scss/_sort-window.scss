@@ -1,0 +1,138 @@
+.l-sort-window{
+  position: absolute;
+  top: 100%;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  @include flex__center($text: center);
+  @include with-border();
+  background:  #777777ee;
+  [role="title"]{
+    @include role-title();
+  }
+  button{
+    margin: 40px 0 0 0;
+  }
+}
+
+.c-hand__sort-window{
+  width: 100%;
+  height: 124px;
+  padding: 0 18%;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  li{
+    @include card__large(
+      $card-w:$largeCardWidth,
+      $card-h:$largeCardHeight
+    );
+    padding:  40px 0;
+    margin: auto 0;
+    @include with-border();
+    @include strongText($size: $large + 5px);
+    text-align: center;
+    cursor: pointer;
+  }
+}
+
+.c-arrow{
+  margin-block-start: 20px;
+  margin-block-end: 20px;
+  margin-inline-start: 0;
+  margin-inline-end: 0;
+
+  svg{
+    width:100px;
+    height:100px;
+
+    fill: #6eb2e0;
+  }
+
+}
+
+// Description-Window
+
+.l-description-window{
+  position: absolute;
+  top: 200%;
+  left: 0;
+  width: 100%;
+  height: 100%;
+
+  @include flex__center($text: center);
+  @include with-border();
+  background:  #333333cc;
+  [role="title"]{
+    @include role-title();
+  }
+  textarea{
+    width: 64%;
+    margin: 0 18%;
+    // height: auto;
+  }
+  .p-desc-toolbar{
+    height: 30px;
+    position: relative;
+    top: 0;
+    left: 0;
+    display: flex;
+    align-items:center ;
+  }
+  .c-sample-display{
+    width: 100%;
+  }
+  ul{
+    margin: 20px 0;
+    background: #f2e6b1;
+  }
+  aside{
+    height:fit-content;
+    min-height:3em;
+    width: 100%;
+    padding: 0 18%;
+    margin: 0 0 20px;
+    background: #f2e6b1;
+    font-size: 20px;
+    overflow: hidden;
+    word-wrap: break-word;
+  }
+}
+
+
+// cardOpenWindow
+.l-open-window{
+  position: absolute;
+  top: 300%;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  // padding: 0 18%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  align-items: center;
+
+  figcaption{
+    text-align: center;
+    @include mainText (
+      $color: $baseBlackColor,
+      $size: $medium,
+      $weight: 600
+      );
+    font-family: "Nico Moji";
+  }
+  .p-avatar{
+    position: relative;
+    width: 100px;
+    height: 120px;
+    padding: 0 0 10px 0 ;
+    margin: 0 10px 0 0 ;
+    background: #fff;
+    @include with-border();
+    img{
+      width: inherit;
+    }
+  }
+
+}

@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="/scss/style.css">
+  <link href="https://fonts.googleapis.com/earlyaccess/nicomoji.css" rel="stylesheet">
+  <script src="js/main.js"></script>
+  <!DOCTYPE html>
+  <html lang="ja">
+  <title>hiragana-porker</title>
+</head>
+
+<body>
+  <!-- <button id="btn"></button> -->
+  <content>
+
+    <!-- HEADER -->
+    <header>
+      <h1>
+        ひらがな <span>D</span><span>E</span> ポーカー
+        <div class="star" aria-hidden="true"></div>
+      </h1>
+      <!-- __G-NAV -->
+      <nav>
+        ここにGナビゲーション
+      </nav>
+    </header>
+
+    <!-- START BUTTON -->
+    <button id="startBtn" class="p-start-button">
+    ゲームスタート
+    </button>
+
+    <!-- GAME TABLE -->
+    <section class="l-table">
+      <p id="stockCards" class="c-stock"></p>
+    </section>
+
+    <!-- INFORMATION -->
+    <section id="information" class="l-information">
+      <p></p>
+    </section>
+
+    <!-- PLAYER FIELD -->
+    <section id="playerField" class="l-player-field">
+      <!-- PLAYER 1 -->
+      <div id="player1" class="p-player">
+        <div class="p-player__left">
+          <figure class="p-avatar">
+            <figcaption id="playerName" ></figcaption>
+            <img id='avatarImg' class="is-hidden" src="" alt="avatar_image">
+          </figure>
+        </div>
+        <div class="p-player__right">
+          <div class="c-players-hand">
+            <!-- ここはチェックボックス？セレクトボックス？ -->
+            <ul id="player1HandCards" class="js_handCards c-hand__list">
+              <li class="no1" role="button" tabindex="0"></li>
+              <li class="no2" role="button" tabindex="0"></li>
+              <li class="no3" role="button" tabindex="0"></li>
+              <li class="no4" role="button" tabindex="0"></li>
+              <li class="no5" role="button" tabindex="0"></li>
+            </ul>
+            <!-- <select multiple id="player1HandCards" class="js_handCards hand__list" autofocus="false">
+              <option class="no1" tabindex="0" value=""></option>
+              <option class="no2" tabindex="0" value=""></option>
+              <option class="no3" tabindex="0" value=""></option>
+              <option class="no4" tabindex="0" value=""></option>
+              <option class="no5" tabindex="0" value=""></option>
+            </select> -->
+            <ul id="player2HandCards" class="c-hand__list is-hidden">
+              <li></li>
+              <li></li>
+              <li></li>
+              <li></li>
+              <li></li>
+            </ul>
+            <!-- <form id="player2HandCards" class="hand__list is-hidden">
+              <input type="checkbox" name="cards" value="">
+              <input type="checkbox" name="cards" value="">
+              <input type="checkbox" name="cards" value="">
+              <input type="checkbox" name="cards" value="">
+              <input type="checkbox" name="cards" value="">
+            </form> -->
+          </div>
+          <div class="c-player__menu">
+            <button id="changeStartBtn" >手札の交換を始める</button>
+            <button id="changeStartBtn2" class="is-hidden">もう１枚交換する</button>
+            <button id="changeDoneBtn" class="is-hidden" disabled>交換する</button>
+            <button id="changeSkipBtn" class="is-hidden">交換を終える</button>
+            <button id="sortWindowBtn" class="is-hidden">並び替える</button>
+            <button id="changeTurnBtn">次のプレーヤーへ</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="turnState" class="l-turn-state">
+      <p></p>
+    </section>
+
+    <section id="sortWindow" class="l-sort-window">
+      <p role="title">
+        おもしろい言葉に並び替えよう！
+      </p>
+      <ul id="player1SortBefore" class="c-hand__sort-window">
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+      </ul>
+      <figure class="c-arrow">
+        <svg width="100" height="100">
+          <path d="M25 0 L75 0 L75 50 L100 50 L50 100 L0 50 L25 50 Z" />
+        </svg>
+      </figure>
+      <ul id="player1SortAfter" class="c-hand__sort-window">
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+      </ul>
+      <div>
+        <button id="sortResetBtn">もう一回並べ換える</button>
+        <button id="descriptionBtn">次に進む</button>
+      </div>
+    </section>
+
+    <section id="description" class="l-description-window">
+      <p role="title">説明書きを付けよう！</p>
+      <div id="descriptionDisplayAreaA" class="c-sample-display">
+        <div></div>
+        <aside id="descriptionDisplayAreaB">&nbsp;</aside>
+      </div>
+      <textarea id="descriptionWriteArea" rows="4" col="40" maxlength="140" preventScroll="true"></textarea>
+      <div class="p-desc-toolbar">
+        <button id="styleLeft">⬅️</button>
+        <button id="styleCenter">●</button>
+        <!-- <button id="lineBreak">[改行]</button> -->
+        <button id="styleLarge">[L]</button>
+        <button id="styleMedium">[M]</button>
+        <button id="styleSmall">[S]</button>
+        <!-- <button id="styleColor">[色]</button> -->
+        <input type="color" id="styleColorPicker" value="#ff4124">
+      </div>
+      <div>
+        <button id="backToDescriptionBtn">並び替えに戻る</button>
+        <button id="finishBtn">ファイナルアンサーする</button>
+      </div>
+      <div id="finishModal" class="c-modal is-hidden">
+        <p>終わってもよいかの？</p>
+        <button id="finishModalDone">はい</button>
+        <button id="finishModalCancel">いいえ</button>
+      </div>
+    </section>
+    <section id="cardOpen" class="l-open-window">
+      <div>P1</div>
+      <figure class="p-avatar">
+        <img src="./image/tori.png"  class="p-p1-avatar" alt="player1_avatar">
+      </figure>
+      <figcaption>Player1</figcaption>
+      <div>VS</div>
+      <div>P2</div>
+      <figure class="p-avatar">
+        <img src="./image/inu.png"class="p-p2-avatar" alt="player2_avatar">
+      </figure>
+      <figcaption>Player2</figcaption>
+      <div>
+        どちらが勝ったと思いますか？
+      </div>
+
+    </section>
+  </content>
+</body>
+</html>
