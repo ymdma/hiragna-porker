@@ -31,7 +31,24 @@
     <button id="startBtn" class="p-start-button">
     ゲームスタート
     </button>
-
+    <div id="firstAttackSelectModal" class="c-modal__first is-hidden">
+      <div class="modal-greenback">
+        <p>どちらが先にプレイする？</p>
+        <!-- <button id="toriFirst" class="c-first-btn__tori"></button>
+        <button id="inuFirst" class="c-first-btn__inu"></button> -->
+        <div>
+          <p id="toriFirst" class="c-first-btn__tori">
+            <img src="./image/tori.png" alt="">
+          </p>
+          <p class="c-first-btn__vs">
+            <img src="./image/vs.png" alt="">
+          </p>
+          <p id="inuFirst" class="c-first-btn__inu">
+            <img src="./image/inu.png" alt="">
+          </p>
+        </div>
+      </div>
+    </div>
     <!-- GAME TABLE -->
     <section class="l-table">
       <p id="stockCards" class="c-stock"></p>
@@ -55,7 +72,8 @@
         <div class="p-player__right">
           <div class="c-players-hand">
             <!-- ここはチェックボックス？セレクトボックス？ -->
-            <ul id="player1HandCards" class="js_handCards c-hand__list">
+            <ul id="currentPlayerHandCards" class="js_handCards c-hand__list">
+            <!-- <ul id="player1HandCards" class="js_handCards c-hand__list"> -->
               <li class="no1" role="button" tabindex="0"></li>
               <li class="no2" role="button" tabindex="0"></li>
               <li class="no3" role="button" tabindex="0"></li>
@@ -128,7 +146,7 @@
         <button id="descriptionBtn">次に進む</button>
       </div>
     </section>
-
+    <section id="aaaaaa"></section>
     <section id="description" class="l-description-window">
       <p role="title">説明書きを付けよう！</p>
       <div id="descriptionDisplayAreaA" class="c-sample-display">

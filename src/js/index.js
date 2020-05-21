@@ -32,49 +32,48 @@ for(var i = cards.length - 1; i > 0; i--){
 }
 // console.log(cards)
 
-// 各プレーヤーの手札を準備
-// let player1Array =[ "ら","り","る","れ","ろ"] //表示確認用
-
-  //5項の空配列を用意　テスト用　消してよし
-// let player1 = new Array(5)
-// let player2Array = new Array(5)
-
 let player1Array = cards.slice(41,46);
 let player2Array = cards.slice(36,41);
 
+let firstPlayerArray = cards.slice(41,46);
+let secondPlayerArray = cards.slice(36,41);
+
 // ゲーム状態
-let gameState ={
+let gameState = {
   sortNow: false
 }
 
-// プレーヤーのオブジェクトを作成(プロトタイプはなし)
+// プレーヤー
 let player1 = {
-  name: 'Player1',
+  name: 'とり',
   avatar: './image/tori.png',
-  handCards: player1Array,
+  handCards: null,
   changesLeft: 4,
   myTurn: false,
   description: ''
 }
-
 let player2 = {
-  name: 'Player2',
+  name: 'いぬ',
   avatar: './image/inu.png',
-  handCards: player2Array,
+  handCards: null,
   changesLeft: 4,
   myTurn: false,
   description: ''
 }
-// *****「ゲームなう」の状態の判定を加える*****
-// 各ボタンを押せないようにする
-
-console.log(player1)
-console.log(player1.handCards)
-
-
+let currentPlayer = {
+  name: '',
+  player: player1,
+  sortNow: false,
+  changesLeft: 4,
+  avatar: '',
+  handCards: null,
+  description: '',
+  acted: false
+}
 
 document.addEventListener('DOMContentLoaded', () => {
-  setGame();
+  pushStartBtn();
+  // setCards();
   cardChange();
   playerChange();
   sortHandCards();
@@ -91,129 +90,180 @@ function toggleDisabled(target,val) {
   target.setAttribute('disabled', val);
 };
 
-
-
-// スタートボタン押した時に走るメソッド
-const setGame = () => {
+// 先攻プレーヤー(キャラ)の選択
+const pushStartBtn = () => {
   const startBtn = document.getElementById('startBtn');
-  const player1HandCards = document.getElementById('player1HandCards');
-  const player2HandCards = document.getElementById('player2HandCards');
-  const info = document.getElementById('information').children[0]
-
+  const toriFirst = document.getElementById('toriFirst');
+  const inuFirst = document.getElementById('inuFirst');
+  // スタートボタン押した時 → 先攻プレーヤーを選択
   startBtn.onclick = () => {
-    //スタートボタンを非活性に
-    startBtn.setAttribute('disabled', true)
-    // P1のターン開始
-    player1.myTurn = true;
-    // 名前とアバターのセッティング
-    
-    document.getElementById('playerName').innerHTML = 'とり'
-    document.getElementById('avatarImg').setAttribute('src', './image/tori.png')
-    // document.getElementById('avatarImg').style.opacity = '1'
-    isHidden(document.getElementById('avatarImg'))
-
-    // アナウンス
-    info.innerHTML = 'カードを交換して言葉を完成させよう！'
-
-    // 手札のセット
-    let numP1 = 0;
-    // player1.player1Array.forEach(function(i){
-    console.log(player1.myTurn)
-    player1.handCards.forEach(function(i){
-      player1HandCards.children[numP1].innerHTML = `${i}`
-      numP1++
-    });
-
-    let numP2 =0
-    player2.handCards.forEach(function(i){
-      player2HandCards.children[numP2].innerHTML = `${i}`
-      numP2++
-    });
+    const firstAttackSelectModal = document.getElementById('firstAttackSelectModal');
+    isHidden(firstAttackSelectModal)
+    // とり先
+    toriFirst.onclick = () =>{
+      setPlayerTori();
+      isHidden(firstAttackSelectModal)
+      // isHidden(startBtn)
+      startBtn.setAttribute('disabled', true)
+      // startBtn.style.opacity = "0"
+    }
+    // いぬ先
+    inuFirst.onclick = () =>{
+      setPlayerInu();
+      isHidden(firstAttackSelectModal)
+      // isHidden(startBtn)
+      startBtn.setAttribute('disabled', true)
+      // startBtn.style.opacity = "0"
+    }
+    // 閉じる用の記述あとで
+    // firstAttackSelectModal.onclick = () => {
+    //   console.log("aaa")
+    //   isHidden(firstAttackSelectModal)
+    // }
   }
+}
+
+// 先攻プレーヤーの選択で「とり先」
+const setPlayerTori = () => {
+  console.log("とり開始"),
+  // currentPlayerにデータをセット
+  currentPlayer.name = `${player1.name}`,
+  currentPlayer.player = player1,
+  currentPlayer.sortNow = false,
+  currentPlayer.changesLeft = 4,
+  currentPlayer.avatar = './image/tori.png',
+  currentPlayer.handCards = firstPlayerArray,
+  currentPlayer.description = '',
+  currentPlayer.acted = false
+
+  console.log(currentPlayer)
+
+  setDisplay();
+  setCards();
+}
+
+// 先攻プレーヤーの選択で「いぬ先」
+const setPlayerInu = () => {
+  console.log("いぬ開始")
+  // currentPlayerにデータをセット
+  currentPlayer.name = `${player2.name}`,
+  currentPlayer.player = player2,
+  currentPlayer.sortNow = false,
+  currentPlayer.changesLeft = 4,
+  currentPlayer.avatar = './image/inu.png',
+  currentPlayer.handCards = firstPlayerArray,
+  currentPlayer.description = '',
+  currentPlayer.acted = false
+
+  console.log(currentPlayer)
+
+  setDisplay();
+  setCards();
+}
+
+// プレーヤー操作部やアナウンスなどの表示
+const setDisplay = () => {
+  const info = document.getElementById('information').children[0]
+      // 名前とアバターを画面上に表示
+      document.getElementById('playerName').innerHTML = `${currentPlayer.name}`
+      document.getElementById('avatarImg').setAttribute('src',  `${currentPlayer.avatar}`)
+      isHidden(document.getElementById('avatarImg')) // ＊改善ポイント ここだけ隠しとくのはスマートじゃないと思う
+
+      // アナウンスの表示
+      info.innerHTML = 'カードを交換して言葉を完成させよう！'
+}
+
+// 手札のセット
+const setCards = () => {
+  const CP_HandCards = document.getElementById('currentPlayerHandCards');
+    let num = 0;
+    console.log(player1.myTurn)
+    currentPlayer.handCards.forEach(function(i){
+      CP_HandCards.children[num].innerHTML = `${i}`
+      num++
+    });
 };
 
+// 後何回交換できるかの表示
+// 未実装
 
 
-// カードの交換
+// カードの交換セクション
 const cardChange = () => {
-
-
-  // 後何回交換できるかの表示
-    // 未実装
 
   const changeDoneBtn = document.getElementById('changeDoneBtn');
   const changeSkipBtn = document.getElementById('changeSkipBtn');
-  const changeStartBtn2 = document.getElementById('changeStartBtn2');
+  const info = document.getElementById('information').children[0];
 
-  // // ****** P1のターンの場合 *****
-  
+  // 「手札の交換を始める」を押した時の表示の更新 (ボタン・アナウンス)
+  const setDisplay = () => {
+    isHidden(changeStartBtn); // [交換開始]ボタンを消す
+    isHidden(changeDoneBtn); // [交換する]ボタンを表示
+    isHidden(changeSkipBtn); // [交換を終える]ボタンを表示
+    // アナウンスの変更
+    info.innerHTML = 'カードを決めたら「交換する」ボタンを押そう'
+  }
+
+
   // 「手札の交換を始める」ボタン
   changeStartBtn.onclick = () => {
-    if ( player1.myTurn === true ) {
-      const info = document.getElementById('information').children[0] // for info
-      // 交換開始(this)ボタンを消す
-      isHidden(changeStartBtn);
-      // 交換するボタン(changeDoneBtn)・スキップボタンを表示
-      isHidden(changeDoneBtn)
-      isHidden(changeSkipBtn)
-      // アナウンス
-      info.innerHTML = 'カードを決めたら「交換する」ボタンを押そう'
-      // ”手札を”クリックした時に、色を変えて、クラスを付与する
-        // 要素をHTMLCollectionに
-      let p1SelectField = document.getElementById('player1HandCards').getElementsByTagName('li')
-        // HTMLCollectionを配列化
-      let p1HandsSelect = Array.prototype.slice.call(p1SelectField)
 
-      console.log(p1HandsSelect[0].classList)
+    setDisplay(); //表示
 
-      // クリックしたら is-selectクラスを付与する
-      p1HandsSelect.forEach(ele =>
+    // 要素をHTMLCollectionに
+    const CP_HandCards_Elem_li = document.getElementById('currentPlayerHandCards').getElementsByTagName('li')
+    // HTMLCollectionを配列化
+    let CP_handCardsArray = Array.prototype.slice.call(CP_HandCards_Elem_li)
+    // console.log(CP_handCardsArray[0].classList)
 
-        ele.onclick = () => {
-          // console.log(ele.classList)
-          isSelect(ele)
+    // クリックしたら is-selectクラスを付与する
+    CP_handCardsArray.forEach (ele =>
+      ele.onclick = () => {
+        // console.log(ele.classList)
+        // ★注意★ 変数化するとなぜがカウントが１つ（+に）ズレる。
+        // let selLength = document.querySelectorAll('.js_handCards > .is-select').length
 
-          // 1枚ずつ交換パターン
-          if( document.querySelectorAll('.js_handCards > .is-select').length === 1
-            ) {
-            changeDoneBtn.removeAttribute('disabled') //toggleDisabledが使えなかったので
-            info.innerHTML = 'カードを決めたら「交換する」ボタンを押そう'
-            console.log("カード選択数 １ (OK)")
-          }
-          else if( document.querySelectorAll('.js_handCards > .is-select').length === 0
-          ) {
-            changeDoneBtn.setAttribute('disabled',true)
-            info.innerHTML = '交換するカードを選ぼう！'
-            console.log("カード未選択")
-          }
-          else{
-            changeDoneBtn.setAttribute('disabled',true)
-            info.innerHTML = '選ぶのは一枚だけだよ！'
-            console.log("カード選択数２〜５")
-          }
+        // クラスの付与
+        isSelect(ele)
+
+        // 残り交換数に応じた ”ボタンの表示・非表示・アナウンス” の振り分け
+        if( document.querySelectorAll('.js_handCards > .is-select').length === 1 ) {
+          changeDoneBtn.removeAttribute('disabled') //toggleDisabledが使えないため
+          info.innerHTML = 'カードを決めたら「交換する」ボタンを押そう'
+          console.log("カード選択数 １ (OK)")
         }
-      )
-      // changeLeftが残り○枚(4-1)（「且つ、交換したいカードが選択済み」という条件は、querySelectorにライブ性がないので含まず。）
-
-        if (player1.changesLeft === 4) {
-          cardChangeOnclickDone(); //処理を次の関数へ受け渡す
+        else if( document.querySelectorAll('.js_handCards > .is-select').length === 0 ) {
+          changeDoneBtn.setAttribute('disabled',true)
+          info.innerHTML = '交換するカードを選ぼう！'
+          console.log("カード未選択")
         }
+        else{
+          changeDoneBtn.setAttribute('disabled',true)
+          info.innerHTML = '選ぶのは一枚だけだよ！'
+          console.log("カード選択数２〜５")
+        }
+      }
+    )
+    // changeLeftが残り○枚(4-1)（「且つ、交換したいカードが選択済み」という条件は、querySelectorにライブ性がないので含まず。）
+
+    if (player1.changesLeft === 4) {
+      cardChangeDone(); //処理を次の関数へ受け渡す
+    }
+  }
+
+}
 
 
-    } // if P1 myTurn=true
+//   // ******* [交換する] を押した時の処理 *******
+const cardChangeDone = () => {
+  const changeDoneBtn = document.getElementById('changeDoneBtn');
+  const changeSkipBtn = document.getElementById('changeSkipBtn');
+  const changeStartBtn2 = document.getElementById('changeStartBtn2');
+  const info = document.getElementById('information').children[0]
 
-    // ＊＊＊＊＊ここに P2ターン時の記述 ＊＊＊＊＊
-    // if ( player2.myTurn === true ){}
-
-  } // changeStartBtn.onclick
-
-
-  // ******* [交換する] を押した時の処理 *******
-  function cardChangeOnclickDone() {
-    const info = document.getElementById('information').children[0] // for info
-    // [選んだカードを交換する]ボタン を押した時
+    // 選んだカードを[交換する] ボタンを押した時
     changeDoneBtn.onclick = () => {
-      console.log("cardChangeOnclickDone発動。残り交換数⤵︎")
+      console.log("cardChangeDone発動。残り交換数⤵︎")
       console.log(player1.changesLeft)
 
       // *****選択したカードを交換する関数******
@@ -230,62 +280,64 @@ const cardChange = () => {
       };
       // Player1のターンの場合
       // 山札から引くカードをダブらないようにする為の条件分岐
-      switch (player1.changesLeft) {
+      switch (currentPlayer.changesLeft) {
         case 4:
           console.log('case4: 現在のプレイヤーの状態⤵︎')
-          console.log(player1)
-          if ( player1.myTurn = true ) {
+          console.log(currentPlayer)
+
+          // 各プレーヤーが山札からランダムに引くロジック
+          if ( currentPlayer.name === 'Tori' ) {
             removeAndAdd(0)
           }
-          else if ( player2.myTurn === true ) {
+          else if ( currentPlayer.name === 'Inu' ) {
             removeAndAdd(4)
           }
-          player1.changesLeft = 3;
-          // 「選んでね」のインフォメーションを出す。
+          currentPlayer.changesLeft = 3;
+          // 「選んでね」のアナウンスを出す。
           info.innerHTML = '交換したいカードを選ぼう！ あと４回！'
           break;
 
         case 3:
           console.log('SWITCH文内 LEFT:3')
           info.innerHTML = "交換したいカードを選ぼう！ あと３回！"
-          if ( player1.myTurn === true ) {
+          if ( currentPlayer.name === 'Tori' ) {
             removeAndAdd(1)
           }
-          else if ( player2.myTurn === true ) {
+          else if ( currentPlayer.name === 'Inu' ) {
             removeAndAdd(5)
           }
-          player1.changesLeft = 2;
+          currentPlayer.changesLeft = 2;
           break;
 
         case 2:
           console.log('SWITCH文内 LEFT:2')
           info.innerHTML = "交換したいカードを選ぼう！ あと２回！"
           // moreCardChangeOnclickDone()
-          if ( player1.myTurn === true ) {
+          if ( currentPlayer.name === 'Tori' ) {
             removeAndAdd(2)
           }
-          else if ( player2.myTurn === true ) {
+          else if ( currentPlayer.name === 'Inu' ) {
             removeAndAdd(6)
           }
-          player1.changesLeft = 1;
+          currentPlayer.changesLeft = 1;
           break;
 
         case 1:
           console.log('SWITCH文内 LEFT:1')
           info.innerHTML = "交換したいカードを選ぼう！ これがラスチャン！"
           // moreCardChangeOnclickDone()
-          if ( player1.myTurn === true ) {
+          if ( currentPlayer.name === 'Tori' ) {
             removeAndAdd(3)
           }
-          else if ( player2.myTurn === true ) {
+          else if ( currentPlayer.name === 'Inu' ) {
             removeAndAdd(7)
           }
-          player1.changesLeft = 0;
+          currentPlayer.changesLeft = 0;
           // info.innerHTML = "交換終了！次のプレイヤーのターンへ！"
           changeEnd();
           break;
       }
-      if( player1.changesLeft >= 1 ) {
+      if ( currentPlayer.changesLeft >= 1 ) {
         // 4 「交換する」ボタンを一旦隠す
         // isHidden(changeStartBtn)
         isHidden(changeDoneBtn)
@@ -298,131 +350,309 @@ const cardChange = () => {
       else{
         console.log("else")
         // isHidden(changeStartBtn2)
-        changeSkipBtn.classList.add('is-hidden');
+        changeSkipBtn.classList.add('is-hidden'); // 完全に隠れて欲しい（is-hiddenの数が増えないかを後ほど確認）
       }
     }
-  }
-  // ******* [交換する] を押した時の処理 *******
-
-  // ******* [次の交換をする] を押した時の処理 *******
-
-
-  changeStartBtn2.onclick = () =>{
-    console.log("moreCardChangeOnclickDone発動。残り交換数⤵︎")
-    console.log(player1.changesLeft)
-    const info = document.getElementById('information').children[0]
-    // // 「もう一度交換する」ボタンを隠す
-    isHidden(changeStartBtn2)
-    // 「交換する」ボタンを再表示
-    isHidden(changeDoneBtn)
-    // アナウンス
-    info.innerHTML = '交換するカードを選ぼう！'
-  }
-
-  // ******* [次の交換をする] を押した時の処理 *******
-
-  // ******* [交換スキップ] を押した時の処理 *******
-  // const changeSkipBtn = document.getElementById('changeSkipBtn');
-  changeSkipBtn.onclick = () => {
-    changeEnd();
-
-    // 交換開始(this)ボタンを非表示
-    // isHidden(changeStartBtn);
-    // [もう一枚交換する]ボタンの非表示
-    // isHidden(changeStartBtn2);
-    changeStartBtn2.classList.add('is-hidden');
-    // スキップボタンを非表示
-    isHidden(changeSkipBtn)
-    // isHidden(sortWindowBtn)
-    player1.changesLeft = 0;
-    console.log(player1)
-  }
-  // ******* [交換スキップ] を押した時の処理 *******
+}
+//   // ******* [交換する] を押した時の処理 *******
 
 
 
 
-  // ******* 交換終了時の処理 *******
-  function changeEnd() {
-    const info = document.getElementById('information').children[0];
-    console.log('function changeEnd');
-    // //「もう一度交換する」ボタンを隠す
-    changeStartBtn2.classList.add('is-hidden')
-    // 「交換する」ボタンを非表示＆非活性に
-    changeDoneBtn.setAttribute('disabled',true);
-    // isHidden(changeDoneBtn);
-    changeDoneBtn.classList.add('is-hidden')
-    info.innerHTML = '交換終了！<ここに次のアナウンス>';
-    isHidden(sortWindowBtn);
-    arrayFix();
 
-    const selectElements = document.querySelectorAll('.js_handCards > .is-select');
-    // 3 今付いているisSelectを外す
-    if ( selectElements ){
-      selectElements.forEach(ele =>
-        ele.classList.remove('is-select')
-      );
-    };
-  };
-  // // ***** 配列組み直し処理 *****
-  function arrayFix() {
-
-    // 配列の組み直し
-    const player1HandCards = document.getElementById('player1HandCards');
-    const player2HandCards = document.getElementById('player2HandCards');
-    let num = 0;
-    if (player1.myTurn === true) {
-      // プレイヤーオブジェクト内の配列を更新
-      player1.handCards = []
-      num = 0
-      for( let n = 5 ; n-- ; n != 0) {
-        let str = player1HandCards.children[num].textContent;
-        num++
-        // player1.handCards.splice(num - 1,0,str)
-        player1.handCards.push(str)
-      }
-      console.log(player1.handCards)
-      // 並び替え （before） に値を挿入
-      num = 0
-      player1.handCards.forEach(function(i){
-        player1SortBefore.children[num].innerHTML = `${i}`
-        num++
-      });
-
-    }
-    else if (player2.myTurn === true){
-      // プレイヤーオブジェクト内の配列を更新
-      player2.handCards = []
-      num = 0
-      for( let n = 5 ; n-- ; n != 0) {
-        let str = player2HandCards.children[num].textContent;
-        num++
-        // player2.handCards.splice(numP1 - 1,0,str)
-        player2.handCards.push(str)
-      }
-      console.log(player2.handCards)
-            // 並び替え （before） に値を挿入
-      num = 0
-      player2.handCards.forEach(function(i){
-        player2SortBefore.children[num].innerHTML = `${i}`
-        num++
-      });
-    }
-    // // ***** 配列組み直し・並び替え画面の元カードへの挿入の処理 *****
-  };
-  // ******* 交換終了時の処理 *******
+///////////////////////////////////
+// // カードの交換
+// const cardChange = () => {
 
 
-  // ******* 並び替え時の処理 *******
-  const player1SortAfter = document.getElementById('player1HandCards');
-  const player2HandCards = document.getElementById('player2HandCards');
+//   // 後何回交換できるかの表示
+//     // 未実装
 
-  // ******* 並び替え時の処理 *******
+//   const changeDoneBtn = document.getElementById('changeDoneBtn');
+//   const changeSkipBtn = document.getElementById('changeSkipBtn');
+//   const changeStartBtn2 = document.getElementById('changeStartBtn2');
+
+//   // // ****** P1のターンの場合 *****
+
+//   // 「手札の交換を始める」ボタン
+//   changeStartBtn.onclick = () => {
+//     if ( player1.myTurn === true ) {
+//       const info = document.getElementById('information').children[0] // for info
+//       // 交換開始(this)ボタンを消す
+//       isHidden(changeStartBtn);
+//       // 交換するボタン(changeDoneBtn)・スキップボタンを表示
+//       isHidden(changeDoneBtn)
+//       isHidden(changeSkipBtn)
+//       // アナウンス
+//       info.innerHTML = 'カードを決めたら「交換する」ボタンを押そう'
+//       // ”手札を”クリックした時に、色を変えて、クラスを付与する
+//         // 要素をHTMLCollectionに
+//       let p1SelectField = document.getElementById('player1HandCards').getElementsByTagName('li')
+//         // HTMLCollectionを配列化
+//       let CP_handCardsArray = Array.prototype.slice.call(p1SelectField)
+
+//       console.log(CP_handCardsArray[0].classList)
+
+//       // クリックしたら is-selectクラスを付与する
+//       CP_handCardsArray.forEach(ele =>
+
+//         ele.onclick = () => {
+//           // console.log(ele.classList)
+//           isSelect(ele)
+
+//           // 1枚ずつ交換パターン
+//           if( document.querySelectorAll('.js_handCards > .is-select').length === 1
+//             ) {
+//             changeDoneBtn.removeAttribute('disabled') //toggleDisabledが使えなかったので
+//             info.innerHTML = 'カードを決めたら「交換する」ボタンを押そう'
+//             console.log("カード選択数 １ (OK)")
+//           }
+//           else if( document.querySelectorAll('.js_handCards > .is-select').length === 0
+//           ) {
+//             changeDoneBtn.setAttribute('disabled',true)
+//             info.innerHTML = '交換するカードを選ぼう！'
+//             console.log("カード未選択")
+//           }
+//           else{
+//             changeDoneBtn.setAttribute('disabled',true)
+//             info.innerHTML = '選ぶのは一枚だけだよ！'
+//             console.log("カード選択数２〜５")
+//           }
+//         }
+//       )
+//       // changeLeftが残り○枚(4-1)（「且つ、交換したいカードが選択済み」という条件は、querySelectorにライブ性がないので含まず。）
+
+//         if (player1.changesLeft === 4) {
+//           cardChangeOnclickDone(); //処理を次の関数へ受け渡す
+//         }
+
+
+//     } // if P1 myTurn=true
 
 
 
-};
 
+//     // ＊＊＊＊＊ここに P2ターン時の記述 ＊＊＊＊＊
+//     // if ( player2.myTurn === true ){}
+
+//   } // changeStartBtn.onclick
+
+
+//   // ******* [交換する] を押した時の処理 *******
+//   function cardChangeOnclickDone() {
+//     const info = document.getElementById('information').children[0] // for info
+//     // [選んだカードを交換する]ボタン を押した時
+//     changeDoneBtn.onclick = () => {
+//       console.log("cardChangeOnclickDone発動。残り交換数⤵︎")
+//       console.log(player1.changesLeft)
+
+//       // *****選択したカードを交換する関数******
+//       // SWITCH文で条件分岐して呼び出される。（山札から引くカードをダブらないようにする）
+//       function removeAndAdd(num) {
+//         // 1 選択した要素(.is-selectのある要素)の中身を消す処理
+//         const selectElements = document.querySelector('.js_handCards > .is-select');
+//         selectElements.innerHTML = '';
+//         // // （1-2 本当ならp-1手札の配列を直す）
+//         // 2 元データ（50音）から手札を補完する処理
+//         selectElements.innerHTML = cards[num];
+//         // 3 今付いているisSelectを外す
+//         selectElements.classList.remove('is-select')
+//       };
+//       // Player1のターンの場合
+//       // 山札から引くカードをダブらないようにする為の条件分岐
+//       switch (player1.changesLeft) {
+//         case 4:
+//           console.log('case4: 現在のプレイヤーの状態⤵︎')
+//           console.log(player1)
+//           if ( player1.myTurn = true ) {
+//             removeAndAdd(0)
+//           }
+//           else if ( player2.myTurn === true ) {
+//             removeAndAdd(4)
+//           }
+//           player1.changesLeft = 3;
+//           // 「選んでね」のインフォメーションを出す。
+//           info.innerHTML = '交換したいカードを選ぼう！ あと４回！'
+//           break;
+
+//         case 3:
+//           console.log('SWITCH文内 LEFT:3')
+//           info.innerHTML = "交換したいカードを選ぼう！ あと３回！"
+//           if ( player1.myTurn === true ) {
+//             removeAndAdd(1)
+//           }
+//           else if ( player2.myTurn === true ) {
+//             removeAndAdd(5)
+//           }
+//           player1.changesLeft = 2;
+//           break;
+
+//         case 2:
+//           console.log('SWITCH文内 LEFT:2')
+//           info.innerHTML = "交換したいカードを選ぼう！ あと２回！"
+//           // moreCardChangeOnclickDone()
+//           if ( player1.myTurn === true ) {
+//             removeAndAdd(2)
+//           }
+//           else if ( player2.myTurn === true ) {
+//             removeAndAdd(6)
+//           }
+//           player1.changesLeft = 1;
+//           break;
+
+//         case 1:
+//           console.log('SWITCH文内 LEFT:1')
+//           info.innerHTML = "交換したいカードを選ぼう！ これがラスチャン！"
+//           // moreCardChangeOnclickDone()
+//           if ( player1.myTurn === true ) {
+//             removeAndAdd(3)
+//           }
+//           else if ( player2.myTurn === true ) {
+//             removeAndAdd(7)
+//           }
+//           player1.changesLeft = 0;
+//           // info.innerHTML = "交換終了！次のプレイヤーのターンへ！"
+//           changeEnd();
+//           break;
+//       }
+//       if( player1.changesLeft >= 1 ) {
+//         // 4 「交換する」ボタンを一旦隠す
+//         // isHidden(changeStartBtn)
+//         isHidden(changeDoneBtn)
+//         // 5 「もう一度交換する」ボタンを表示
+//         isHidden(changeStartBtn2)
+//         // 6 次の行動をアナウンス
+//         info.innerHTML = 'まだ交換する場合はボタンを押してね'
+//         console.log("if Left >= 1")
+//       }
+//       else{
+//         console.log("else")
+//         // isHidden(changeStartBtn2)
+//         changeSkipBtn.classList.add('is-hidden');
+//       }
+//     }
+//   }
+//   // ******* [交換する] を押した時の処理 *******
+
+//   // ******* [次の交換をする] を押した時の処理 *******
+
+
+//   changeStartBtn2.onclick = () =>{
+//     console.log("moreCardChangeOnclickDone発動。残り交換数⤵︎")
+//     console.log(player1.changesLeft)
+//     const info = document.getElementById('information').children[0]
+//     // // 「もう一度交換する」ボタンを隠す
+//     isHidden(changeStartBtn2)
+//     // 「交換する」ボタンを再表示
+//     isHidden(changeDoneBtn)
+//     // アナウンス
+//     info.innerHTML = '交換するカードを選ぼう！'
+//   }
+
+//   // ******* [次の交換をする] を押した時の処理 *******
+
+//   // ******* [交換スキップ] を押した時の処理 *******
+//   // const changeSkipBtn = document.getElementById('changeSkipBtn');
+//   changeSkipBtn.onclick = () => {
+//     changeEnd();
+
+//     // 交換開始(this)ボタンを非表示
+//     // isHidden(changeStartBtn);
+//     // [もう一枚交換する]ボタンの非表示
+//     // isHidden(changeStartBtn2);
+//     changeStartBtn2.classList.add('is-hidden');
+//     // スキップボタンを非表示
+//     isHidden(changeSkipBtn)
+//     // isHidden(sortWindowBtn)
+//     player1.changesLeft = 0;
+//     console.log(player1)
+//   }
+//   // ******* [交換スキップ] を押した時の処理 *******
+
+
+
+
+//   // ******* 交換終了時の処理 *******
+//   function changeEnd() {
+//     const info = document.getElementById('information').children[0];
+//     console.log('function changeEnd');
+//     // //「もう一度交換する」ボタンを隠す
+//     changeStartBtn2.classList.add('is-hidden')
+//     // 「交換する」ボタンを非表示＆非活性に
+//     changeDoneBtn.setAttribute('disabled',true);
+//     // isHidden(changeDoneBtn);
+//     changeDoneBtn.classList.add('is-hidden')
+//     info.innerHTML = '交換終了！<ここに次のアナウンス>';
+//     isHidden(sortWindowBtn);
+//     arrayFix();
+
+//     const selectElements = document.querySelectorAll('.js_handCards > .is-select');
+//     // 3 今付いているisSelectを外す
+//     if ( selectElements ){
+//       selectElements.forEach(ele =>
+//         ele.classList.remove('is-select')
+//       );
+//     };
+//   };
+//   // // ***** 配列組み直し処理 *****
+//   function arrayFix() {
+
+//     // 配列の組み直し
+//     const player1HandCards = document.getElementById('player1HandCards');
+//     const player2HandCards = document.getElementById('player2HandCards');
+//     let num = 0;
+//     if (player1.myTurn === true) {
+//       // プレイヤーオブジェクト内の配列を更新
+//       player1.handCards = []
+//       num = 0
+//       for( let n = 5 ; n-- ; n != 0) {
+//         let str = player1HandCards.children[num].textContent;
+//         num++
+//         // player1.handCards.splice(num - 1,0,str)
+//         player1.handCards.push(str)
+//       }
+//       console.log(player1.handCards)
+//       // 並び替え （before） に値を挿入
+//       num = 0
+//       player1.handCards.forEach(function(i){
+//         player1SortBefore.children[num].innerHTML = `${i}`
+//         num++
+//       });
+
+//     }
+//     else if (player2.myTurn === true){
+//       // プレイヤーオブジェクト内の配列を更新
+//       player2.handCards = []
+//       num = 0
+//       for( let n = 5 ; n-- ; n != 0) {
+//         let str = player2HandCards.children[num].textContent;
+//         num++
+//         // player2.handCards.splice(numP1 - 1,0,str)
+//         player2.handCards.push(str)
+//       }
+//       console.log(player2.handCards)
+//             // 並び替え （before） に値を挿入
+//       num = 0
+//       player2.handCards.forEach(function(i){
+//         player2SortBefore.children[num].innerHTML = `${i}`
+//         num++
+//       });
+//     }
+//     // // ***** 配列組み直し・並び替え画面の元カードへの挿入の処理 *****
+//   };
+//   // ******* 交換終了時の処理 *******
+
+
+//   // ******* 並び替え時の処理 *******
+//   const player1SortAfter = document.getElementById('player1HandCards');
+//   const player2HandCards = document.getElementById('player2HandCards');
+
+//   // ******* 並び替え時の処理 *******
+
+
+
+// };
+////////////////////////////////////////////////////////
 
 
 
@@ -436,8 +666,7 @@ function isHidden(ele) {
 };
 
 function isSelect(ele) {
-  if ((player1.myTurn === true && player1.changesLeft != 0)
-    || (player2.myTurn === true && player2.changesLeft != 0)) {
+  if (currentPlayer.changesLeft != 0) { // 誤作動防止
     if (ele.classList.contains("is-select")) {
       ele.classList.remove('is-select')
     } else {
