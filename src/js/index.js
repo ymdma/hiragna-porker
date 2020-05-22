@@ -63,11 +63,12 @@ let player2 = {
 let currentPlayer = {
   name: '',
   player: player1,
-  sortNow: false,
-  changesLeft: 4,
   avatar: '',
   handCards: null,
   description: '',
+  changesLeft: 4,
+  sortNow: false,
+  sortEnd: false,
   // acted: false,
   finishedPlayer: 0
 }
@@ -81,12 +82,12 @@ document.addEventListener('DOMContentLoaded', () => {
   sortHandCards();
   sortWindowAppearance();
   sortReset();
-  writeDescription();
+  toDescription();
   backToDescription();
   finalConfirmModal();
   descriptionWriteFunc();
   styleChangeToolbar();
-  playerChange();
+  // playerChange();
 });
 
 function toggleDisabled(target,val) {
@@ -180,7 +181,6 @@ const setDisplay = () => {
 const setCards = () => {
   const CP_HandCards = document.getElementById('currentPlayerHandCards');
     let num = 0;
-    console.log(player1.myTurn);
     currentPlayer.handCards.forEach(function(i){
       CP_HandCards.children[num].innerHTML = `${i}`;
       num++;
@@ -513,7 +513,7 @@ function sortHandCards() {
       if ( sortArray.length < 5 ) {
         sortArray.splice(num,0,ele.textContent);
         document.getElementById('currentPlayerSortAfter').children[num].innerHTML = `${sortArray[num]}`;
-        num++
+        num++;
       }
       if (num != 0 && num != 5 ) {
         currentPlayer.sortNow = true; // 交換中の状態を付与 この値は現在不使用..
@@ -556,33 +556,72 @@ const sortReset = () => {
 
 
 // *****[次に進む] ボタン(descriptionBtn)を押した時の処理*****
-const writeDescription = () => {
-  const writeDescriptionBtn = document.getElementById('descriptionBtn')
+const toDescription = () => {
 
-  writeDescriptionBtn.onclick = () => {
-        // モジュールの複製  currentPlayerSortAfter → descriptionDisplayAreaA
-        const currentPlayerSortAfter = document.getElementById('currentPlayerSortAfter')
-        const descriptionDisplayAreaA = document.getElementById('descriptionDisplayAreaA')
-        const cardsClone = currentPlayerSortAfter.cloneNode(true)
-        descriptionDisplayAreaA.children[0].appendChild(cardsClone)
-    
-    scrollBy(0, 2000);
-    console.log("次に進む")
+  const toDescriptionBtn = document.getElementById('toDescriptionBtn');
+
+  toDescriptionBtn.onclick = () => {
+    // HTMLモジュールの複製  currentPlayerSortAfter → descriptionDisplayAreaA
+    const currentPlayerSortAfter = document.getElementById('currentPlayerSortAfter');
+    const descriptionDisplayAreaA = document.getElementById('descriptionDisplayAreaA');
+    const cardsClone = currentPlayerSortAfter.cloneNode(true);
+    descriptionDisplayAreaA.children[0].appendChild(cardsClone);
+    //コピーされてしまうidを消す
+    const displayCards = document.querySelector('#descriptionDisplayAreaA > div > ul')
+    displayCards.removeAttribute('id');
+    //新たなIDを付与
+    displayCards.setAttribute('id', 'displayCards');
+
+    console.log(displayCards);
+
+    // 配列の更新(currentPlayer.handsCard)
+    sortAfterToArray();
+
+    // currentPlayer sortEnd ステートの変更
+    currentPlayer.sortEnd = true;
+
+    //ボタンの非活性化
+    toDescriptionBtn.setAttribute('disabled',true);
+  
+
+    // 次へスクロール
+    let h = document.documentElement.clientHeight;
+
+    scrollBy(0, h);
+    console.log("次に進む");
     // isHidden();
   }
 
-  // ここに並べ替え確定の処理を書く（currentPlayer.handCardsに代入）
 }
+
+// 手札の並び替えを配列に反映する
+const sortAfterToArray = () => {
+  currentPlayer.handCards = []; // 初期化
+  const displayCards_elem_li = document.getElementById('displayCards').getElementsByTagName('li');
+  const displayCardsArray = Array.prototype.slice.call(displayCards_elem_li);
+  displayCardsArray.forEach (ele =>
+    currentPlayer.handCards.push(ele.textContent)
+  );
+};
 
 const backToDescription = () => {
   const backToDescriptionBtn = document.getElementById('backToDescriptionBtn')
 
   backToDescriptionBtn.onclick = () => {
+    const displayCards = document.getElementById('displayCards')
 
-    // 移動
-    scrollBy(0, -765);
-    console.log("次に進む")
-    // isHidden();
+    // 現在ある要素の除去
+    displayCards.parentNode.removeChild(displayCards)
+    // ステートの変更を戻す sortEnd
+    currentPlayer.sortEnd = false;
+
+    // ボタンの活性化
+    const toDescriptionBtn = document.getElementById('toDescriptionBtn')
+    toDescriptionBtn.removeAttribute('disabled')
+    let h = document.documentElement.clientHeight;
+
+    // 並び替え画面の位置へスクロール（現状-100%）
+    scrollBy(0, -h);
   }
 }
 // *****[次に進む] ボタンを押した時の処理*****
@@ -602,7 +641,6 @@ const descriptionWriteFunc = () => {
   })
   // 文字変換
   function replace (str) {
-    
     str = str.replace(/\n/g, '</br>'); // 改行をbrに
     str = str.replace(/ /g, '&nbsp;'); // 半角スペースの連続が反映されない対策でエスケープ
     str = str.replace(/<(script|\/script)>/, '*****インラインスクリプトは不許可*****'); // 今はローカルだけど一応XSS対策
@@ -618,7 +656,7 @@ const descriptionWriteFunc = () => {
 
 const styleChangeToolbar = () => {
   const descriptionDisplayAreaB = document.getElementById('descriptionDisplayAreaB');
-  const descriptionWriteArea = document.getElementById('descriptionWriteArea');
+  // const descriptionWriteAreA = document.getElementById('descriptionWriteAreA');
   //text-align
   const styleLeft = document.getElementById('styleLeft');
   const styleCenter = document.getElementById('styleCenter');
@@ -637,18 +675,18 @@ const styleChangeToolbar = () => {
   }
   // カーソルのある場所に文字列を挿入
   // lineBreak.onclick = () => {
-  //   let sentence = descriptionWriteArea.value
+  //   let sentence = descriptionWriteAreA.value
   //   const textLength = sentence.length
-  //   const cursorPosition = descriptionWriteArea.selectionStart
+  //   const cursorPosition = descriptionWriteAreA.selectionStart
   //   const cursorBefore = sentence.substr(0, cursorPosition);
-  //   const addBrTag = '</>'
+  //   const addBrTag = '</br>'
   //   const cursorAfter = sentence.substr(cursorPosition, textLength);
 
   //   sentence = cursorBefore + addBrTag + cursorAfter
-  //   descriptionWriteArea.value = sentence
+  //   descriptionWriteAreA.value = sentence
 
-  //   descriptionDisplayAreaB.innerHTML = `${descriptionWriteArea.value}`
-  //   descriptionWriteArea.focus()
+  //   descriptionDisplayAreaB.innerHTML = `${descriptionWriteAreA.value}`
+  //   descriptionWriteAreA.focus()
   // }
 
   styleLarge.onclick = () => {
@@ -677,6 +715,7 @@ const finalConfirmModal = () => {
   const finishModalDone = document.getElementById('finishModalDone');
   const finishModalCancel = document.getElementById('finishModalCancel');
 
+
   // finishModalBtn.onclick = () => { //confirm finish modal ?? 英語がわからん
   //   console.log("FinishModalOpen")
   //   isHidden(finishModal);
@@ -690,9 +729,18 @@ const finalConfirmModal = () => {
     isHidden(finishModal);
   }
 
-  // *****[DONE] オブジェクトにゲームの結果を保管(並べ替え/説明入力終了後）*****
+  // ***** 「これでOK？」→ [DONE] (並べ替え/説明入力終了後）*****
   finishModalDone.onclick = () => {
-    console.log("Done");
+    // console.log("Done");
+
+    if ( finishedPlayer  == 0 ){
+      dataMove(); // currentPlayerから済んだプレイヤーのobjectへ
+      ReturnToDefault(); //次の準備
+      console.log(Player2のターンへ);
+    }
+    else if( finishedPlayer == 1 ){
+      console.log(判定Windowへ);
+    }
   }
   // *****オブジェクトにゲームの結果を保管(並べ替え/説明入力終了後）*****
 }
@@ -709,61 +757,70 @@ const finalConfirmModal = () => {
 
 // *****次のプレーヤーへ*****
 // ターンの切り替え（P1終了確定とP2の為の初期化）
-const playerChange = () => {
+// const playerChange = () => {
+
+
+
+const dataMove = () => {
   // const changeTurnBtn = document.getElementById('changeTurnBtn');
-  const finishModalDoneBtn = document.getElementById('finishModalDone');
   const description = document.getElementById('descriptionDisplayAreaB');
-  finishModalDoneBtn.onclick = () => {
-    // myTurnのプレイヤー(P1)の残り交換数を0に
-    // currentPlayer.changesLeft = 0 ;
-    // 本来ならHTMLに変換されたものを保存したいが、とりまこれで問題ないので節約。
-    currentPlayer.description = description.textContent;
-    currentPlayer.acted = true;
+  // 本来ならHTMLに変換されたものを保存したいが、とりまこれで問題ないので節約。
+  // currentPlayer.changesLeft = 0 ;// しっかり機能していれば不要
+  currentPlayer.description = description.textContent;
+  currentPlayer.acted = true;
 
-    if ( currentPlayer.player == player1 ) {
+  if ( currentPlayer.player == player1 ) {
 
-      player1.sortNow = currentPlayer.sortNow,
-      player1.changesLeft = currentPlayer.changesLeft, // 0
-      player1.handCards = currentPlayer.handCards,
-      player1.description = currentPlayer.description,
-      player1.acted =  currentPlayer.acted
-      console.log(currentPlayer);
-    
-    }
-    if ( currentPlayer.player == player2 ) {
-      player2.sortNow = currentPlayer.sortNow,
-      player2.changesLeft = currentPlayer.changesLeft, // 0
-      player2.handCards = currentPlayer.handCards,
-      player2.description = currentPlayer.description,
-      player2.acted =  currentPlayer.acted
-      console.log(currentPlayer);
-    }
-    currentPlayer.finishedPlayer++;
-    
-    console.log(currentPlayer);
+    player1.sortNow = currentPlayer.sortNow,
+    player1.changesLeft = currentPlayer.changesLeft, // 0
+    player1.handCards = currentPlayer.handCards,
+    player1.description = currentPlayer.description,
+    player1.acted =  currentPlayer.acted
+    // console.log(currentPlayer);
+  }
+  if ( currentPlayer.player == player2 ) {
+    player2.sortNow = currentPlayer.sortNow,
+    player2.changesLeft = currentPlayer.changesLeft, // 0
+    player2.handCards = currentPlayer.handCards,
+    player2.description = currentPlayer.description,
+    player2.acted =  currentPlayer.acted
+    // console.log(currentPlayer);
+  }
+  currentPlayer.finishedPlayer++;
+  console.log(player1);
+  console.log(player2);
+  console.log(currentPlayer);
 
-
-    // ターンのステート表示の切り替え
-    // const turnState = document.getElementById('turnState').children
-    // turnState.setAttribute('aria-expanded', 'true')
-    // 自ボタンを消す
-    // toggleDisabled(changeTurnBtn, 'true');
-
-    // // P1のmyTurnをfalseに
-    // player1.myTurn = false;
-    // // P2のmyTurnをTrueに
-    // player2.myTurn = true;
-    // 判定に進むボタンを生成（or表示）
-    //未実装
-    //手札の交換ボタンの再配置
-    //未実装
-    // どこかでP2のターンをアナウンスする
-    //未実装
-    console.log(player1)
-    console.log(player2)
-
-  };
 };
+
+const ReturnToDefault = () => {
+  // オブジェクトのセット
+  setNextPlayer(); // 次プレイ用にcurrentPlayerの値をセット
+  //
+
+  //手札の交換ボタンの再配置
+  //未実装
+
+}
+
+const setNextPlayer = () => {
+
+}
+
+
+// ターンのステート表示の切り替え
+// const turnState = document.getElementById('turnState').children
+// turnState.setAttribute('aria-expanded', 'true')
+
+
+// どこかでP2のターンをアナウンスする
+//未実装
+
+// これは２人がやった後
+// 判定に進むボタンを生成（or表示）
+//未実装
+// 自ボタンを消す
+// toggleDisabled(changeTurnBtn, 'true');
 
 // *****濁点*****
   // const p1SortAfterCard = document.getElementById('player1SortAfter').getElementsByTagName('li')

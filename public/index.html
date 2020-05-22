@@ -71,22 +71,14 @@
         </div>
         <div class="p-player__right">
           <div class="c-players-hand">
-            <!-- ここはチェックボックス？セレクトボックス？ -->
             <ul id="currentPlayerHandCards" class="js_handCards c-hand__list">
-            <!-- <ul id="player1HandCards" class="js_handCards c-hand__list"> -->
               <li class="no1" role="button" tabindex="0"></li>
               <li class="no2" role="button" tabindex="0"></li>
               <li class="no3" role="button" tabindex="0"></li>
               <li class="no4" role="button" tabindex="0"></li>
               <li class="no5" role="button" tabindex="0"></li>
             </ul>
-            <!-- <select multiple id="player1HandCards" class="js_handCards hand__list" autofocus="false">
-              <option class="no1" tabindex="0" value=""></option>
-              <option class="no2" tabindex="0" value=""></option>
-              <option class="no3" tabindex="0" value=""></option>
-              <option class="no4" tabindex="0" value=""></option>
-              <option class="no5" tabindex="0" value=""></option>
-            </select> -->
+
             <ul id="player2HandCards" class="c-hand__list is-hidden">
               <li></li>
               <li></li>
@@ -94,13 +86,7 @@
               <li></li>
               <li></li>
             </ul>
-            <!-- <form id="player2HandCards" class="hand__list is-hidden">
-              <input type="checkbox" name="cards" value="">
-              <input type="checkbox" name="cards" value="">
-              <input type="checkbox" name="cards" value="">
-              <input type="checkbox" name="cards" value="">
-              <input type="checkbox" name="cards" value="">
-            </form> -->
+
           </div>
           <div class="c-player__menu">
             <button id="changeStartBtn" >手札の交換を始める</button>
@@ -114,9 +100,9 @@
       </div>
     </section>
 
-    <section id="turnState" class="l-turn-state">
+    <!-- <section id="turnState" class="l-turn-state">
       <p></p>
-    </section>
+    </section> -->
 
     <section id="sortWindow" class="l-sort-window">
       <p role="title">
@@ -143,10 +129,9 @@
       </ul>
       <div>
         <button id="sortResetBtn">もう一回並べ換える</button>
-        <button id="descriptionBtn">次に進む</button>
+        <button id="toDescriptionBtn">次に進む</button>
       </div>
     </section>
-    <section id="aaaaaa"></section>
     <section id="description" class="l-description-window">
       <p role="title">説明書きを付けよう！</p>
       <div id="descriptionDisplayAreaA" class="c-sample-display">
