@@ -66,7 +66,8 @@ content{
     @include strongText();
     @include flex--center();
     background: green;
-    transform: translateY(-100%);
+    transform: translateY(-50%);
+    // transform: translateX(-50%);
     
     div{
       display: flex;

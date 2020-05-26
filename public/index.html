@@ -89,12 +89,13 @@
 
           </div>
           <div class="c-player__menu">
+            <button id="setCardsBtn" class="is-hidden">手札を引く</button>
             <button id="changeStartBtn" >手札の交換を始める</button>
             <button id="changeStartBtn2" class="is-hidden">もう１枚交換する</button>
             <button id="changeDoneBtn" class="is-hidden" disabled>交換する</button>
             <button id="changeSkipBtn" class="is-hidden">交換を終える</button>
-            <button id="sortWindowBtn" class="is-hidden">並び替える</button>
-            <button id="changeTurnBtn">次のプレーヤーへ</button>
+            <button id="toSortWindowBtn" class="is-hidden">並び替える</button>
+            <!-- <button id="changeTurnBtn">次のプレーヤーへ</button> -->
           </div>
         </div>
       </div>
@@ -159,21 +160,55 @@
         <button id="finishModalCancel">いいえ</button>
       </div>
     </section>
-    <section id="cardOpen" class="l-open-window">
-      <div>P1</div>
-      <figure class="p-avatar">
-        <img src="./image/tori.png"  class="p-p1-avatar" alt="player1_avatar">
-      </figure>
-      <figcaption>Player1</figcaption>
-      <div>VS</div>
-      <div>P2</div>
-      <figure class="p-avatar">
-        <img src="./image/inu.png"class="p-p2-avatar" alt="player2_avatar">
-      </figure>
-      <figcaption>Player2</figcaption>
-      <div>
-        どちらが勝ったと思いますか？
+
+    <section id="OpenWindow" class="l-open-window">
+      <div class=playerA>
+        <div class="c-player-status">
+          <figure id="resultAvatarA" class="p-result-avatar">
+          </figure>
+          <figcaption id="resultPlayerNameA"></figcaption>
+        </div>
+        <div id="deliverablesA" class="deliverables">
+          <p class="desc">
+          </p>
+        </div>
       </div>
+
+      <figure class="p-vs">
+        <img src="./image/vs.png" >
+      </figure>
+
+      <div class=playerB>
+        <div class="c-player-status">
+          <figure id="resultAvatarB" class="p-result-avatar">
+          </figure>
+          <figcaption id="resultPlayerNameB"></figcaption>
+        </div>
+        <div id="deliverablesB" class="deliverables">
+        </div>
+      </div>
+      <!-- resultModal -->
+      <button id="openResultModalBtn" class="open-result-btn">
+        判定する
+      </button>
+
+      <div id="resultModalFirst" class="p-modal__result is-hidden">
+        <p>
+        </p>
+        <div>
+          <button id="firstPlayerResultA" tubindex="0"></button>
+          <button id="firstPlayerResultB" tubindex="0"></button>
+        </div>
+      </div>
+      <div id="resultModalSecond" class="p-modal__result is-hidden">
+        <p>
+        </p>
+        <div>
+          <button id="secondPlayerResultA" tubindex="0"></button>
+          <button id="secondPlayerResultB" tubindex="0"></button>
+        </div>
+      </div>
+      <div id="lastResult" class="l-last-result is-hidden"></div>
 
     </section>
   </content>
