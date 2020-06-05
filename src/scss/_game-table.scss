@@ -1,30 +1,47 @@
 // ゲームテーブル
-
-
-.l-table{
-  width: 500px;
-  height: 300px;
-  margin: 50px 0 0 0;
-  @include no-border();
-  background: #077;
-  @include flex--center(
-    $text: center
-    );
-  z-index: -10;
-
+.first-window{
+  widows: 100%;
+  height: 100%;
+  margin: 0;
+  background: $gameTableColor;
+  z-index: -1;
+  @include flex--center($jc:flex-start);
+  box-shadow: inset 0 0 500px 300px rgba(0,0,0,0.5);
+  overflow: hidden;
+  @media(min-width:$pc){
+    min-height:640px;
+  }
 }
 
-////// これをコンポーネント化する！
-.c-stock{
-  width: 60px;
-  height: 80px;
-  padding: 17px 0;
+.l-game-table{
+  // width: 500px;
+  // height: 300px;
+  width: 100%;
+  height: 350px;
+  margin: 50px 0 0 0;
+  @include flex--center($text: center);
+  background: $gameTableColor;
+  @include no-border();
+  // box-shadow: inset 0 0 200px rgba(0,0,0,0.6),;
+  box-shadow: inset 0 0 200px rgba(0,0,0,0.7),
+              inset 0 0 300px rgba(0,0,0,0.2);
+  z-index: 10;
+  overflow: hidden;
+}
+
+// STOCK CARDS
+.c-stock-cards{
+  width: 54px;
+  height: 73px;
+  // padding: 17px 0;
   background: $baseWhiteColor;
   // background: transparent;
   @include with-border();
   @include strongText;
   position: relative;
-
+  top: -8px;
+  left: -8px;
+  z-index:10;
 
   // カードの重なり部分
   &:before{
@@ -32,22 +49,128 @@
     width: 100%;
     height: 100%;
     position: absolute;
-    top: -10px;
-    left: -10px;
+    top: +8px;
+    left: +6.5px;
     background: $baseWhiteColor;
     @include with-border();
-    z-index: -2;
+    z-index: 2;
   }
   &:after{
     content:"";
     width: 100%;
     height: 100%;
     position: absolute;
-    top: -6px;
-    left: -6px;
+    top: +3px;
+    left: +2.5px;
     background: $baseWhiteColor;
     @include with-border();
-    z-index: -1;
+    z-index: 1;
 
   }
 }
+
+// HAND CARDS - FirstPlayer
+.p-game-table-card-box__first{
+  width: 240px;
+  height: 62px;
+  position: absolute;
+  top: 210px;
+  left: -88px;
+  transform: rotate(90deg);
+  overflow: hidden;
+  .c-game-table-hand-cards{
+    display: flex;
+    li{
+      @include card(
+        $card-w: $tableHandCardWidth,
+        $card-h: $tableHandCardHeight
+        );
+      background: #cccccc;
+      @include with-border();
+      box-shadow: 0.5px 22px 0.5px 0.5px rgba(0,0,0,0.2);
+    }
+    .no1{z-index:15; transform: rotate(-26deg) translateY(17px) translateX(3px); }
+    .no2{z-index:14; transform: rotate(-13deg) translateY( 4px) translateX(3px); }
+    .no3{z-index:13; transform: rotate();}
+    .no4{z-index:12; transform: rotate( 13deg) translateY(4px) translateX(-3px); }
+    .no5{z-index:11; transform: rotate(26deg) translateY(17px) translateX(-3px); }
+  }
+}
+
+
+// HAND CARDS - SecondPlayer
+
+.p-game-table-card-box__second{
+  width: 240px;
+  height: 62px;
+  position: absolute;
+  top: 180px;
+  right: -89px;
+  transform: rotate(-90deg);
+  overflow: hidden;
+  .c-game-table-hand-cards{
+    display: flex;
+
+    li{
+      @include card(
+        $card-w: $tableHandCardWidth,
+        $card-h: $tableHandCardHeight
+        );
+      background: #777777;
+      @include with-border();
+      box-shadow: 0.5px 22px 0.5px 0.5px rgba(0,0,0,0.2);
+    }
+    .no1{z-index:15; transform: rotate(-26deg) translateY(17px) translateX(3px); }
+    .no2{z-index:14; transform: rotate(-13deg) translateY( 4px) translateX(3px); }
+    .no3{z-index:13; transform: rotate();}
+    .no4{z-index:12; transform: rotate( 13deg) translateY(4px) translateX(-3px); }
+    .no5{z-index:11; transform: rotate(26deg) translateY(17px) translateX(-3px); }
+  }
+}
+
+// DISCARD
+
+.p-discard-first,
+.p-discard-second {
+  width: 230px;
+  height: 60px;
+  padding: 0 15px;
+  display: flex;
+  align-items: center;
+  background:transparent;
+  border: dotted $baseGrayColor 2px;
+  z-index: 10;
+  li{
+    margin: 0 5px 0 5px;
+    padding: 11px 0;
+    text-align: center;
+    @include mainText(
+      $size: $medium + 12px,
+      $line-height: $medium + 12px);
+    @include card(
+      $card-w:$handCardWidth - 7.5px,
+      $card-h:$handCardHeight - 10px );
+    @include with-border();
+    border-radius: 3px;
+  }
+}
+
+.p-discard-first{
+  position: absolute;
+  top: 332px;
+  left: 72.5px;
+}
+
+.p-discard-second{
+  position: absolute;
+  top: 58px;
+  right: 72.5px;
+  @media (max-width:$sp) {
+    right: calc((100vw - 230px)/2);
+  }
+  @media (max-width:$sp) {
+    top: 68px;
+  }
+}
+
+

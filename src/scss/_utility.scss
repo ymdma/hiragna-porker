@@ -1,6 +1,12 @@
 // // Utility // //
 
+.is-active{
+  display: block !important;
+}
 
+.is-hidden{
+  display: none !important;
+}
 
 // // flexBoxSet
 
@@ -12,13 +18,21 @@ align-items: center;
 }
 // center
 @mixin flex--center(
-  $text: left
+  $text: left,
+  $jc: center
 ){
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  justify-content: $jc;
   align-items: center;
   text-align: $text;
+}
+
+// border-radius [borderより上に配置]
+@mixin border-radius(
+  $radius: 2px
+){
+  border-radius: $radius;
 }
 
 
@@ -28,6 +42,7 @@ align-items: center;
 @mixin no-border {
   border: none;
   box-shadow: 1 1 3px 1px $baseBlackColor;
+  @include border-radius();
 }
 // border__ありの場合
 @mixin with-border (
@@ -37,6 +52,7 @@ align-items: center;
 ){
   border: $type $color $width;
   box-shadow: 1 1 3px 1px $baseBlackColor;
+  @include border-radius();
 }
 
 // // TEXT
@@ -45,23 +61,25 @@ align-items: center;
 @mixin mainText (
   $color: $baseBlackColor,
   $size: $medium,
+  $line-height: $medium,
   $weight: 400
 ){
   color: $color;
   font-size: $size;
   font-weight: $weight;
-  line-height: $medium;
+  line-height: $line-height;
   letter-spacing: 0.9px;
 }
 @mixin strongText (
   $color: $baseBlackColor,
   $size: $large,
+  $line-height: $large,
   $weight: 600
 ){
   color: $color;
   font-size: $size;
   font-weight: $weight;
-  line-height: $large;
+  line-height: $line-height;
   letter-spacing: 0.9px;
 }
 
@@ -94,13 +112,18 @@ $small: 12px;
 }
 
 // p[role="title"]
-@mixin role-title() {
+@mixin role-title(
+  $shadow: none
+) {
   width: fit-content;
   height: 40px;
-  margin: 0 0 40px 0;
+
+  // margin: 0 0 40px 0;
   @include strongText(
-    $color: rgb(0, 18, 32),
-    $size: $large - 3px
+    $color: #000,
+    $size: $large - 3px,
+    $line-height: $large - 3px
     );
-    text-shadow: 1.5px 1.5px 1px #dbdbdbdd;
+    text-shadow:$shadow;
 }
+

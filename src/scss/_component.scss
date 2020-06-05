@@ -1,9 +1,66 @@
-$handCardWidth:40px;
-$handCardHeight:60px;
+
+
+// モーダル
+.c-modal{
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: #00000099;
+  @include flex--center;
+}
+
+
+// アバター
+
+$avatar-size__normal: 100px;
+$avatar-size__large: 200px;
+
+@mixin avatar-img(
+  $width: $avatar-size__normal,
+  $height: $avatar-size__normal
+){
+  p{
+    width: $width;
+    height: $height;
+    img{
+      width: inherit;
+      height: inherit;
+    }
+  }
+}
+// figureにつけたクラス
+.c-avatar,
+.c-avatar__tori,
+.c-avatar__inu {
+  // display: block;
+  // width: fit-content;
+  @include avatar-img();
+  margin: 0;
+  @include flex--center();
+  .c-avatar__name{
+    height: 20px;
+    text-align: center;
+    @include mainText (
+      $color: #000000,
+      $size: 22px,
+      $weight: 400
+      );
+    font-family: "Nico Moji";
+  }
+}
+// ***********
+
+// カード
+$tableHandCardWidth:42px;
+$tableHandCardHeight:56px;
+$handCardWidth:48px;
+$handCardHeight:64px;
 $stockCardWidth:60px;
 $stockCardHeight:80px;
-$largeCardWidth:90px;
-$largeCardHeight:120px;
+$largeCardWidth:75px;
+$largeCardHeight:100px;
 
 @mixin card(
   // $card-margin,
@@ -16,7 +73,6 @@ $largeCardHeight:120px;
   // margin: $card-margin;
   background: $baseWhiteColor;
   // background: transparent;
-
 }
 
 @mixin card__large(
@@ -31,4 +87,112 @@ $largeCardHeight:120px;
   background: $baseWhiteColor;
   // background: transparent;
 
+  @media (max-width:$sp) {
+    width: $largeCardWidth - 9px;
+    height :$largeCardHeight - 12px;
+  }
+}
+
+.c-display-hand-cards{
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+
+  @media (max-width:$sp) {
+    height: 68px;
+  }
+
+  @media (min-width:$pc) {
+    height: 85px;
+  }
+
+  li{
+    padding:0 0px;
+    @include strongText();
+    @include with-border();
+    text-align: center;
+    @media (max-width:$sp) {
+      padding: 10px 0;
+      @include card(
+        $card-w: $handCardWidth,
+        $card-h: $handCardHeight );
+    }
+
+    @media (min-width:$pc) {
+      padding: 16px 0;
+      @include card__large(
+        $card-w: $largeCardWidth - 21px,
+        $card-h: $largeCardHeight - 28px );
+    }
+  }
+}
+
+
+// ボタン
+
+
+.c-button{
+  width: fit-content;
+  height: 40px;
+  padding: 2px 3px 2px 3px;
+  background: $baseWhiteColor;
+  @include with-border();
+  border-radius: 3px;
+  @include mainText($weight:600);
+  text-align: center;
+  word-break: keep-all;
+
+  @media (max-width:$sp) {
+    width: fit-content;
+    height: 35px;
+    padding: 2px 4px 2px 4px;
+    @include mainText(
+      $weight:600,
+      $size:$medium - 1px);
+  }
+}
+.c-button:hover{
+  // background: $basePinkColor;
+  box-shadow: inset 0 0 0.5px 2.5px #fff;
+  background: #9acbea;
+}
+.c-button:disabled{
+  background-color: #c0c0c0;
+}
+
+
+.c-icon{
+  width: 35px;
+  height: 35px;
+  padding: auto;
+  background: $baseWhiteColor;
+  @include with-border(
+  $color:#777,  
+  $width:1px);
+  border-radius: 1px;
+  color: #555;
+  font-size: 18.5px;
+  font-weight: 400;
+
+  text-align: center;
+  @media (max-width:$sp) {
+    width: 35px;
+    height: 35px;
+    margin-bottom: 5px;
+    padding: 2px 4px 2px 4px;
+    @include mainText(
+      $weight:600,
+      $size:$medium - 1px);
+  }
+  &[aria-expanded="true"]{
+    background: #df4d4d;
+  }
+  &:hover{
+    // background: $basePinkColor;
+    box-shadow: inset 0 0 0.5px 2.5px $basePinkColor;
+    background: #999;
+  }
+  &:disabled{
+    background-color: #ccc;
+  }
 }
