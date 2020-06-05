@@ -1,102 +1,158 @@
-// playerのコンポーネント化
-@mixin player(
-  $bgcolor: #777
-){
-  width: 700px;
-  height: 140px;
-  margin: 10px 0 0 0; //仮
-  background: $bgcolor;
-  @include with-border();
-}
+// プレーヤー操作エリア
 
-// PLAYER 1 設定
+
 .l-player-field{
-  @include player(
-    $bgcolor: #aaa
-  );
-  .p-player{
+  width: 100%;
+  height: 160px;
+  margin: 10px 0 0 0; //仮
+  padding: 0px 15px 0px 15px;
+
+  background: #6b2d00;
+  box-shadow: inset 0 0 20px 0 rgba(0,0,0,0.7);
+  // display: flex;
+  // justify-content: center;
+  // align-items: center;
+  @media (max-width:$sp) {
+    height: 140px;
+    padding: 0px 5px 0px 5px;
+  }
+  .p-player-area{
+    width: 100%;
     height: 100%;
+    padding: 11px 0;
     display: flex;
     justify-content: center;
     align-items: center;
-
-  }
-
-}
-
-// LEFT SIDE
-.p-player__left{
-  width: 100px;
-  height: 120px;
-  padding: 0 0 10px 0 ;
-  margin: 0 10px 0 0 ;
-  background: #fff;
-  @include with-border();
-  figcaption{
-    text-align: center;
-    @include mainText (
-      $color: $baseBlackColor,
-      $size: $medium,
-      $weight: 600
-      );
-    font-family: "Nico Moji";
-  }
-  figure{
-    width: inherit;
-    margin: 0;
-    img{
-      width: inherit;
+    // 左
+    .c-avatar{
+      background: $baseWhiteColor;
+      padding: 8px;
+      margin: 0 5px 0 0;
+      @include with-border();
+      @media(max-width:$sp){
+        padding: 8px 0;
+      }
     }
   }
 }
 
-// RIGHT SIDE
-.p-player__right{
-  width: 500px;
-  height: 120px;
-  background: #ded5ac;
+//左
+// .c-profile-box__avatar{
+//   width: 100px;
+//   height: 100%;
+//   margin: 0 5px 0 0;
+//   border-radius: 15%;
+//   background: #fdf9f5;
+//   @include with-border($color:#000);
+//   @include flex--center();
+//   @media (max-width:$sp) {
+//     width: 80px;
+//     height: 125px;
+//     margin: 0 5px 0 0 ;
+//     border-radius: 5px;
+//   }
+// }
+
+
+// 右
+.c-control-area{
+  // width: 500px;
+  width: 100%;
+  height: 138px;
   display: flex;
   flex-direction: column;
-
-  .c-players-hand{
-    order:2;
-    width: calc(inherit - 80px);
-    height: 80px;
-    padding: 0 40px 0;
-    background: #f2e6b1;
+  // background: #ded5ac;
+  background: $baseYellowColor;
+  @include with-border();
+  box-shadow: inset 0 0 50px 0 rgba(0,0,0,0.1);
+  @media (min-width:$pc) {
+    padding: 0 5%;
   }
-  .c-player__menu{
-    order: 1;
+  @media (max-width:$sp) {
+    height: 133px;
+    padding: 0px 5px 0px 5px;
+  }
+  // @media (max-width:$sp) {
+  //   height: 121px;
+  // }
+
+  .c-buttons{
     width: inherit;
-    height: 40px;
+    order: 1;
     display: flex;
-    background: rgb(203, 128, 128);
-    button{
-      margin: auto;
-      display: block;
+    justify-content: space-around;
+    align-items: flex-end;
+
+    @media (min-width:$pc) {
+      height: 50px;
+      padding: 0 20%;
     }
+    @media (max-width:$sp) {
+      height: 45px;
+      padding: 0 1%;
+    }
+
   }
 }
-    //詳細度下げるためツリーから独立
-    .c-hand__list{
-      width: inherit;
-      height: inherit;
-      display: flex;
-      justify-content: space-around;
-      align-items: center;
-      li{
-        @include card(
-          $card-w:$handCardWidth,
-          $card-h:$handCardHeight
-        );
-        padding: 8px 0;
-        @include with-border();
-        @include strongText;
-      };
-      cursor: pointer;
-    }
+
+//詳細度下げるためツリーから独立
+.c-hand-cards{
+  order:2;
+  // width: inherit;
+
+  display: flex;
+  justify-content: space-around;
+  @media (min-width:$pc) {
+    height: 84px;
+    padding: 0 10%;
+    align-items: center;
+  }
+  @media (max-width:$sp) {
+    height: 64px;
+    margin: 10px 0;
+    align-items: flex-end;
+
+  }
+  li{
+    text-align: center;
+    @include card(
+      $card-w:$handCardWidth,
+      $card-h:$handCardHeight
+    );
+    padding: 8px 0;
+    @include with-border();
+    @include strongText;
+  };
+  cursor: pointer;
+}
 
 
 
 
 
+
+// avatar-field
+// .p-player__avatar{
+//   width: 100px;
+//   height: 120px;
+//   padding: 0 0 10px 0 ;
+//   margin: 0 10px 0 0 ;
+//   background: #fff;
+//   @include with-border();
+//   figcaption{
+//     text-align: center;
+//     @include mainText (
+//       $color: $baseBlackColor,
+//       $size: $medium,
+//       $weight: 600
+//       );
+//     font-family: "Nico Moji";
+//   }
+//   figure{
+//     width: inherit;
+//     margin: 0;
+//     img{
+//       width: inherit;
+//     }
+//   }
+// }

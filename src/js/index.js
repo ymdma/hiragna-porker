@@ -35,7 +35,6 @@ let firstPlayerArray = cards.slice(41,46);
 let secondPlayerArray = cards.slice(36,41);
 
 
-
 // 対戦記録
 let gameRecord = []
 // 一回終わるごとにオブジェクトをpushしてく
@@ -60,6 +59,8 @@ let player2 = {
   description: '',
   winner: false
 }
+
+// 行動中のプレイヤー
 let currentPlayer = {
   name: '',
   player: player1,
@@ -70,7 +71,9 @@ let currentPlayer = {
   sortNow: false,
   sortEnd: false,
   // acted: false,
-  finishedPlayer: 0
+  finishedPlayer: 0,
+  gameStage: 'firstStage',
+  ReScrollPoint: 'first'
 }
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -82,15 +85,131 @@ document.addEventListener('DOMContentLoaded', () => {
   sortWindowAppearance();
   sortReset();
   toDescription();
-  backToDescription();
+  backToSort();
   finalConfirmModal();
   descriptionWriteFunc();
   styleChangeToolbar();
 });
 
-// function toggleDisabled(target,val) {
-//   target.setAttribute('disabled', val);
-// };
+
+// ***** WindowEvent *****
+// ***Scroll***
+
+// // 表示ブレのため、スクロールされたら戻す
+// window.addEventListener('scroll', () => {
+//   let timeoutId;
+//   if ( timeoutId ) return;
+//   timeoutId = setTimeout( function () {
+//     timeoutId = 0;
+//   GoToNextStage()}, 2000);
+// });
+
+// ****リサイズに伴う表示のズレ補正****
+// ウィンドウサイズが変更された時
+window.addEventListener("resize", function(event) {
+  let h = document.documentElement.clientHeight
+  let first = 0;
+  let sort = h ;
+  let description = h * 2;
+  let result = h * 3;
+  // スコープの問題、また値が変動するため
+  switch ( currentPlayer.ReScrollPoint ) {
+    case 'first':
+      scroll(first)
+      break;
+    case 'sort':
+      scroll(sort)
+      break;
+    case 'description':
+      scroll(description)
+      break;
+    case 'result':
+      scroll(result)
+      break;
+  }
+  function scroll(target){
+    scrollTo(0, target);
+    console.log("スクロール動作 :補正")
+  }
+})
+// ***Scroll***
+
+// ***** Functions *****
+
+// ***Scroll***
+let stageStep = document.documentElement.clientHeight;
+let firstStage = 0;
+let sortStage = stageStep;
+let descriptionStage = stageStep * 2;
+let resultStage = stageStep * 3;
+
+// 次のウィンドウへ移動
+function GoToNextStage() {
+
+
+  // ステージの振り分け（基準となる値を取得後、string→変数にして引数へ）
+  switch ( currentPlayer.gameStage ) {
+    case 'firstStage':
+      scrollNext(firstStage);
+      break;
+    case 'sortStage':
+      scrollNext(sortStage);
+      break;
+    case 'descriptionStage':
+      scrollNext(descriptionStage);
+      break;
+    case 'resultStage':
+      scrollNext(resultStage);
+      break;
+  }
+  function scrollNext(target) {
+    scrollTo(0, target);
+    console.log("スクロール動作:ジャンプ");
+    console.log(sortStage);
+  }
+}
+// ***Scroll***
+
+// ****** Class付与関数 ******
+// display:none
+function isHidden(ele) {
+  if (ele.classList.contains('is-hidden')) {
+    ele.classList.remove('is-hidden')
+  } else {
+    ele.classList.add('is-hidden')
+    console.log('isHidden作動')
+  }
+};
+// 交換を希望するカードを選択時の表示
+function isSelect(ele) {
+  if (currentPlayer.changesLeft != 0) { // 誤作動防止
+    if (ele.classList.contains("is-select")) {
+      ele.classList.remove('is-select')
+    } else {
+      ele.classList.add('is-select')
+      console.log("is-select作動")
+    }
+  }
+};
+// ****** Class付与関数 ******
+
+// ボタンの無効化
+function toggleDisabled(target,val) {
+  target.setAttribute('disabled', val);
+};
+
+// aria-expanded 切替 (半手動)
+function setAttrAriaExpanded(target) {
+  if ( target.getAttribute('aria-expanded') == 'false' ) {
+    target.setAttribute('aria-expanded', 'true');
+  }
+  else{
+    target.setAttribute('aria-expanded', 'false');
+  }
+  // console.log("aria-expanded切替")
+};
+
+// ***** Functions *****
 
 // 先攻プレーヤー(キャラ)の選択
 const pushStartBtn = () => {
@@ -101,21 +220,67 @@ const pushStartBtn = () => {
   startBtn.addEventListener('click', function() {
     const firstAttackSelectModal = document.getElementById('firstAttackSelectModal');
     isHidden(firstAttackSelectModal);
+
+    // ゲームステージ更新
+    currentPlayer.gameStage = 'firstStage'
+    currentPlayer.ReScrollPoint = 'first'
+
+    // ゲームスタート時のアニメーション
+    const startFlag = document.getElementById('startFlag')
+    // animation
+    function startFlagAppearance() {
+      startFlag.setAttribute('aria-expanded',true);
+    }
+    function startFlagIsHidden() {
+      startFlag.classList.add('is-hidden')
+    }
+    function anime_startFlagExit() {
+      startFlag.animate({
+        opacity: [1, 0, 1]
+      }, {
+        duration: 1700,
+        // direction: 'reverse',
+        iterations: 1
+      });
+    }
+    function anime_startFlagExit2() {
+      startFlag.animate({
+        opacity: [1, 0]
+      }, {
+        duration: 2000,
+        easing: 'ease-in-out',
+        fill: 'forwards'
+      })
+    }
+
     // とり先
-    toriFirst.onclick = () =>{
+    toriFirst.onclick = () => {
       setFirstPlayerTori();
       isHidden(firstAttackSelectModal);
-      // isHidden(startBtn)
-      startBtn.setAttribute('disabled', true);
-      // startBtn.style.opacity = "0"
+      toggleDisabled(startBtn,true);
+      isHidden(startBtn.parentNode); // 画面を覆っている為parent
+      isHidden(startFlag);
+
+      // animation  **** promiseの順次処理に書き換える ****
+      setTimeout(startFlagAppearance, 300); // ゲームスタートの帯出現
+      setTimeout(anime_startFlagExit, 1500);
+      setTimeout(anime_startFlagExit2, 4800);// 1700+1500+a
+      setTimeout(startFlagIsHidden, 6800);
+
     }
     // いぬ先
     inuFirst.onclick = () => {
       setFirstPlayerInu();
       isHidden(firstAttackSelectModal);
-      // isHidden(startBtn)
-      startBtn.setAttribute('disabled', true);
-      // startBtn.style.opacity = "0"
+      toggleDisabled(startBtn,true);
+      isHidden(startBtn.parentNode); // 画面を覆っている為parent
+      isHidden(startFlag);
+
+      // animation
+      setTimeout(startFlagAppearance, 300); // ゲームスタートの帯出現
+      setTimeout(anime_startFlagExit, 1500);
+      setTimeout(anime_startFlagExit2, 4500);// 1700+1500+a
+      setTimeout(startFlagIsHidden, 6800);
     }
     // ***閉じる用の記述**
     document.addEventListener('keydown',
@@ -130,35 +295,44 @@ const pushStartBtn = () => {
 
 // 先攻プレーヤーの選択で「とり先」
 const setFirstPlayerTori = () => {
-  console.log("とり開始"),
+  console.log("とり開始");
   // currentPlayerにデータをセット
-  currentPlayer.name = `${player1.name}`,
-  currentPlayer.player = player1,
-  currentPlayer.sortNow = false,
-  currentPlayer.changesLeft = 4,
-  currentPlayer.avatar = './image/tori.png',
-  currentPlayer.handCards = firstPlayerArray,
-  currentPlayer.description = '',
-  currentPlayer.acted = false
+  currentPlayer.name = `${player1.name}`;
+  currentPlayer.player = player1;
+  currentPlayer.sortNow = false;
+  currentPlayer.changesLeft = 4;
+  currentPlayer.avatar = './image/tori.png';
+  currentPlayer.handCards = firstPlayerArray;
+  currentPlayer.description = '';
+  currentPlayer.acted = false;
+
+  firstPlayer = player1.name;
+  secondPlayer = player2.name;
 
   console.log(currentPlayer);
+  console.log(firstPlayer);
+  console.log(secondPlayer);
 
   setDisplay();
   setCards();
+  setFirstInfo();
 }
 
 // 先攻プレーヤーの選択で「いぬ先」
 const setFirstPlayerInu = () => {
-  console.log("いぬ開始")
+  console.log("いぬ開始");
   // currentPlayerにデータをセット
-  currentPlayer.name = `${player2.name}`,
-  currentPlayer.player = player2,
-  currentPlayer.sortNow = false,
-  currentPlayer.changesLeft = 4,
-  currentPlayer.avatar = './image/inu.png',
-  currentPlayer.handCards = firstPlayerArray,
-  currentPlayer.description = '',
-  currentPlayer.acted = false
+  currentPlayer.name = `${player2.name}`;
+  currentPlayer.player = player2;
+  currentPlayer.sortNow = false;
+  currentPlayer.changesLeft = 4;
+  currentPlayer.avatar = './image/inu.png';
+  currentPlayer.handCards = firstPlayerArray;
+  currentPlayer.description = '';
+  currentPlayer.acted = false;
+
+  firstPlayer = player2.name;
+  secondPlayer = player1.name;
 
   console.log(currentPlayer);
 
@@ -172,7 +346,8 @@ const setFirstPlayerInu = () => {
 const setDisplay = () => {
   // 名前とアバターを画面上に表示
   document.getElementById('playerName').innerHTML = `${currentPlayer.name}`;
-  document.getElementById('avatarImg').setAttribute('src',  `${currentPlayer.avatar}`);
+  document.getElementById('avatarImg').setAttribute('src', `${currentPlayer.avatar}`);
+  console.log(playerName)
   if ( currentPlayer.finishedPlayer == 0 ) {
     isHidden(document.getElementById('avatarImg')); // ＊改善ポイント ここだけ隠しとくのはスマートじゃないと思う
   }
@@ -288,13 +463,45 @@ const cardChangeDone = () => {
         selectElements.classList.remove('is-select');
         console.log("入れ替え関数動作！");
       };
+        // discard(); // 捨てたカードを置いておく
+
+      function discard() {
+        const firstPlayerDiscardArea = document.getElementById('firstDiscard')
+        const secondPlayerDiscardArea = document.getElementById('secondDiscard')
+        let target = document.querySelector('#currentPlayerHandCards > .is-select')
+        switch (currentPlayer.finishedPlayer ){
+          case 0:
+            let newCard = document.createElement('li');
+            firstPlayerDiscardArea.appendChild(newCard);
+            let lastAdd = firstPlayerDiscardArea.lastElementChild;
+            lastAdd.innerHTML = target.textContent
+          break;
+          case 1:
+            let newCard2 = document.createElement('li');
+            secondPlayerDiscardArea.appendChild(newCard2);
+            let lastAdd2 = secondPlayerDiscardArea.lastElementChild;
+            lastAdd2.innerHTML = target.textContent
+          break;
+        }
+      }
+      // カードを一枚選択している時のみボタンを使用可能にする
+      let selectEle = document.querySelectorAll('#currentPlayerHandCards .is-select');
+      const changeDoneBtn = document.getElementById('changeDoneBtn')
+      if ( selectEle.length == 1 ){
+        toggleDisabled(changeDoneBtn,false)
+        console.log('no-block!')
+      }
+      else if ( selectEle.length != 1 ) {
+        toggleDisabled(changeDoneBtn,true)
+        console.log('block!')
+      }
       // Player1のターンの場合
       // 山札から引くカードをダブらないようにする為の条件分岐
       switch (currentPlayer.changesLeft) {
         case 4:
+          discard();
           console.log('case4: 現在のプレイヤーの状態⤵︎');
           console.log(currentPlayer);
-
           // 各プレーヤーが山札からランダムに引くロジック
           if ( currentPlayer.name === 'とり' ) {
             removeAndAdd(0);
@@ -308,6 +515,7 @@ const cardChangeDone = () => {
           break;
 
         case 3:
+          discard();
           console.log('SWITCH文内 LEFT:3')
           info.innerHTML = "交換したいカードを選ぼう！ あと３回！"
           if ( currentPlayer.name === 'とり' ) {
@@ -320,6 +528,7 @@ const cardChangeDone = () => {
           break;
 
         case 2:
+          discard();
           console.log('SWITCH文内 LEFT:2')
           info.innerHTML = "交換したいカードを選ぼう！ あと２回！"
           // moreCardChangeOnclickDone();
@@ -333,6 +542,7 @@ const cardChangeDone = () => {
           break;
 
         case 1:
+          discard();
           console.log('SWITCH文内 LEFT:1')
           info.innerHTML = "交換したいカードを選ぼう！ これがラスチャン！"
           // moreCardChangeOnclickDone()
@@ -366,8 +576,8 @@ const cardChangeDone = () => {
 }
 //   // ******* [交換する] を押した時の処理 *******
 
-//   // ******* [次の交換をする] を押した時の処理 *******
 
+//   // ******* [次の交換をする] を押した時の処理 *******
 const moreCardChangeDone = () => {
   const changeDoneBtn = document.getElementById('changeDoneBtn');
   // const changeSkipBtn = document.getElementById('changeSkipBtn');
@@ -388,7 +598,8 @@ const moreCardChangeDone = () => {
 }
 //   // ******* [次の交換をする] を押した時の処理 *******
 
-//   // ******* [交換スキップ] を押した時の処理 *******
+
+//   // ******* [交換を終える] を押した時の処理 *******
 const changeSkip = () => {
   // const changeDoneBtn = document.getElementById('changeDoneBtn');
   const changeSkipBtn = document.getElementById('changeSkipBtn');
@@ -407,13 +618,13 @@ const changeSkip = () => {
     // isHidden(toSortWindowBtn)
     currentPlayer.changesLeft = 0;
     console.log('changeSkip発動')
-    console.log(`CP_LEFT => ${currentPlayer.changesLeft}`)
+    // console.log(`CP_LEFT => ${currentPlayer.changesLeft}`)
   }
 }
 //   // ******* [交換スキップ] を押した時の処理 *******
 
 
-//   // ******* 交換終了時の処理(ボタンの表示・非表示 クラスを取る) *******
+//   // ******* 交換終了時の処理(ボタンの表示・非表示) *******
 function changeEndFunc() {
   const changeDoneBtn = document.getElementById('changeDoneBtn');
   // const changeSkipBtn = document.getElementById('changeSkipBtn');
@@ -469,43 +680,26 @@ function arrayFix() {
   // ******* 交換終了時の処理 *******
 
 
-function isHidden(ele) {
-  if (ele.classList.contains('is-hidden')) {
-    ele.classList.remove('is-hidden')
-  } else {
-    ele.classList.add('is-hidden')
-    console.log('isHidden作動')
-  }
-};
-
-function isSelect(ele) {
-  if (currentPlayer.changesLeft != 0) { // 誤作動防止
-    if (ele.classList.contains("is-select")) {
-      ele.classList.remove('is-select')
-    } else {
-      ele.classList.add('is-select')
-      console.log("is-select作動")
-    }
-  }
-};
-
 // *****[並べ替える]押した時の処理(次画面出現)*****
 const sortWindowAppearance = () => {
   const toSortWindowBtn = document.getElementById('toSortWindowBtn');
 
-  console.log(toSortWindowBtn);
-
   toSortWindowBtn.onclick = () => {
-    const sortWindow = document.getElementById('sortWindow');
-    let h = document.documentElement.clientHeight;
-    scrollBy(0, h);
-    // sortWindow.classList.add('sortWindowAppearance');
-    // sortWindow.style.top = '0';
-    console.log("並び替えBtn click成功");
+    // console.log(toSortWindowBtn);
+
+    // gameStage更新
+    currentPlayer.gameStage = 'sortStage'
+    currentPlayer.ReScrollPoint = 'sort'
+
+
+    // sortWindowへスクロール
+    GoToNextStage();
+
   };
 
 };
 // *****[並べ替える]押した時の処理(次画面出現)*****
+
 
 
 // *****手札の並べ替え（交換終了後）*****         // 【未ダブり対策】
@@ -516,13 +710,14 @@ function sortHandCards() {
   let num = 0;
   sortBeforeCardsArray.forEach(ele =>
     ele.onclick = () => {
-      console.log(ele.textContent);
+      // console.log(ele.textContent);
 
       if ( sortArray.length < 5 ) {
         sortArray.splice(num,0,ele.textContent);
         document.getElementById('currentPlayerSortAfter').children[num].innerHTML = `${sortArray[num]}`;
         num++;
       }
+
       if (num != 0 && num != 5 ) {
         currentPlayer.sortNow = true; // 交換中の状態を付与 この値は現在不使用..
         console.log(currentPlayer.sortNow);
@@ -531,9 +726,14 @@ function sortHandCards() {
         currentPlayer.sortNow = false; // 交換中の状態を付与 この値は現在不使用..
         console.log(currentPlayer.sortNow);
 
+        // 次に進む ボタンの無効化解除
+        const toDescriptionBtn = document.getElementById('toDescriptionBtn');
+        toDescriptionBtn.removeAttribute('disabled');
+
         sortHandCards(); // リセット！ *[並べ直し]用
       }
       console.log(`num: ${num}`)
+
     }
   )
 };
@@ -544,8 +744,14 @@ function sortHandCards() {
 const sortReset = () => {
   const sortResetBtn = document.getElementById('sortResetBtn')
 
+
   currentPlayer.sortNow = false
+
   sortResetBtn.onclick = () => {
+
+    // 次に進む ボタンの無効化
+  const toDescriptionBtn = document.getElementById('toDescriptionBtn');
+  toDescriptionBtn.setAttribute('disabled',true);
 
     sortHandCards(); // リセット！ 誤作動防止の為の関数読み込み直し
 
@@ -563,24 +769,29 @@ const sortReset = () => {
 // *****[手札の並べ替えをリセットする]ボタンを押した時の処理*****
 
 
-// *****[次に進む] ボタン(descriptionBtn)を押した時の処理*****
+// *****[次に進む] ボタン(toDescriptionBtn)を押した時の処理*****
 const toDescription = () => {
 
   const toDescriptionBtn = document.getElementById('toDescriptionBtn');
 
+  // ***** 次に進むボタンを押した時 *****
   toDescriptionBtn.onclick = () => {
+
     // HTMLモジュールの複製  currentPlayerSortAfter → descriptionDisplayAreaA
     const currentPlayerSortAfter = document.getElementById('currentPlayerSortAfter');
     const descriptionDisplayAreaA = document.getElementById('descriptionDisplayAreaA');
     const cardsClone = currentPlayerSortAfter.cloneNode(true);
-    descriptionDisplayAreaA.children[0].appendChild(cardsClone);
+    descriptionDisplayAreaA.appendChild(cardsClone);
     //コピーされてしまうidを消す
-    const displayCards = document.querySelector('#descriptionDisplayAreaA > div > ul')
+    const displayCards = document.querySelector('#descriptionDisplayAreaA > ul')
     displayCards.removeAttribute('id');
     //新たなIDを付与
     displayCards.setAttribute('id', 'displayCards');
+    displayCards.classList.remove('c-hand-cards-large')
+    displayCards.classList.add('c-display-hand-cards')
+    // console.log(displayCards);
 
-    console.log(displayCards);
+    displayAvatarSet();
 
     // 配列の更新(currentPlayer.handsCard)
     sortAfterToArray();
@@ -590,17 +801,24 @@ const toDescription = () => {
 
     //ボタンの非活性化
     toDescriptionBtn.setAttribute('disabled',true);
-  
 
-    // 次へスクロール
-    let h = document.documentElement.clientHeight;
+    // gameStage更新
+    currentPlayer.gameStage = 'descriptionStage'
+    currentPlayer.ReScrollPoint = 'description'
 
-    scrollBy(0, h);
-    console.log("次に進む");
-    // isHidden();
+    // sortWindowへスクロール
+    GoToNextStage();
   }
+}
+
+const displayAvatarSet = () => {
+//   // アバター用img要素を生成、所定の位置に設置、名前を表示、クラスの追加
+  const avatarImg = document.getElementById('descriptionAvatarImg');
+  console.log(avatarImg)
+  avatarImg.setAttribute('src' , currentPlayer.avatar)
 
 }
+
 
 // 手札の並び替えを配列に反映する
 const sortAfterToArray = () => {
@@ -612,24 +830,28 @@ const sortAfterToArray = () => {
   );
 };
 
-const backToDescription = () => {
-  const backToDescriptionBtn = document.getElementById('backToDescriptionBtn')
+const backToSort = () => {
+  const backToSortBtn = document.getElementById('backToSortBtn')
 
-  backToDescriptionBtn.onclick = () => {
+  // *****並び替えに戻るボタンを押した時*****
+  backToSortBtn.onclick = () => {
     const displayCards = document.getElementById('displayCards')
 
     // 現在ある要素の除去
-    displayCards.parentNode.removeChild(displayCards)
+    displayCards.parentNode.removeChild(displayCards);
     // ステートの変更を戻す sortEnd
     currentPlayer.sortEnd = false;
 
     // ボタンの活性化
     const toDescriptionBtn = document.getElementById('toDescriptionBtn')
     toDescriptionBtn.removeAttribute('disabled')
-    let h = document.documentElement.clientHeight;
 
-    // 並び替え画面の位置へスクロール（現状-100%）
-    scrollBy(0, -h);
+    // gameStage更新
+    currentPlayer.gameStage = 'sortStage'
+    currentPlayer.ReScrollPoint = 'sort'
+
+    // sortWindowへスクロール
+    GoToNextStage();
   }
 }
 // *****[次に進む] ボタンを押した時の処理*****
@@ -657,8 +879,8 @@ const descriptionWriteFunc = () => {
     return str;
   }
 }
-
 // ***** 説明書き テキストエリアの入力をasideに *****
+
 
 // ***** Style change Toolbar *****
 
@@ -668,18 +890,46 @@ const styleChangeToolbar = () => {
   //text-align
   const styleLeft = document.getElementById('styleLeft');
   const styleCenter = document.getElementById('styleCenter');
+  const styleRight = document.getElementById('styleRight');
 
   // Color
   const styleColorPicker = document.getElementById('styleColorPicker');
   // font-size
+  const openPopFontsize = document.getElementById('openPopFontsize');
+  const popToolbarFontsize = document.getElementById('popToolbarFontsize');
   const styleLarge = document.getElementById('styleLarge');
   const styleMedium = document.getElementById('styleMedium');
   const styleSmall = document.getElementById('styleSmall');
+
   styleLeft.onclick = () => {
     descriptionDisplayAreaB.style.textAlign = 'left';
+    setAttrAriaExpanded(styleLeft)
+    if ( styleCenter.getAttribute('aria-expanded') == 'true' ) {
+    setAttrAriaExpanded(styleCenter)
+    }
+    if ( styleRight.getAttribute('aria-expanded') == 'true' ) {
+    setAttrAriaExpanded(styleRight)
+    }
   }
   styleCenter.onclick = () => {
     descriptionDisplayAreaB.style.textAlign ='center';
+    setAttrAriaExpanded(styleCenter)
+    if ( styleLeft.getAttribute('aria-expanded') == 'true' ) {
+    setAttrAriaExpanded(styleLeft)
+    }
+    if ( styleRight.getAttribute('aria-expanded') == 'true' ) {
+    setAttrAriaExpanded(styleRight)
+    }
+  }
+  styleRight.onclick = () => {
+    descriptionDisplayAreaB.style.textAlign ='right';
+    setAttrAriaExpanded(styleRight)
+    if ( styleLeft.getAttribute('aria-expanded') == 'true' ) {
+    setAttrAriaExpanded(styleLeft)
+    }
+    if ( styleCenter.getAttribute('aria-expanded') == 'true' ) {
+    setAttrAriaExpanded(styleCenter)
+    }
   }
   // カーソルのある場所に文字列を挿入
   // lineBreak.onclick = () => {
@@ -697,14 +947,43 @@ const styleChangeToolbar = () => {
   //   descriptionWriteAreA.focus()
   // }
 
+  openPopFontsize.addEventListener('click', (event) => {
+    isHidden(popToolbarFontsize);
+    setAttrAriaExpanded(openPopFontsize);
+
+  })
   styleLarge.onclick = () => {
     descriptionDisplayAreaB.style.fontSize = `35px`;
+    descriptionDisplayAreaB.style.lineHeight = `35px`;
+    setAttrAriaExpanded(styleLarge)
+    if ( styleMedium.getAttribute('aria-expanded') == 'true' ) {
+    setAttrAriaExpanded(styleMedium)
+    }
+    if ( styleSmall.getAttribute('aria-expanded') == 'true' ) {
+    setAttrAriaExpanded(styleSmall)
+    }
   }
   styleMedium.onclick = () => {
     descriptionDisplayAreaB.style.fontSize = `20px`;
+    descriptionDisplayAreaB.style.lineHeight = `20px`;
+    setAttrAriaExpanded(styleMedium)
+    if ( styleLarge.getAttribute('aria-expanded') == 'true' ) {
+    setAttrAriaExpanded(styleLarge)
+    }
+    if ( styleSmall.getAttribute('aria-expanded') == 'true' ) {
+    setAttrAriaExpanded(styleSmall)
+    }
   }
   styleSmall.onclick = () => {
     descriptionDisplayAreaB.style.fontSize ='15px';
+    descriptionDisplayAreaB.style.lineHeight ='15px';
+    setAttrAriaExpanded(styleSmall)
+    if ( styleLarge.getAttribute('aria-expanded') == 'true' ) {
+    setAttrAriaExpanded(styleLarge)
+    }
+    if ( styleMedium.getAttribute('aria-expanded') == 'true' ) {
+    setAttrAriaExpanded(styleMedium)
+    }
   }
   styleColorPicker.addEventListener('change', (event) => {
     const value = event.target.value;// 選択された色を確認
@@ -712,7 +991,6 @@ const styleChangeToolbar = () => {
   })
   //範囲を指定してタグで囲む仕様
 }
-
 // ***** Style change Toolbar *****
 
 
@@ -724,13 +1002,25 @@ const finalConfirmModal = () => {
   const finishModalCancel = document.getElementById('finishModalCancel');
 
 
-  // finishModalBtn.onclick = () => { //confirm finish modal ?? 英語がわからん
-  //   console.log("FinishModalOpen")
-  //   isHidden(finishModal);
-  // }
-
-
   finishBtn.onclick = () => {
+      // モーダルの文言
+  const finishModalTextFirst = document.getElementById('finishModalTextFirst');
+  const finishModalTextSecond = document.getElementById('finishModalTextSecond');
+
+  switch ( currentPlayer.finishedPlayer ) {
+    case 0:
+      isHidden(finishModalTextSecond);
+
+      break;
+      case 1:
+      finishModalTextFirst.classList.add('is-hidden');
+      finishModalTextSecond.classList.remove('is-hidden');
+
+
+    break;
+  };
+
+    // console.log(currentPlayer)
     isHidden(finishModal);
   }
   finishModalCancel.onclick = () => {
@@ -738,23 +1028,20 @@ const finalConfirmModal = () => {
   }
 
   // ***** 「これでOK？」→ [DONE] (並べ替え/説明入力終了後）*****
+
   finishModalDone.onclick = () => {
-    // console.log("Done");
 
-    // 画面消す
-    // とりま上にスクロールさせとく
-    // モーダルを出す
-
-    // １人目が終わったタイミング
+    // **********１人目が終わったタイミング**********
     if ( currentPlayer.finishedPlayer == 0 ){
-      
-      // 作成した成果をresult-windowにセットする
+
+      // // ***** 作成した成果をresult-windowにセットする ***** // //
       const resultWindowDisplayA = document.getElementById('deliverablesA');
-      const cardsDisp = document.querySelector('#descriptionDisplayAreaA ul');
+      const cardsDisp = document.querySelector('#descriptionDisplayAreaA > ul');
       const descriptionDisp = document.getElementById('descriptionDisplayAreaB');
       const cloneCards = cardsDisp.cloneNode(true);
       const cloneDesc = descriptionDisp.cloneNode(true);
-
+      console.log(resultWindowDisplayA)
+      // console.log(cloneCards)
       resultWindowDisplayA.appendChild(cloneCards);
       resultWindowDisplayA.appendChild(cloneDesc);
       //コピーされてしまうid/classを消す
@@ -762,22 +1049,22 @@ const finalConfirmModal = () => {
       const clonedDescA = document.querySelector('#deliverablesA > aside');
       clonedCardsA.removeAttribute('id');
       clonedDescA.removeAttribute('id');
-      clonedCardsA.classList.remove('c-hand__sort-window');
+      // clonedCardsA.classList.remove('c-hand-card-large');
       // clonedDescA.classList.remove('');
       //新たなid/classを付与
       clonedCardsA.setAttribute('id', 'resultCardsA');
       clonedDescA.setAttribute('id', 'resultDescA');
-      clonedCardsA.classList.add('c-hand__result-window');
-      clonedDescA.classList.add('c-desc__result-window');
+      // clonedCardsA.classList.add('c-hand__result-window');
+      // clonedDescA.classList.add('c-desc__result-window');
       // アバター用img要素を生成、所定の位置に設置、名前を表示、クラスの追加
       var img = document.createElement('img');
       img.src = currentPlayer.avatar
       img.alt = 'player_avatar_image';
-      const avatarImgA = document.getElementById('resultAvatarA');
+      const avatarImgA = document.getElementById('resultAvatarA'); // pにid
       avatarImgA.appendChild(img);
-      avatarImgA.classList.add('p-avatar');
+      // avatarImgA.classList.add('c-avatar');
       document.getElementById('resultAvatarA').appendChild(img);
-      document.getElementById('resultPlayerNameA').classList.add('c-player-name');
+      document.getElementById('resultPlayerNameA').classList.add('c-avatar__name');
       document.getElementById('resultPlayerNameA').innerHTML = currentPlayer.name;
 
       // resultModalにプレーヤー名を挿入
@@ -785,9 +1072,8 @@ const finalConfirmModal = () => {
       const secondPlayerResultA = document.getElementById('secondPlayerResultA');
       firstPlayerResultA.innerHTML = currentPlayer.name
       secondPlayerResultA.innerHTML = currentPlayer.name
+      // // 作成した成果をresult-windowにセットする // //
 
-      // 変数firstPlayerに登録
-      firstPlayer = currentPlayer.name
 
       dataMove(); // currentPlayerから済んだプレイヤーのobjectへ
       // console.log(player1);
@@ -799,17 +1085,71 @@ const finalConfirmModal = () => {
       // console.log(currentPlayer);
       // console.log(player1);
       // console.log(player2);
-      setSecondPlayerHandCards();
+      setSecondPlayerHandCards(); //次プレーヤーの手札をセット
+
       console.log('Player2のターンへ');
-    }
-    // ２人目が終わったタイミング
+
+      // // 画面を一番上元に戻す
+      // scrollTop(500);
+
+      // // 重さを考慮して↓に差し替え
+
+      // gameStage更新
+      currentPlayer.gameStage = 'firstStage'
+      currentPlayer.ReScrollPoint = 'first'
+
+      // sortWindowへスクロール
+      GoToNextStage();
+
+      // secondPlayer開始時のアニメーション
+      // ゲームスタート時のアニメーション
+      const startFlag = document.getElementById('startFlag');
+      const startFlag_ele_p = document.querySelector('#startFlag p');
+      startFlag.classList.remove('is-hidden');
+      startFlag.setAttribute('aria-expanded',false);
+      startFlag_ele_p.textContent = `${secondPlayer}さんのターン`;
+
+      // animation
+      function startFlagAppearance() {
+        startFlag.setAttribute('aria-expanded',true);
+      }
+      function startFlagIsHidden() {
+        startFlag.classList.add('is-hidden')
+      }
+      function anime_startFlagExit() {
+        startFlag.animate({
+          opacity: [1, 0, 1]
+        }, {
+          duration: 1700,
+          // direction: 'reverse',
+          iterations: 1
+        });
+      }
+      function anime_startFlagExit2() {
+        startFlag.animate({
+          opacity: [1, 0]
+        }, {
+          duration: 2000,
+          easing: 'ease-in-out',
+          fill: 'forwards'
+        })
+      }
+
+      // animation実行
+      setTimeout(startFlagAppearance, 10); // ゲームスタートの帯出現
+      setTimeout(anime_startFlagExit, 50);
+      setTimeout(anime_startFlagExit2, 1750);// 1700+1500+a
+      setTimeout(startFlagIsHidden, 5000);
+  }
+
+    // **********２人目が終わったタイミング（判定ウィンドウへ）**********
     else if( currentPlayer.finishedPlayer == 1 ){
       console.log('判定Windowへ');
 
-      // 作成した成果をresult-windowにセットする
+      // // 作成した成果をresult-windowにセットする // //
       // const resultWindowDisplayA = document.getElementById('deliverablesA');
       const resultWindowDisplayB = document.getElementById('deliverablesB');
-      const cardsDisp = document.querySelector('#descriptionDisplayAreaA ul');
+      const cardsDisp = document.querySelector('#descriptionDisplayAreaA > ul');
       const descriptionDisp = document.getElementById('descriptionDisplayAreaB');
       const cloneCards = cardsDisp.cloneNode(true);
       const cloneDesc = descriptionDisp.cloneNode(true);
@@ -821,23 +1161,23 @@ const finalConfirmModal = () => {
       const clonedDescB = document.querySelector('#deliverablesB > aside');
       clonedCardsB.removeAttribute('id');
       clonedDescB.removeAttribute('id');
-      clonedCardsB.classList.remove('c-hand__sort-window');
+      // clonedCardsB.classList.remove('c-hand-card-large');
       // clonedDescA.classList.remove('');
       //新たなid/classを付与
       clonedCardsB.setAttribute('id', 'resultCardsB');
       clonedDescB.setAttribute('id', 'resultDescB');
-      clonedCardsB.classList.add('c-hand__result-window');
-      clonedDescB.classList.add('c-desc__result-window');
+      // clonedCardsB.classList.add('c-hand__result-window');
+      // clonedDescB.classList.add('c-desc__result-window');
 
       // アバター用img要素を生成、所定の位置に設置、名前を表示、クラスの追加
       var img = document.createElement('img');
       img.src = currentPlayer.avatar
       img.alt = 'player_avatar_image';
-      const avatarImgB = document.getElementById('resultAvatarB');
+      const avatarImgB = document.getElementById('resultAvatarB');//pにid
       avatarImgB.appendChild(img);
-      avatarImgB.classList.add('p-avatar');
+      // avatarImgB.classList.add('c-avatar');
       document.getElementById('resultAvatarB').appendChild(img);
-      document.getElementById('resultPlayerNameB').classList.add('c-player-name');
+      document.getElementById('resultPlayerNameB').classList.add('c-avatar__name');
       document.getElementById('resultPlayerNameB').innerHTML = currentPlayer.name;
 
       // resultModalにプレーヤー名を挿入
@@ -846,11 +1186,27 @@ const finalConfirmModal = () => {
       const secondPlayerResultB = document.getElementById('secondPlayerResultB');
       firstPlayerResultB.innerHTML = currentPlayer.name
       secondPlayerResultB.innerHTML = currentPlayer.name
+      // // 作成した成果をresult-windowにセットする // //
 
-      // 変数secondPlayerに登録
-      secondPlayer = currentPlayer.name
 
-      // *********** 判定するボタンを押した時の処理の呼び出し ************
+      dataMove(); // currentPlayerから済んだプレイヤーのobjectへ
+      setDisplayDefault(); // 次プレイヤー用に現状復帰+a 表示の切り替え等
+      isHidden(finishModal)
+      setSecondPlayer(); // 次プレイヤー用にcurrentPlayerの値をセット
+      console.log(currentPlayer);
+      console.log(player1);
+      console.log(player2);
+
+      // gameStage更新
+      currentPlayer.gameStage = 'resultStage'
+      currentPlayer.ReScrollPoint = 'resultStage'
+
+      // resultWindowへスクロール
+      GoToNextStage();
+
+      // *********** 結果表示Windowにて ************
+
+      // 判定するボタンを押した時の処理の呼び出し
       openResultModal();
 
     }
@@ -860,10 +1216,9 @@ const finalConfirmModal = () => {
 
 const dataMove = () => {
   // const changeTurnBtn = document.getElementById('changeTurnBtn');
-  const description = document.getElementById('descriptionDisplayAreaB');
-  // 本来ならHTMLに変換されたものを保存したいが、とりまこれで問題ないので節約。
-  // currentPlayer.changesLeft = 0 ;// しっかり機能していれば不要
-  currentPlayer.description = description.textContent;
+  const description_Ele = document.getElementById('descriptionDisplayAreaB');
+  // currentPlayer.changesLeft = 0 ;// ここまでしっかり機能していれば不要
+  currentPlayer.description = description_Ele;
   currentPlayer.acted = true;
 
   if ( currentPlayer.player == player1 ) {
@@ -912,7 +1267,7 @@ const setDisplayDefault = () => {
   //  beforeを空に
   const CP_SortBefore_Elem_li = document.getElementById('currentPlayerSortBefore').getElementsByTagName('li');
   const CP_SortBeforeArray = Array.prototype.slice.call(CP_SortBefore_Elem_li);
-  
+
   CP_SortBeforeArray.forEach(ele =>
     ele.innerHTML = ''
   )
@@ -925,9 +1280,9 @@ const setDisplayDefault = () => {
     ele.innerHTML = ''
   )
 
-  //  次に進むボタンを活性化
-  const toDescriptionBtn = document.getElementById('toDescriptionBtn')
-  toDescriptionBtn.removeAttribute('disabled');
+  // 次に進む ボタンの無効化
+  const toDescriptionBtn = document.getElementById('toDescriptionBtn');
+  toDescriptionBtn.setAttribute('disabled',true);
 
   // 説明
   //  カードの要素の削除
@@ -939,25 +1294,24 @@ const setDisplayDefault = () => {
   //  textareaを空に
   const descriptionWriteArea = document.getElementById('descriptionWriteArea');
   descriptionWriteArea.value = ''
-
-  // 画面を一番上元に戻す
-  scrollTop(500);
-  function scrollTop(duration) {
-    let currentY = window.pageYOffset; 
-    let step = duration/currentY > 1 ? 10 : 100;
-    let timeStep = duration/currentY * step;
-    let intervalID = setInterval(scrollUp, timeStep);
-
-    function scrollUp(){
-      currentY = window.pageYOffset;
-      if(currentY === 0) {
-          clearInterval(intervalID);
-      } else {
-          scrollBy( 0, -step );
-      }
-    }
-  }
 }
+
+// //画面をスクロールで一番上に戻す
+//   function scrollTop(duration) {
+//     let currentY = window.pageYOffset;
+//     let step = duration/currentY > 1 ? 10 : 100;
+//     let timeStep = duration/currentY * step;
+//     let intervalID = setInterval(scrollUp, timeStep);
+
+//     function scrollUp(){
+//       currentY = window.pageYOffset;
+//       if(currentY === 0) {
+//           clearInterval(intervalID);
+//       } else {
+//           scrollBy( 0, -step );
+//       }
+//     }
+//   }
 
 
 const setSecondPlayer = () => {
@@ -976,8 +1330,12 @@ const setSecondPlayer = () => {
     currentPlayer.sortEnd = false;
     currentPlayer.acted = false;
     currentPlayer.finishedPlayer = 1;
+    currentPlayer.gameStage = 'firstStage';
+    currentPlayer.ReScrollPoint = 'first';
 
-    console.log("a");
+
+
+    // console.log("a");
   }
   else if (currentPlayer.player == player2) {
     player2.acted = true;
@@ -992,11 +1350,14 @@ const setSecondPlayer = () => {
     currentPlayer.sortEnd = false;
     currentPlayer.acted = false;
     currentPlayer.finishedPlayer = 1;
+    currentPlayer.gameStage = 'firstStage';
+    currentPlayer.ReScrollPoint = 'first';
 
-    console.log("b");
+    // console.log("b");
   }
-
 }
+
+// ２人目のプレイヤーのファーストステージ始めの処理
 
 const setSecondPlayerHandCards = () => {
   const setCardsBtn = document.getElementById('setCardsBtn')
@@ -1007,44 +1368,46 @@ const setSecondPlayerHandCards = () => {
   info.innerHTML = `${currentPlayer.name}さんのターンです！手札を引いて下さい！`;
   console.log(currentPlayer)
 
+  // 手札を引く ボタンを押した時
   setCardsBtn.onclick = () => {
-  //   const CP_HandCards = document.getElementById('currentPlayerHandCards');
-  //   let num = 0;
-  //   secondPlayerArray.forEach(function(i) {
-  //     CP_HandCards.children[num].innerHTML = `${[i]}`;
-  //     num++;
-  //   })
-  //   console.log(secondPlayerArray)
-
     setCards();
     isHidden(changeStartBtn)
     isHidden(setCardsBtn)
     setFirstInfo();
-
   }
-
 };
 
+// 決着をつける！
 const openResultModal = () => {
   const openResultModalBtn = document.getElementById('openResultModalBtn');
   const resultModalFirst = document.getElementById('resultModalFirst');
+  const RM_FirstText = resultModalFirst.querySelector('p');
   const firstPlayerResultA = document.getElementById('firstPlayerResultA');
   const firstPlayerResultB = document.getElementById('firstPlayerResultB');
+
+  // 判定する ボタンを押した時 <条件分岐によって結果が分かれる>
   openResultModalBtn.onclick = () => {
-    resultModalFirst.getElementsByTagName('p').innerHTML =  `${firstPlayer.name}さん、どちらが勝ったと思いますか？`
+
+    //モーダル１に質問文を挿入
+    RM_FirstText.innerHTML = `${currentPlayer.name}さん、どちらが勝ったと思いますか？`
+
     isHidden(resultModalFirst);
-    
+
+    //モーダル２に質問文を挿入
     const resultModalSecond = document.getElementById('resultModalSecond');
-    resultModalSecond.getElementsByTagName('p').innerHTML =  `${secondPlayer.name}さん、どちらが勝ったと思いますか？`
+    const RM_SecondText = resultModalSecond.querySelector('p');
+    RM_SecondText.innerHTML =  `${secondPlayer}さん、どちらが勝ったと思いますか？`
+
     const secondPlayerResultA = document.getElementById('secondPlayerResultA');
     const secondPlayerResultB = document.getElementById('secondPlayerResultB');
     const lastResult = document.getElementById('lastResult')
 
-    // *************はじめA
-    // first 1票から
+    // *************始めA(first)
+    // firstPlayerが firstに1票入れる
     firstPlayerResultA.onclick = () => {
       isHidden(resultModalFirst); // 閉
       isHidden(resultModalSecond); // 開
+
       // first 2票
       secondPlayerResultA.onclick = () => {
         isHidden(resultModalSecond); // 開
@@ -1055,41 +1418,35 @@ const openResultModal = () => {
       secondPlayerResultB.onclick = () => {
         isHidden(resultModalSecond); // 開
         isHidden(lastResult); //開
-        lastResult.innerHTML = 'どちらも同じくらい面白かったようです。'
+        // lastResult.innerHTML = 'どちらも同じくらい面白かったようです。'
+        lastResult.innerHTML = '意地の張り合いもほどほどに。'
+
       }
     }
-    // *************はじめB
-    // second 1票から
+    // *************始めB(second)
+    // firstPlayerが secondに1票入れる
     firstPlayerResultB.onclick = () => {
       isHidden(resultModalFirst); // 閉
       isHidden(resultModalSecond); // 開
+
       // 1:1
       secondPlayerResultA.onclick = () => {
         isHidden(resultModalSecond); // 開
         isHidden(lastResult); //開
-        lastResult.innerHTML = 'どちらも同じくらい面白かったようです。'
+        // lastResult.innerHTML = 'どちらも同じくらい面白かったようです。'
+        lastResult.innerHTML = '素晴らしい讃え合いです！'
       }
       // second２票
       secondPlayerResultB.onclick = () => {
         isHidden(resultModalSecond); // 開
         isHidden(lastResult); //開
         lastResult.innerHTML = `${secondPlayer}さんの勝ち！`
-
       }
 
     }
   }
 }
 
-
-// どこかでP2のターンをアナウンスする
-//未実装
-
-// これは２人がやった後
-// 判定に進むボタンを生成（or表示）
-//未実装
-// 自ボタンを消す
-// toggleDisabled(changeTurnBtn, 'true');
 
 // *****濁点*****
   // const p1SortAfterCard = document.getElementById('player1SortAfter').getElementsByTagName('li')
@@ -1102,6 +1459,4 @@ const openResultModal = () => {
 
 
 
-// *****ゲーム後に勝敗判定*****
-  // 自己申告制
-  // 勝ち数の記録を表示
+  // 勝ち数の記録を表示？

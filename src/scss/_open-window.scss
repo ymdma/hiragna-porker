@@ -1,15 +1,20 @@
 // cardOpenWindow
-.l-open-window{
+.open-window{
   position: absolute;
   top: 300%;
   left: 0;
   width: 100%;
   height: 100%;
+
   padding: 2em 1em;
   display: flex;
   flex-direction: column;
   justify-content: space-around;
   align-items: center;
+  @media(min-width:$pc){
+    min-height:640px;
+  }
+
   .p-vs{
     width: 100px;
     height: 100px;
@@ -19,40 +24,21 @@
     }
   }
 }
-[class^="player"]{
+[class^="l-player"]{
   width: 100%;
   display: flex;
+  align-items: flex-start;
   background: #ffffff;
   // background: #007788;
 
 }
 
-.playerB{
-  .c-player-status{
+.l-playerB{
+  .c-avatar{
     order: 2;
   }
-  .deliverables{
+  .p-deliverables{
     order:1;
-  }
-}
-
-.c-player-status{
-
-  height: inherit;
-  width: 150px;
-  @include flex--center($text:center);
-  background: #ffffff;
-  // background: #0000ff;
-
-  .p-avatar{
-    position: relative;
-    width: 100px;
-    height: 100px;
-    @include with-border();
-
-    img{
-      width: inherit;
-    }
   }
 }
 
@@ -67,53 +53,53 @@
   font-family: "Nico Moji";
 }
 
-
-.deliverables{
+.p-deliverables{
   width: 100%;
     display: flex;
     align-items: center;
     justify-content: center;
     flex-direction: column;
-  .c-hand__result-window{
-    width: 60%;
-    height: inherit;
-    margin: 0 0 20px 0;
-    display: flex;
-    justify-content: space-around;
-    align-items: center;
-    li{
-      @include card(
-        $card-w:$handCardWidth,
-        $card-h:$handCardHeight
-      );
-      padding: 8px 0;
-      @include with-border();
-      @include strongText;
-    };
+
+    .c-display-hand-cards{
+      @media(max-width:$sp){
+        width: 60%;
+
+      }
+      @media(min-width:$pc){
+        // width: 100%;
+        // padding: 0 20%;
+        width: 60%;
+      }
+    }
+}
+
+// ResultModal-Open
+.open-result-btn{
+  width: 185px;
+  height: 43px;
+  position: absolute;
+  top: 5px;
+  right: 23%;
+  background: #fff;
+  outline: solid #00F 2px;
+  @include mainText (
+    $color: #000,
+    $size: 26px,
+    $line-height: 26px,
+    $weight: 600
+    );
+  letter-spacing: 1.5px;
+  // font-family: "Nico Moji";
+  z-index: 101;
+  @media (max-width:$sp){
+    right: 37px;
   }
-  .c-desc__result-window{
-    width: 100%;
-    height: fit-content;
+  &:hover{
+    background: rgb(163, 206, 241);
   }
 }
 
-// ResultModal
-.open-result-btn{
-  width: 250px;
-  height: 60px;
-  position: absolute;
-  top: 3%;
-  right: 3%;
-  background: #00000000;
-  text-align: center;
-  @include mainText (
-    $color: $baseBlackColor,
-    $size: 26px,
-    $weight: 600
-    );
-    outline:solid #000 2px;
-  // font-family: "Nico Moji";
-}
+
 .p-modal__result{
   width: 350px;
   height: 200px;
