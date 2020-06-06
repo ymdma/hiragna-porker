@@ -27,6 +27,9 @@
               inset 0 0 300px rgba(0,0,0,0.2);
   z-index: 10;
   overflow: hidden;
+  @media(max-width: $sp){
+    height: 330px;
+  }
 }
 
 // STOCK CARDS
@@ -78,6 +81,11 @@
   left: -88px;
   transform: rotate(90deg);
   overflow: hidden;
+
+  @media (max-width:$sp) {
+    top: 200px;
+  }
+
   .c-game-table-hand-cards{
     display: flex;
     li{
@@ -108,6 +116,11 @@
   right: -89px;
   transform: rotate(-90deg);
   overflow: hidden;
+
+  @media (max-width:$sp) {
+    top: 170px;
+  }
+
   .c-game-table-hand-cards{
     display: flex;
 
@@ -159,6 +172,9 @@
   position: absolute;
   top: 332px;
   left: 72.5px;
+  @media (max-width:$sp) {
+    top: 312px;
+  }
 }
 
 .p-discard-second{

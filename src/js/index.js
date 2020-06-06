@@ -354,7 +354,7 @@ const setDisplay = () => {
 }
 const setFirstInfo = () => {
   const info = document.getElementById('information').children[0];
-  info.innerHTML = 'カードを交換して言葉を完成させよう！';
+  info.innerHTML = `手札を交換して、言葉を完成させよう！`;
 
 }
 
@@ -1242,9 +1242,6 @@ const dataMove = () => {
 
 const setDisplayDefault = () => {
   // 全ての一時的な表示を元に戻す。
-  // インフォ
-  // const info = document.getElementById('information').children[0];
-  // info.innerHTML = `${currentPlayer.name}さんのターンです！\n手札を引いて下さい！`;
 
   // プレーヤーエリア
   //  手札を空に
@@ -1365,7 +1362,7 @@ const setSecondPlayerHandCards = () => {
   const info = document.getElementById('information').children[0];
   isHidden(changeStartBtn)
   setDisplay();
-  info.innerHTML = `${currentPlayer.name}さんのターンです！手札を引いて下さい！`;
+  info.innerHTML = `${currentPlayer.name}さん、手札を引いて下さい！`;
   console.log(currentPlayer)
 
   // 手札を引く ボタンを押した時
