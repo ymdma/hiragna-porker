@@ -1,5 +1,5 @@
 
 node_modules
-.vscode
-public/js
-public/scss
+/.vscode
+/public/js
+/public/scss
