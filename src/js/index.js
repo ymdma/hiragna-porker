@@ -1,7 +1,7 @@
-import {hello} from "./sub.js";
+// import {hello} from "./sub.js";
 
-console.log("indexの読み込み1")
-hello();
+// console.log("indexの読み込み1")
+// hello();
 
 // // //
 
@@ -434,7 +434,6 @@ const cardChange = () => {
       cardChangeDone(); //処理を次の関数へ受け渡す
     }
   }
-
 }
 
 
