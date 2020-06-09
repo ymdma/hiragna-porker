@@ -90,7 +90,8 @@
     );
   letter-spacing: 1.5px;
   // font-family: "Nico Moji";
-  z-index: 101;
+  // z-index: 101;
+  cursor: pointer;
 
   @media (max-width:$sp){
     left: 50%;
@@ -127,6 +128,7 @@
         $size:25px,
         $color:#000
         );
+      cursor: pointer;
     }
     button:nth-child(1){
       margin: 0 20px 0 0;
