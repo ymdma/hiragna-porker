@@ -1,4 +1,5 @@
-const MODE = "development";
+// const MODE = "development";
+const MODE = "production";
 const enabledSourceMap = MODE === "development";
 const path = require('path');
 const  MiniCssExtractPlugin = require('mini-css-extract-plugin');
@@ -9,6 +10,19 @@ let
 
 
 module.exports = {
+
+  mode: MODE,
+  entry:
+  {
+    script:[
+    './src/js/index.js',
+    './src/scss/style.scss'
+  ]
+  },
+  output:{
+    path: path.resolve(__dirname, './public/'),
+    filename:"js/main.js"
+  },
 
   devServer: {
     // contentBase: "dist",
@@ -29,21 +43,8 @@ module.exports = {
     historyApiFallback: true,
     compress: true,
   },
-  mode: MODE,
-  entry:
-  {
-    script:[
-    './src/js/index.js',
-    './src/scss/style.scss'
-  ]
-  },
-  output:{
-    path: path.resolve(__dirname, './public/'),
-    filename:"js/main.js"
-  },
   module: {
     rules: [
-      
       {
         test: /\.scss$/,
         use: [

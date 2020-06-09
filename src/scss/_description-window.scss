@@ -13,7 +13,7 @@
   background: $baseYellowColor;
   box-shadow: inset 0 0 60px 0 rgba(0,0,0,0.5);
   @media(min-width:$pc){
-    min-height:640px;
+    min-height:630px;
   }
 
   [role="title"]{
@@ -67,10 +67,6 @@
   position: absolute;
   top: 0;
   left: 148px;
-  // display: flex;
-  // flex-direction: column;
-  // background: #ffffffcb;
-  // @include with-border();
   @include no-border;
 
   .c-button{
@@ -160,39 +156,8 @@
       width: 100%;
       // height: 40px;
       background: transparent;
-      // .c-hand-cards-large{
-      //   margin: 0;
-      //   padding:0 10px;
-      //   @media (max-width:$sp) {
-      //     height: 68px;
-      //   }
-      //   @media (min-width:$pc) {
-      //     height: 85px;
-      //   }
-      //   li{
-      //     @media (max-width:$sp) {
-      //       padding: 10px 0;
-      //       @include card(
-      //         $card-w: $handCardWidth,
-      //         $card-h: $handCardHeight
-      //       )
-      //     }
-      //     @media (min-width:$pc) {
-      //       padding: 16px 0;
-      //       @include card__large(
-      //         $card-w: $largeCardWidth - 21px,
-      //         $card-h: $largeCardHeight - 28px
-      //       )
-      //     }
-
-      //   }
-      // }
 
     }
-    // ul{
-    //   margin: 20px 0;
-    //   background: transparent;
-    // }
 
     .c-display-description{
       width: 100%;

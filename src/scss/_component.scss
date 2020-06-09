@@ -141,6 +141,7 @@ $largeCardHeight:100px;
   @include mainText($weight:600);
   text-align: center;
   word-break: keep-all;
+  cursor: pointer;
 
   @media (max-width:$sp) {
     width: fit-content;
@@ -173,8 +174,8 @@ $largeCardHeight:100px;
   color: #555;
   font-size: 18.5px;
   font-weight: 400;
-
   text-align: center;
+  cursor: pointer;
   @media (max-width:$sp) {
     width: 35px;
     height: 35px;

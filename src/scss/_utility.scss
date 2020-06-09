@@ -62,13 +62,14 @@ align-items: center;
   $color: $baseBlackColor,
   $size: $medium,
   $line-height: $medium,
-  $weight: 400
+  $weight: 400,
+  $letter-spacing: 1px
 ){
   color: $color;
   font-size: $size;
   font-weight: $weight;
   line-height: $line-height;
-  letter-spacing: 0.9px;
+  letter-spacing: $letter-spacing;
 }
 @mixin strongText (
   $color: $baseBlackColor,
