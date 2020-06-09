@@ -90,10 +90,14 @@
     );
   letter-spacing: 1.5px;
   // font-family: "Nico Moji";
-  z-index: 101;
+  // z-index: 101;
+  cursor: pointer;
+
   @media (max-width:$sp){
-    right: 37px;
+    left: 50%;
+    transform: translateX(-50%);
   }
+
   &:hover{
     background: rgb(163, 206, 241);
   }
@@ -124,6 +128,7 @@
         $size:25px,
         $color:#000
         );
+      cursor: pointer;
     }
     button:nth-child(1){
       margin: 0 20px 0 0;
@@ -133,7 +138,6 @@
       background: #44aa44;
     }
   }
-
 }
 
 .l-last-result{
