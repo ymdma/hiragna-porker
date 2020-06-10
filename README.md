@@ -16,7 +16,8 @@
 Mac GoogleChrome(ver: 最新) <br>
 iOS 13 GoogleChrome,safari (画面サイズ: iPhoneで言うと6以上))<br>
 <br>
-*PCでのプレイ時、ブラウザ画面高640px以上推奨<br>
+＊PCでのプレイ時、ブラウザ画面の縦幅640px以上推奨<br>
+＊スマホでは縦のみ対応。横置き時は「縦でプレイしてください」というダイアログが出ます。<br>
 <br>
 
   #  ひらがな DE ポーカー とは

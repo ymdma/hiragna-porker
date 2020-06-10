@@ -1446,3 +1446,16 @@ const hbgmenu = () =>{
 //   alert("aaa")
 //   // setAttrAriaExpanded(hbg)
 // }
+
+window.onorientationchange = function () {
+  switch ( window.orientation ) {
+    case 0:
+      break;
+    case 90:
+      alert('スマホでは画面を縦にしてプレイしてください');
+      break;
+    case -90:
+      alert('スマホでは画面を縦にしてプレイしてください２');
+      break;
+    }
+  }
