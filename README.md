@@ -1,5 +1,7 @@
   # ひらがな DE ポーカー
-
+<div display="flex" align="center">
+  <img src="./public/image/start.png" width="50%">
+</div>
   ## ひらがな DE ポーカーとは
     "ひらがな DE ポーカー"は、ポーカーのようでそうでない…一風変わったカードゲームアプリです。
 
@@ -11,10 +13,10 @@
 <br>
 
   ### 制作・動作確認環境: <br>
-Mac GoogleChrome(ver:最新) <br>
-iOS 13 GoogleChrome,safari)<br>
+Mac GoogleChrome(ver: 最新) <br>
+iOS 13 GoogleChrome,safari (画面サイズ: iPhoneで言うと6以上))<br>
 <br>
-*PC : ブラウザ画面高640px以上推奨<br>
+*PCでのプレイ時、ブラウザ画面高640px以上推奨<br>
 <br>
 
   #  ひらがな DE ポーカー とは
@@ -37,11 +39,7 @@ iOS 13 GoogleChrome,safari)<br>
 
   プリセットされている2つのアバター:chicken: :dog:のうちいずれかを選択し、先行するプレーヤーを決めます。
 
-
-  [![Image from Gyazo](url)](url)
-
-
-  <br>
+<br>
 
   ## カードを交換する
   先行するプレーヤーから行動を開始します。
@@ -50,15 +48,14 @@ iOS 13 GoogleChrome,safari)<br>
   手札の文字達からイメージを膨らませ、交換したいカードがあれば、「カードの交換」を行います。
   (交換は最大で４枚まで行えます。)
 
-  [画像]
+   なお、交換して不要になったカードは「交換済みカード」として表示されます。
 
-  なお、交換して不要になったカードは「交換済みカード」として表示されます。
+<div display="flex" align="center">
+  <img src="https://i.gyazo.com/0b638fb57070ea53c58f34a2d2a04c6b.gif" width="50%">
+</div>
 
-  [画像]
+  これ以上交換の必要がないと考えた場合、また、交換を終えた時には、「並び替える」ボタンを押して並び替えの画面に移ります。
 
-  交換の必要がないと考えた場合、また、交換を終えた時には、並び替えの画面に移ります。
-
-  [![Image from Gyazo](url)](url)
 <br>
 
   ## 手札を並び替える
@@ -68,9 +65,11 @@ iOS 13 GoogleChrome,safari)<br>
 
   まずは、上段の手札を並ばせたい順番にクリックすることで、下段に新しい並びの手札が作成されてゆきます。
 
-
+<div display="flex" align="left">
+  <img src="./public/image/sort.png" width="30%">
+</div>
   並びを直したい時（また、文字が被ってしまった時）には、画面下部の「もう一回並び替える」を押すことで、始めからやり直すことができます。
-<div display="flex" align="center">
+<div display="flex" align="right">
   <img src="https://i.gyazo.com/30559106526d41368c8bb54b31a7749a.gif" width="30%">
 </div>
   思った通りに並び替えたら、「次へ進む」を押します。
@@ -84,7 +83,9 @@ iOS 13 GoogleChrome,safari)<br>
   例えばTwitterで、面白い写真をtweetする際に、一言ボケコメントを添えて笑いを誘うように、気の利いた一言コメントを添えたり。
   または、なんでもない言葉でも詳しいシチュエーションを説明して面白くしてみたり。それぞれの発想で活用してください。
   
-  [![Image from Gyazo](url)](url)
+<div display="flex" align="center">
+  <img src="./public/image/comment.png" width="50%">
+</div>
 
   使い方としては、
   ・テキストエリアを選択して文字入力(上限は140文字)。
@@ -105,25 +106,62 @@ iOS 13 GoogleChrome,safari)<br>
   問題なければそのまま肯定し、判定画面に映ってください。
 
 <br>
-<br>
 
   ## 判定(発表)画面
   各プレーヤーが作った"文字"と”コメント”が発表されます。
   先行プレーヤーが上に、後行のプレーヤーが下に、アバターとともに縦に並んで表示されます。
 
-  <br>
-:copyright:
+<br>
+<br>
+<div display="flex" align="center">
+  <img src="./public/image/result.png" width="50%">
+</div>
 
 
+<br>
+<br>
 
+## 投票する
 
-  ## 制作背景
+「判定する」ボタンを押すことで、投票に移ります。<br>
+勝敗は各プレイヤーの感覚に委ねられます。<br>
 
-  ### 制作動機
+各プレイヤーに対し、勝敗を問うモーダルが表示されますので、正直にどちらが勝ったか答えて下さい。
 
+<br>
+
+最後に、結果の表示がされ、ゲーム終了となります。
+
+お疲れ様でした！
 
 <br>
 
 ***
 
 <br>
+
+  ## 制作背景
+
+ライブラリを使わないJavaScript、Webpack4を用いたコンパイル、Sassや、FLOCSSを用いた(意識)したCSS等、フロントエンド系の諸技術を使用した習作として製作しました。
+
+<br>
+
+***
+
+<br>
+
+
+  ## なぜこのゲームを作ったのか
+
+  - 流行ったのは数年前ですが、前とはいえ普遍的な面白さがあること。<br>
+  - 「やってみたいね」と言う話になったが既製品でアプリが見つからなかったこと。<br>
+  - 検索すると、 [*** アプリ] のように表示されるが、どうやら既製品がないこと。<br>
+  - ゲームのルールには著作権が適用されないこと。<br>
+
+<br>
+
+***
+<br>
+
+:copyright: MasatoYamada
+

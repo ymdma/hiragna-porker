@@ -82,6 +82,7 @@ document.addEventListener('DOMContentLoaded', () => {
   finalConfirmModal();
   descriptionWriteFunc();
   styleChangeToolbar();
+  hbgmenu();
 });
 
 
@@ -195,17 +196,24 @@ function removeDisabled(target) {
   target.removeAttribute('disabled');
 };
 
-// aria-expanded 切替 (半手動)
+// aria-expanded 切替
 function setAttrAriaExpanded(target) {
   if ( target.getAttribute('aria-expanded') == 'false' ) {
-    target.setAttribute('aria-expanded', 'true');
+    setAttr(target, 'true')
   }
   else{
-    target.setAttribute('aria-expanded', 'false');
+    setAttr(target, 'false')
   }
 };
 
+// setAttribute
+function setAttr(target,val) {
+  target.setAttribute('aria-expanded', val)
+}
+
 // ***** Functions *****
+
+
 
 // 先攻プレーヤー(キャラ)の選択
 const pushStartBtn = () => {
@@ -1423,3 +1431,18 @@ const openResultModal = () => {
 
 
 
+// ********** HBG **********
+const hbgmenu = () =>{
+
+  const hamburgerBtn = document.getElementById('hamburgerBtn');
+  const navList = document.getElementById('navList');
+
+  hamburgerBtn.addEventListener('click', function(){
+    setAttrAriaExpanded(hamburgerBtn);
+    setAttrAriaExpanded(navList);
+  })
+}
+// hamburgerBtn.onclick = () => {
+//   alert("aaa")
+//   // setAttrAriaExpanded(hbg)
+// }

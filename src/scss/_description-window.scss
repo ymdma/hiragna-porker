@@ -200,7 +200,7 @@
     height: fit-content;
     padding: 40px;
     @include flex--center($text:center);
-    background: #ffffffcc;
+    background: #ffffffee;
     @include with-border();
     @include mainText();
     p{
