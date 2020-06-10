@@ -192,13 +192,18 @@
 
 
 .p-nav{
-  width: 250px;
+
   height: 50px;
   display: flex;
   align-items: center;
   overflow: hidden;
   cursor: pointer;
-
+  @media (min-width:$pc){
+    width: 250px;
+  }
+  @media (max-width:$sp){
+    width: fit-content;
+  }
   .c-hamburger-button {
     width: 40px;
     height: 40px;
@@ -211,7 +216,7 @@
       top: 10px;
     }
     right: 10px;
-    background: #ffffff38;
+    background: transparent;
     @include no-border();
     z-index:102;
     cursor: pointer;
