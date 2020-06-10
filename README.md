@@ -84,7 +84,7 @@ iOS 13 GoogleChrome,safari (画面サイズ: iPhoneで言うと6以上))<br>
   または、なんでもない言葉でも詳しいシチュエーションを説明して面白くしてみたり。それぞれの発想で活用してください。
   
 <div display="flex" align="center">
-  <img src="./public/image/comment.png" width="50%">
+  <img src="./public/image/comment.png" width="40%">
 </div>
 
   使い方としては、
@@ -114,7 +114,7 @@ iOS 13 GoogleChrome,safari (画面サイズ: iPhoneで言うと6以上))<br>
 <br>
 <br>
 <div display="flex" align="center">
-  <img src="./public/image/result.png" width="50%">
+  <img src="./public/image/result.png" width="40%">
 </div>
 
 
@@ -129,11 +129,15 @@ iOS 13 GoogleChrome,safari (画面サイズ: iPhoneで言うと6以上))<br>
 各プレイヤーに対し、勝敗を問うモーダルが表示されますので、正直にどちらが勝ったか答えて下さい。
 
 <br>
+<br>
 
 最後に、結果の表示がされ、ゲーム終了となります。
 
+<br>
+
 お疲れ様でした！
 
+<br>
 <br>
 
 ***
