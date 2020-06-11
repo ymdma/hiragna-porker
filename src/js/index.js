@@ -70,6 +70,7 @@ let currentPlayer = {
 }
 
 document.addEventListener('DOMContentLoaded', () => {
+  // geme
   pushStartBtn();
   cardChange();
   moreCardChangeDone();
@@ -82,7 +83,9 @@ document.addEventListener('DOMContentLoaded', () => {
   finalConfirmModal();
   descriptionWriteFunc();
   styleChangeToolbar();
-  hbgmenu();
+  // nav
+  HBG_menu();
+  NAV_control();
 });
 
 
@@ -197,7 +200,7 @@ function removeDisabled(target) {
 };
 
 // aria-expanded 切替
-function setAttrAriaExpanded(target) {
+function setAriaExpanded(target) {
   if ( target.getAttribute('aria-expanded') == 'false' ) {
     setAttr(target, 'true')
   }
@@ -892,32 +895,32 @@ const styleChangeToolbar = () => {
 
   styleLeft.onclick = () => {
     descriptionDisplayAreaB.style.textAlign = 'left';
-    setAttrAriaExpanded(styleLeft)
+    setAriaExpanded(styleLeft)
     if ( styleCenter.getAttribute('aria-expanded') == 'true' ) {
-    setAttrAriaExpanded(styleCenter)
+    setAriaExpanded(styleCenter)
     }
     if ( styleRight.getAttribute('aria-expanded') == 'true' ) {
-    setAttrAriaExpanded(styleRight)
+    setAriaExpanded(styleRight)
     }
   }
   styleCenter.onclick = () => {
     descriptionDisplayAreaB.style.textAlign ='center';
-    setAttrAriaExpanded(styleCenter)
+    setAriaExpanded(styleCenter)
     if ( styleLeft.getAttribute('aria-expanded') == 'true' ) {
-    setAttrAriaExpanded(styleLeft)
+    setAriaExpanded(styleLeft)
     }
     if ( styleRight.getAttribute('aria-expanded') == 'true' ) {
-    setAttrAriaExpanded(styleRight)
+    setAriaExpanded(styleRight)
     }
   }
   styleRight.onclick = () => {
     descriptionDisplayAreaB.style.textAlign ='right';
-    setAttrAriaExpanded(styleRight)
+    setAriaExpanded(styleRight)
     if ( styleLeft.getAttribute('aria-expanded') == 'true' ) {
-    setAttrAriaExpanded(styleLeft)
+    setAriaExpanded(styleLeft)
     }
     if ( styleCenter.getAttribute('aria-expanded') == 'true' ) {
-    setAttrAriaExpanded(styleCenter)
+    setAriaExpanded(styleCenter)
     }
   }
   // カーソルのある場所に文字列を挿入
@@ -938,40 +941,40 @@ const styleChangeToolbar = () => {
 
   openPopFontsize.addEventListener('click', (event) => {
     isHidden(popToolbarFontsize);
-    setAttrAriaExpanded(openPopFontsize);
+    setAriaExpanded(openPopFontsize);
 
   })
   styleLarge.onclick = () => {
     descriptionDisplayAreaB.style.fontSize = `35px`;
     descriptionDisplayAreaB.style.lineHeight = `35px`;
-    setAttrAriaExpanded(styleLarge)
+    setAriaExpanded(styleLarge);
     if ( styleMedium.getAttribute('aria-expanded') == 'true' ) {
-    setAttrAriaExpanded(styleMedium)
+    setAriaExpanded(styleMedium);
     }
     if ( styleSmall.getAttribute('aria-expanded') == 'true' ) {
-    setAttrAriaExpanded(styleSmall)
+    setAriaExpanded(styleSmall);
     }
   }
   styleMedium.onclick = () => {
     descriptionDisplayAreaB.style.fontSize = `20px`;
     descriptionDisplayAreaB.style.lineHeight = `20px`;
-    setAttrAriaExpanded(styleMedium)
+    setAriaExpanded(styleMedium);
     if ( styleLarge.getAttribute('aria-expanded') == 'true' ) {
-    setAttrAriaExpanded(styleLarge)
+    setAriaExpanded(styleLarge);
     }
     if ( styleSmall.getAttribute('aria-expanded') == 'true' ) {
-    setAttrAriaExpanded(styleSmall)
+    setAriaExpanded(styleSmall);
     }
   }
   styleSmall.onclick = () => {
     descriptionDisplayAreaB.style.fontSize ='15px';
     descriptionDisplayAreaB.style.lineHeight ='15px';
-    setAttrAriaExpanded(styleSmall)
+    setAriaExpanded(styleSmall);
     if ( styleLarge.getAttribute('aria-expanded') == 'true' ) {
-    setAttrAriaExpanded(styleLarge)
+    setAriaExpanded(styleLarge);
     }
     if ( styleMedium.getAttribute('aria-expanded') == 'true' ) {
-    setAttrAriaExpanded(styleMedium)
+    setAriaExpanded(styleMedium);
     }
   }
   styleColorPicker.addEventListener('change', (event) => {
@@ -1432,22 +1435,38 @@ const openResultModal = () => {
 
 
 // ********** HBG **********
-const hbgmenu = () =>{
+const HBG_menu = () =>{
 
   const hamburgerBtn = document.getElementById('hamburgerBtn');
   const navList = document.getElementById('navList');
 
-  hamburgerBtn.addEventListener('click', function(){
-    setAttrAriaExpanded(hamburgerBtn);
-    setAttrAriaExpanded(navList);
+  hamburgerBtn.addEventListener('click', function() {
+    setAriaExpanded(hamburgerBtn);
+    setAriaExpanded(navList);
   })
 }
-// hamburgerBtn.onclick = () => {
-//   alert("aaa")
-//   // setAttrAriaExpanded(hbg)
-// }
 
-window.onorientationchange = function () {
+const NAV_control = () =>{
+  const toRules = document.getElementById('toRules');
+  const Rules = document.getElementById('Rules');
+  const toRequirements = document.getElementById('toRequirements');
+  const Requirements = document.getElementById('Requirements');
+  const closeRequirements = document.getElementById('closeRequirements');
+
+  toRules.onclick = () => {
+    setAriaExpanded(Rules);
+  };
+  toRequirements.onclick = () => {
+    setAriaExpanded(Requirements);
+  };
+  closeRequirements.onclick = () => {
+    setAriaExpanded(Requirements);
+  };
+
+}
+
+// スマホの横置き時、「縦でお願いします」のダイアログを出す。
+window.onorientationchange = () => {
   switch ( window.orientation ) {
     case 0:
       break;
@@ -1457,5 +1476,6 @@ window.onorientationchange = function () {
     case -90:
       alert('スマホでは画面を縦にしてプレイしてください２');
       break;
-    }
   }
+}
+

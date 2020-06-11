@@ -14,7 +14,6 @@
 
 <body>
 
-
   <content class="wrap">
 
     <!-- HEADER -->
@@ -34,13 +33,59 @@
           <span id="hbg" class="c-hamburger-button__line"></span>
         </button>
         <ul id="navList" class="p-nav__list" aria-expanded="false">
-          <li>ルール</li>
-          <li>動作環境</li>
+          <li id="toRules">ルール</li>
+          <li id="toRequirements">動作環境</li>
         </ul>
       </nav>
       <!-- __G-NAV -->
     </header>
   <!-- HEADER -->
+
+  <!-- 動作環境 -->
+
+  <div id="Requirements" class="p-requirements" aria-expanded="false">
+    <div id="closeRequirements" class="c-close-button__x" role="button" tabindex="0">
+      ×
+    </div>
+    <h2> 制作・動作確認環境 </h2>
+    <div class="requirements-grids">
+      <p>
+        <span class="u-span-text__mac-black">Mac</span><br>
+        GoogleChrome(Latest)
+      </p>
+      <p>
+        <span class="u-span-text__pink">iOS13</span><br>
+        GoogleChrome
+      </p>
+      <p>
+        <span class="u-span-text__pink">iOS13</span><br>
+        safari
+      </p>
+      <p>
+        <span class="u-span-text__black">PCブラウザ縦幅 :</span><br>
+        640px以上推奨
+      </p>
+      <p>
+        <span class="u-span-text__black">スマホ画面サイズ :</span><br>
+        iPhone6/7/8~
+      </p>
+      <p>
+        <span class="u-span-text__black">スマホ画面縦横 :</span><br>
+        ポートレート(縦)のみ対応
+      </p>
+    </div>
+  </div>
+
+  <!-- 動作環境 -->
+
+  <!-- ルール -->
+  <section class="p-rule-1">
+  </section>
+  <section class="p-rule-2">
+  </section>
+  <section class="p-rule-3">
+  </section>
+  <!-- ルール -->
 
 
     <!-- START BUTTON -->
@@ -50,7 +95,6 @@
       </button>
     </section>
     <!-- START BUTTON -->
-
 
     <!-- FIRST MODAL -->
     <div id="firstAttackSelectModal" class="c-modal first-modal is-hidden">
