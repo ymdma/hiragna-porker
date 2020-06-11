@@ -11,6 +11,7 @@
   @include flex--center;
 }
 
+//  (×)  押したらクローズするボタン
 .c-close-button__x{
   width: 30px;
   height: 30px;
@@ -208,5 +209,80 @@ $largeCardHeight:100px;
   }
   &:disabled{
     background-color: #ccc;
+  }
+}
+
+.p-pop__dakuten{
+  width: 330px;
+  height: 63px;
+  margin: 10px 0 0 0;
+  padding: 5px 20px;
+  display: flex;
+  justify-content: space-around;
+  background: #fffaca;
+  @include with-border(
+    $style: double,
+    $color: #ccb800,
+    $width: 3px
+    );
+  box-shadow: 1px 2px 3px 1px #555555dd;
+  p{
+    width: fit-content;
+    height: fit-content;
+    padding: 7px;
+    margin: 0 8px 0 0;
+    @include with-border(
+      $style: dotted,
+      $color: #ff5050
+      );
+    border-radius: 5px;
+    @include strongText(
+      $size: 32px,
+      $line-height: 32px
+    );
+    &:nth-of-type(1){
+      border-color: #2e9e8a;
+    }
+    &:nth-of-type(2){
+      border:none;
+      color: #ff7f50;
+    }
+    &:last-of-type{
+      margin: 0;
+    }
+  }
+  // &:before{
+  //   content: "変換候補";
+  //   // width: 80px;
+  //   height: 40px;
+  //   padding: 10px 20px 10px 0;
+  //   position: absolute;
+  //   top: 72%;
+  //   left: 0%;
+  //   background: #fff;
+  //   border-style: solid;
+  //   border-width: 2px 2px 2px 0;
+  //   border-color: #000;
+  //   border-radius: 2px;
+
+  //   word-break: keep-all;
+
+  // }
+}
+
+
+// ⬇︎
+.c-arrow{
+  margin-block-start: 5px;
+  margin-block-end: 5px;
+  margin-inline-start: 0;
+  margin-inline-end: 0;
+  width:90px;
+  height:90px;
+  fill: #d36d24;
+  @media (max-width:$sp) {
+    width:70px;
+    height:70px;
+    fill: #e4d97a;
   }
 }

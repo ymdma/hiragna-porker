@@ -46,11 +46,11 @@ align-items: center;
 }
 // border__ありの場合
 @mixin with-border (
-  $type: solid,
+  $style: solid,
   $color: $baseBlackColor,
   $width: 2px
 ){
-  border: $type $color $width;
+  border: $style $color $width;
   box-shadow: 1 1 3px 1px $baseBlackColor;
   @include border-radius();
 }

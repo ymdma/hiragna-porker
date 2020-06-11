@@ -64,17 +64,3 @@
   }
 }
 
-.c-arrow{
-  margin-block-start: 20px;
-  margin-block-end: 20px;
-  margin-inline-start: 0;
-  margin-inline-end: 0;
-  width:100px;
-  height:100px;
-  fill: #d36d24;
-  @media (max-width:$sp) {
-    width:80px;
-    height:80px;
-    fill: #e4d97a;
-  }
-}
