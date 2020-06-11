@@ -85,7 +85,6 @@ document.addEventListener('DOMContentLoaded', () => {
   styleChangeToolbar();
   // nav
   HBG_menu();
-  NAV_control();
 });
 
 
@@ -1444,9 +1443,7 @@ const HBG_menu = () =>{
     setAriaExpanded(hamburgerBtn);
     setAriaExpanded(navList);
   })
-}
 
-const NAV_control = () =>{
   const toRules = document.getElementById('toRules');
   const Rules = document.getElementById('Rules');
   const closeRules = document.getElementById('closeRules');
@@ -1457,6 +1454,8 @@ const NAV_control = () =>{
   toRules.onclick = () => {
     setAriaExpanded(Rules);
     setAttr(Requirements, false)
+    // setAttr(hamburgerBtn, false);
+    // setAttr(navList, false);
   };
   closeRules.onclick = () => {
     setAriaExpanded(Rules);
@@ -1464,6 +1463,8 @@ const NAV_control = () =>{
   toRequirements.onclick = () => {
     setAriaExpanded(Requirements);
     setAttr(Rules, false)
+    // setAttr(hamburgerBtn, false);
+    // setAttr(navList, false);
   };
   closeRequirements.onclick = () => {
     setAriaExpanded(Requirements);
