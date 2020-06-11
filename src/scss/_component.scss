@@ -14,14 +14,15 @@
 .c-close-button__x{
   width: 30px;
   height: 30px;
-  padding: 0;
+  padding: 0 0 2px 0;
   background: transparent;
   border:solid $baseBlackColor 1px;
   border-radius: 50%;
-  font-size: 30px;
-  line-height: 25.5px;
+  font-size: 27px;
+  line-height: 26px;
   // @include flex--center;
   text-align: center;
+  cursor: pointer;
 }
 
 // アバター

@@ -1449,19 +1449,26 @@ const HBG_menu = () =>{
 const NAV_control = () =>{
   const toRules = document.getElementById('toRules');
   const Rules = document.getElementById('Rules');
+  const closeRules = document.getElementById('closeRules');
   const toRequirements = document.getElementById('toRequirements');
   const Requirements = document.getElementById('Requirements');
   const closeRequirements = document.getElementById('closeRequirements');
 
   toRules.onclick = () => {
     setAriaExpanded(Rules);
+    setAttr(Requirements, false)
+  };
+  closeRules.onclick = () => {
+    setAriaExpanded(Rules);
   };
   toRequirements.onclick = () => {
     setAriaExpanded(Requirements);
+    setAttr(Rules, false)
   };
   closeRequirements.onclick = () => {
     setAriaExpanded(Requirements);
   };
+
 
 }
 
