@@ -6,35 +6,58 @@
 
   ## ひらがな DE ポーカーとは
 
-  "ひらがな DE ポーカー"は、ポーカーのようでそうでない…一風変わったカードゲームアプリです。
+元となるゲームは、数年前にTwitterで話題になったゲーム「ひらがなポーカー」。<br>
+それは、ひらがな五十音(47枚)のカードを使ったゲームです。<br>
+
+ランダムで配られた５枚のカードを手札として、面白い言葉になるように交換・並べ替えを行い、<br>
+できた”ことば”をプレイヤー同士発表し合います。
+
+勝敗は「面白い方が勝ち！」というユニークなゲームです。
 
 <br>
 
-  ### :link:サイトURL:<br>
-[https://hiragana-de-porker.web.app/](https://hiragana-de-porker.web.app/)
+  ### サイトURL:<br>
+:link: [https://hiragana-de-porker.web.app/](https://hiragana-de-porker.web.app/)
 
 <br>
 
   ### 制作・動作確認環境: <br>
-Mac GoogleChrome(ver: 最新) <br>
-iOS 13 GoogleChrome,safari (画面サイズ: iPhoneで言うと6以上))<br>
+:computer: Mac GoogleChrome(ver: 最新) <br>
+:iphone: iOS 13 GoogleChrome,safari (画面サイズ: iPhone6/7/8~)<br>
 <br>
 ＊PCでのプレイ時、ブラウザ画面の縦幅640px以上推奨<br>
 ＊スマホでは縦のみ対応。横置き時は「縦でプレイしてください」というダイアログが出ます。<br>
 <br>
 
-  #  ひらがな DE ポーカー とは
 
-元となるゲームは、数年前にTwitterで話題になったゲーム「ひらがなポーカー」。
+<br>
 
-五十音のひらがなの中から一文字づつ記されたカードを使ったゲームです。
+***
 
-ランダムで配られた５枚のカードを、面白い言葉のになるように並べ替え、プレイヤー同士発表し合います。
+<br>
 
-勝敗は「面白い方が勝ち！」というユニークなゲームです。
+  ## 制作背景
+
+ライブラリを使わないJavaScript、Webpack4を用いたコンパイル、Sassや、FLOCSSを用いた(意識)したCSS等、フロントエンド系の諸技術を使用した習作として製作しました。
+
+<br>
+
+***
+
+<br>
 
 
-  <br>
+  ## なぜこのゲームを作ろうと思ったか
+
+  - 「やってみたいね」と言う話になったが既製品でアプリが見つからなかったこと。<br>
+  - 検索すると、 [*** アプリ] のように表示されるが、どうやら既製品がないこと。<br>
+  - 流行ったのは数年前ですが、前とはいえ普遍的な面白さがあること。<br>
+  - ゲームのルールには著作権が適用されないこと。<br>
+
+
+<br>
+<br>
+
 
   # ゲームの流れ
 
@@ -149,34 +172,12 @@ iOS 13 GoogleChrome,safari (画面サイズ: iPhoneで言うと6以上))<br>
 <br>
 <br>
 
-***
 
-<br>
-
-  ## 制作背景
-
-ライブラリを使わないJavaScript、Webpack4を用いたコンパイル、Sassや、FLOCSSを用いた(意識)したCSS等、フロントエンド系の諸技術を使用した習作として製作しました。
-
-<br>
-
-***
-
-<br>
-
-
-  ## なぜこのゲームにしたのか
-
-  - 「やってみたいね」と言う話になったが既製品でアプリが見つからなかったこと。<br>
-  - 検索すると、 [*** アプリ] のように表示されるが、どうやら既製品がないこと。<br>
-  - 流行ったのは数年前ですが、前とはいえ普遍的な面白さがあること。<br>
-  - ゲームのルールには著作権が適用されないこと。<br>
-
-<br>
 
 ***
 <br>
 
-  ## 苦労した点
+  ## 制作苦労した点
 
   - 素のJavaScriptの様々な書き方による、DOM取得時の細かい仕様の違いについて。<br>
 
@@ -192,100 +193,36 @@ iOS 13 GoogleChrome,safari (画面サイズ: iPhoneで言うと6以上))<br>
     再利用可能なコードを考えるのに、何度か書き直した場面が（多く）ありました。<br>
     しかしそれは、可読性をよくし、さらに整理して書き足すことや、複数プレイヤーでのプレイや拡張性を想定するのに必要なポイントでした。
 
+<br>
 
 ***
 <br>
 
   ## 工夫した点
+
   - スクロールの制御<br>
     ゲーム進行のステップ（画面遷移）を縦スクロールによって実装したため、いくつかの問題を解決する必要がありました<br>
-    
-    1 <br>
-    ユーザーがスクロールすることで、見せたくない部分が見れてしまう。<br>
-    （例えば、先行ユーザーの結果を先にセットしていると見れてしまう、など。）
-    2 <br>
-    「ユーザーがブラウザ画面幅の再指定を行うと、表示エリアが変わってしまう（縦方向にズレてしまう）」
-    
-    それらを防ぐため、３つのスクロールに関する関数(機能)を用意しました。
 
-    一つ目は、普通に次のステージへジャンプする処理。<br>
+<br>
+
+    ①ユーザーがスクロールすることで、見せたくない部分が見れてしまう。
+    （例えば、先行ユーザーの結果を先にセットしていると見れてしまう、など。）
+
+    ⓶ユーザーがブラウザのリサイズを行うと、表示が縦方向にズレてしまう
+
+<br>
+
+それらを防ぐため、３つのスクロールに関する関数(機能)を用意しました。
+
+    一つ目は、普通に次のウィンドウへジャンプする処理。<br>
     二つ目は、画面のリサイズを検知して、ゲームの進行状況に合わせてスクロールし直す処理。<br>
     二つ目は、スクロールを検知して、ゲームの進行状況に合わせてスクロールし直す（一つ目の関数）処理。<br>
 
-それぞれバッティングさせないように組むのに、少し工夫が必要でした。
+しかし、それぞれバッティングさせないように組むのに、少し工夫が必要でした。<br>
 
-        let stageStep = document.documentElement.clientHeight;
-        let firstStage = 0;
-        let sortStage = stageStep;
-        let descriptionStage = stageStep * 2;
-        let resultStage = stageStep * 3;
+具体的には、スクロールイベントを制御するsetTimeoutの値の調整(バッティングの回避)や、<br>
+ウィンドウの切り替え位置を段階ごとに動的に定義する、オブジェクトのプロパティの設定の仕方(→敢えて共有部分を作らず、同じ内容のプロパティを名前を分けて2つ用意しました)などです。
 
-        // 次のウィンドウへ移動
-        function GoToNextStage() {
-        // ステージの振り分け（基準となる値を取得後、string→変数にして引数へ）
-        switch ( currentPlayer.gameStage ) {
-          case 'firstStage':
-            scrollNext(firstStage);
-            break;
-          case 'sortStage':
-            scrollNext(sortStage);
-            break;
-          case 'descriptionStage':
-            scrollNext(descriptionStage);
-            break;
-          case 'resultStage':
-            scrollNext(resultStage);
-            break;
-        }
-        function scrollNext(target) {
-          scrollTo(0, target);
-          console.log("スクロール動作:ジャンプ");
-          console.log(sortStage);
-          }
-        }
-
-<br>
-
-
-      // ****リサイズに伴う表示のズレ補正****
-      // ウィンドウサイズが変更された時
-      window.addEventListener("resize", function(event) {
-        let h = document.documentElement.clientHeight
-        let first = 0;
-        let sort = h ;
-        let description = h * 2;
-        let result = h * 3;
-        // スコープの問題、また値が変動するため
-        switch ( currentPlayer.ReScrollPoint ) {
-          case 'first':
-            scroll(first)
-            break;
-          case 'sort':
-            scroll(sort)
-            break;
-          case 'description':
-            scroll(description)
-            break;
-          case 'result':
-            scroll(result)
-            break;
-        }
-        function scroll(target){
-          scrollTo(0, target);
-          console.log("スクロール動作 :補正")
-        }
-      })
-
-<br>
-
-        // 表示ブレのため、スクロールされたら戻す
-        window.addEventListener('scroll', () => {
-          let timeoutId;
-          if ( timeoutId ) return;
-          timeoutId = setTimeout( function () {
-            timeoutId = 0;
-          GoToNextStage()}, 2000);
-        });
 
 <br>
 ***
@@ -302,11 +239,13 @@ iOS 13 GoogleChrome,safari (画面サイズ: iPhoneで言うと6以上))<br>
   - （PC向け）初めのウィンドウ以外でもハンバーガーメニューを表示させるようにする。<br>
     → aria-expandedとメディアクエリによって振り分けているが、PCのみ、一部スクロールの位置で表示を変えるようにする。
 
-  ### 修正予定
-  - ハンバーガーメニューの内容が現在入っていないので「動作推奨環境について」、
-  - nav >「ルール」内容を入れる。ゲーム中に参照できるようにする。
+  - nav >「ルール」 :<br>
+    内容を入れる。ゲーム中にルールを参照できるようにする。<br>
+    尚、内容はゲームの進行度合いに合わせて表示を変える仕様にする。
 
-  - 並び替えの際に、同じカードを二枚並べることができてしまうので、これは要修正。
+  ### 修正予定
+
+  - 並び替えの際に、同じカードを二枚並べることができてしまうので、要修正。
 
   - 初めの画面のインフォメーションとカードの選択との兼ね合いが一部崩れるため、バグフィックス。
 
