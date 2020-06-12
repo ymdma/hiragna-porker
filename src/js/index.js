@@ -1,6 +1,6 @@
 // ひらがな５０音元配列( Length => 46 )
 const data=[
-            "あ","い", "う","え","お",
+            "あ","い","う","え","お",
             "か","き","く","け","こ",
             "さ","し","す","せ","そ",
             "た","ち","つ","て","と",
@@ -9,7 +9,7 @@ const data=[
             "ま","み","む","め","も",
             "や","ゆ","よ",
             "ら","り","る","れ","ろ",
-            "わ","を","ん"
+            "わ","を","ん","ー"
             ];
 
 
@@ -24,8 +24,8 @@ for(var i = cards.length - 1; i > 0; i--){
   cards[j] = tmp;
 }
 
-let firstPlayerArray = cards.slice(41,46);
-let secondPlayerArray = cards.slice(36,41);
+let firstPlayerArray = cards.slice(42,47);
+let secondPlayerArray = cards.slice(37,42);
 
 
 // 対戦記録
@@ -87,6 +87,7 @@ document.addEventListener('DOMContentLoaded', () => {
   // nav
   HBG_menu();
 });
+
 
 
 // ***** WindowEvent *****
@@ -161,8 +162,8 @@ function GoToNextStage() {
   }
   function scrollNext(target) {
     scrollTo(0, target);
-    console.log("スクロール動作:ジャンプ");
-    console.log(sortStage);
+    // console.log("スクロール動作:ジャンプ");
+    // console.log(sortStage);
   }
 }
 // ***Scroll***
@@ -174,7 +175,7 @@ function isHidden(ele) {
     ele.classList.remove('is-hidden')
   } else {
     ele.classList.add('is-hidden')
-    console.log('isHidden作動')
+    // console.log('isHidden作動')
   }
 };
 // 交換を希望するカードを選択時の表示
@@ -184,7 +185,7 @@ function isSelect(ele) {
       ele.classList.remove('is-select')
     } else {
       ele.classList.add('is-select')
-      console.log("is-select作動")
+      // console.log("is-select作動")
     }
   }
 };
@@ -302,7 +303,7 @@ const pushStartBtn = () => {
 
 // 先攻プレーヤーの選択で「とり先」
 const setFirstPlayerTori = () => {
-  console.log("とり開始");
+  // console.log("とり開始");
   // currentPlayerにデータをセット
   currentPlayer.name = `${player1.name}`;
   currentPlayer.player = player1;
@@ -317,8 +318,6 @@ const setFirstPlayerTori = () => {
   secondPlayer = player2.name;
 
   // console.log(currentPlayer);
-  // console.log(firstPlayer);
-  // console.log(secondPlayer);
 
   setDisplay();
   setCards();
@@ -327,7 +326,7 @@ const setFirstPlayerTori = () => {
 
 // 先攻プレーヤーの選択で「いぬ先」
 const setFirstPlayerInu = () => {
-  console.log("いぬ開始");
+  // console.log("いぬ開始");
   // currentPlayerにデータをセット
   currentPlayer.name = `${player2.name}`;
   currentPlayer.player = player2;
@@ -341,7 +340,7 @@ const setFirstPlayerInu = () => {
   firstPlayer = player2.name;
   secondPlayer = player1.name;
 
-  console.log(currentPlayer);
+  // console.log(currentPlayer);
 
   // 二週目の為に3つに分けて記述
   setDisplay();
@@ -354,7 +353,7 @@ const setDisplay = () => {
   // 名前とアバターを画面上に表示
   document.getElementById('playerName').innerHTML = `${currentPlayer.name}`;
   document.getElementById('avatarImg').setAttribute('src', `${currentPlayer.avatar}`);
-  console.log(playerName)
+  // console.log(playerName)
   if ( currentPlayer.finishedPlayer == 0 ) {
     isHidden(document.getElementById('avatarImg')); // ＊改善ポイント ここだけ隠しとくのはスマートじゃないと思う
   }
@@ -419,17 +418,17 @@ const cardChange = () => {
         if( document.querySelectorAll('.js_handCards > .is-select').length === 1 ) {
           removeDisabled(changeDoneBtn);
           info.innerHTML = 'カードを決めたら「交換する」ボタンを押そう';
-          console.log("カード選択数 １ (OK)");
+          // console.log("カード選択数 １ (OK)");
         }
         else if( document.querySelectorAll('.js_handCards > .is-select').length === 0 ) {
           isDisabled(changeDoneBtn, true);
           info.innerHTML = '交換するカードを選ぼう！';
-          console.log("カード未選択");
+          // console.log("カード未選択");
         }
         else{
           isDisabled(changeDoneBtn, true);
           info.innerHTML = '選ぶのは一枚だけだよ！';
-          console.log("カード選択数２〜５");
+          // console.log("カード選択数２〜５");
         }
       }
     )
@@ -451,8 +450,8 @@ const cardChangeDone = () => {
 
     // 選んだカードを[交換する] ボタンを押した時
     changeDoneBtn.onclick = () => {
-      console.log("cardChangeDone発動。残り交換数⤵︎");
-      console.log(currentPlayer.changesLeft);
+      // console.log("cardChangeDone発動。残り交換数⤵︎");
+      // console.log(currentPlayer.changesLeft);
 
       // *****選択したカードを交換する関数******
       // SWITCH文で条件分岐して呼び出される。（山札から引くカードをダブらないようにする）
@@ -465,7 +464,7 @@ const cardChangeDone = () => {
         selectElements.innerHTML = cards[num];
         // 3 今付いているisSelectを外す
         selectElements.classList.remove('is-select');
-        console.log("入れ替え関数動作！");
+        // console.log("入れ替え関数動作！");
       };
         // discard(); // 捨てたカードを置いておく
 
@@ -489,7 +488,6 @@ const cardChangeDone = () => {
         }
       }
       // カードを一枚選択している時のみボタンを使用可能にする
-      let selectEle = document.querySelectorAll('#currentPlayerHandCards .is-select');
       const changeDoneBtn = document.getElementById('changeDoneBtn')
 
       // Player1のターンの場合
@@ -497,8 +495,8 @@ const cardChangeDone = () => {
       switch (currentPlayer.changesLeft) {
         case 4:
           discard();
-          console.log('case4: 現在のプレイヤーの状態⤵︎');
-          console.log(currentPlayer);
+          // console.log('case4: 現在のプレイヤーの状態⤵︎');
+          // console.log(currentPlayer);
           // 各プレーヤーが山札からランダムに引くロジック
           if ( currentPlayer.name === 'とり' ) {
             removeAndAdd(0);
@@ -513,7 +511,7 @@ const cardChangeDone = () => {
 
         case 3:
           discard();
-          console.log('SWITCH文内 LEFT:3')
+          // console.log('SWITCH文内 LEFT:3')
           info.innerHTML = "交換したいカードを選ぼう！ あと３回！"
           if ( currentPlayer.name === 'とり' ) {
             removeAndAdd(1);
@@ -526,7 +524,7 @@ const cardChangeDone = () => {
 
         case 2:
           discard();
-          console.log('SWITCH文内 LEFT:2')
+          // console.log('SWITCH文内 LEFT:2')
           info.innerHTML = "交換したいカードを選ぼう！ あと２回！"
           // moreCardChangeOnclickDone();
           if ( currentPlayer.name === 'とり' ) {
@@ -540,7 +538,7 @@ const cardChangeDone = () => {
 
         case 1:
           discard();
-          console.log('SWITCH文内 LEFT:1')
+          // console.log('SWITCH文内 LEFT:1')
           info.innerHTML = "交換したいカードを選ぼう！ これがラスチャン！"
           // moreCardChangeOnclickDone()
           if ( currentPlayer.name === 'とり' ) {
@@ -562,10 +560,10 @@ const cardChangeDone = () => {
         isHidden(changeStartBtn2);
         // 6 次の行動をアナウンス
         info.innerHTML = 'まだ交換する場合はボタンを押してね';
-        console.log("if Left >= 1");
+        // console.log("if Left >= 1");
       }
       else{
-        console.log("else");
+        // console.log("else");
         // isHidden(changeStartBtn2);
         changeSkipBtn.classList.add('is-hidden'); // 完全に隠れて欲しい（is-hiddenの数が増えないかを後ほど確認）
       }
@@ -577,14 +575,13 @@ const cardChangeDone = () => {
 //   // ******* [次の交換をする] を押した時の処理 *******
 const moreCardChangeDone = () => {
   const changeDoneBtn = document.getElementById('changeDoneBtn');
-  // const changeSkipBtn = document.getElementById('changeSkipBtn');
   const changeStartBtn2 = document.getElementById('changeStartBtn2');
-  // const info = document.getElementById('information').children[0];
+
   changeStartBtn2.onclick = () =>{
-    console.log("moreCardChangeDone発動");
+    // console.log("moreCardChangeDone発動");
 
     const info = document.getElementById('information').children[0];
-        // // 「もう一度交換する」ボタンを隠す
+    // 「もう一度交換する」ボタンを隠す
     isHidden(changeStartBtn2);
     // 「交換する」ボタンを再表示
     isHidden(changeDoneBtn);
@@ -597,13 +594,11 @@ const moreCardChangeDone = () => {
 
 //   // ******* [交換を終える] を押した時の処理 *******
 const changeSkip = () => {
-  // const changeDoneBtn = document.getElementById('changeDoneBtn');
   const changeSkipBtn = document.getElementById('changeSkipBtn');
   const changeStartBtn2 = document.getElementById('changeStartBtn2');
-  // const info = document.getElementById('information').children[0];
+
   changeSkipBtn.onclick = () => {
     changeEndFunc();
-
     // 交換開始(this)ボタンを非表示
     // isHidden(changeStartBtn);
     // [もう一枚交換する]ボタンの非表示
@@ -613,7 +608,7 @@ const changeSkip = () => {
     isHidden(changeSkipBtn)
     // isHidden(toSortWindowBtn)
     currentPlayer.changesLeft = 0;
-    console.log('changeSkip発動')
+    // console.log('changeSkip発動')
   }
 }
 //   // ******* [交換スキップ] を押した時の処理 *******
@@ -637,7 +632,7 @@ function changeEndFunc() {
 
   arrayFix();
 
-  console.log('changeEnd関数 発動');
+  // console.log('changeEnd関数 発動');
 
   // 今付いているisSelectを外す
   const selectElements = document.querySelectorAll('.js_handCards > .is-select');
@@ -663,7 +658,7 @@ function arrayFix() {
       // currentPlayer.handCards.splice(num - 1,0,str)
       currentPlayer.handCards.push(str)
     }
-    console.log(currentPlayer.handCards)
+    // console.log(currentPlayer.handCards)
     // 並び替え （before） に値を挿入
     num = 0
     currentPlayer.handCards.forEach(function(i) {
@@ -680,17 +675,13 @@ const sortWindowAppearance = () => {
   const toSortWindowBtn = document.getElementById('toSortWindowBtn');
 
   toSortWindowBtn.onclick = () => {
-
     // gameStage更新
     currentPlayer.gameStage = 'sortStage'
     currentPlayer.ReScrollPoint = 'sort'
 
-
     // sortWindowへスクロール
     GoToNextStage();
-
   };
-
 };
 // *****[並べ替える]押した時の処理(次画面出現)*****
 
@@ -703,8 +694,8 @@ function sortHandCards() {
   let sortArray = [];
   let num = 0;
   sortBeforeCardsArray.forEach(ele =>
+    // カードをクリックした時
     ele.onclick = () => {
-
       if ( sortArray.length < 5 ) {
         sortArray.splice(num,0,ele.textContent);
         document.getElementById('currentPlayerSortAfter').children[num].innerHTML = `${sortArray[num]}`;
@@ -713,11 +704,11 @@ function sortHandCards() {
 
       if (num != 0 && num != 5 ) {
         currentPlayer.sortNow = true; // 交換中の状態を付与 この値は現在不使用..
-        console.log(currentPlayer.sortNow);
+        // console.log(currentPlayer.sortNow);
       }
       else if ( num === 5 ) {
         currentPlayer.sortNow = false; // 交換中の状態を付与 この値は現在不使用..
-        console.log(currentPlayer.sortNow);
+        // console.log(currentPlayer.sortNow);
 
         // 次に進む ボタンの無効化解除
         const toDescriptionBtn = document.getElementById('toDescriptionBtn');
@@ -726,7 +717,6 @@ function sortHandCards() {
         sortHandCards(); // リセット！ *[並べ直し]用
       }
       console.log(`num: ${num}`)
-
     }
   )
 };
@@ -737,14 +727,14 @@ function sortHandCards() {
 const sortReset = () => {
   const sortResetBtn = document.getElementById('sortResetBtn')
 
-
   currentPlayer.sortNow = false
 
+  // 並べ替えをやり直すボタンを押した時
   sortResetBtn.onclick = () => {
 
     // 次に進む ボタンの無効化
-  const toDescriptionBtn = document.getElementById('toDescriptionBtn');
-  isDisabled(toDescriptionBtn, true);
+    const toDescriptionBtn = document.getElementById('toDescriptionBtn');
+    isDisabled(toDescriptionBtn, true);
 
     sortHandCards(); // リセット！ 誤作動防止の為の関数読み込み直し
 
@@ -755,7 +745,7 @@ const sortReset = () => {
     sortAfterCardsArray.forEach (ele =>
       ele.innerHTML = ''
       )
-    console.log("並べ替えやり直し")
+    // console.log("並べ替えやり直し")
 
   }
 };
@@ -768,7 +758,13 @@ const toDescription = () => {
   const toDescriptionBtn = document.getElementById('toDescriptionBtn');
 
   // ***** 次に進むボタンを押した時 *****
-  toDescriptionBtn.onclick = () => {
+  // toDescriptionBtn.onclick = () => {
+  toDescriptionBtn.addEventListener('click', () => {
+
+    // 濁点付与の為のポップが出っぱなしにならない様に消しておく。
+    const dakutenPopTarget = document.getElementById('dakutenPopTarget')
+    while (dakutenPopTarget.firstChild) dakutenPopTarget.removeChild(dakutenPopTarget.firstChild);
+
 
     // HTMLモジュールの複製  currentPlayerSortAfter → descriptionDisplayAreaA
     const currentPlayerSortAfter = document.getElementById('currentPlayerSortAfter');
@@ -800,13 +796,12 @@ const toDescription = () => {
 
     // sortWindowへスクロール
     GoToNextStage();
-  }
+  })
 }
 
 const displayAvatarSet = () => {
 //   // アバター用img要素を生成、所定の位置に設置、名前を表示、クラスの追加
   const avatarImg = document.getElementById('descriptionAvatarImg');
-  console.log(avatarImg)
   avatarImg.setAttribute('src' , currentPlayer.avatar)
 
 }
@@ -853,11 +848,7 @@ const descriptionWriteFunc = () => {
   const descriptionWriteArea = document.getElementById('descriptionWriteArea')
   const descriptionDisplayAreaB = document.getElementById('descriptionDisplayAreaB')
 
-  // descriptionWriteArea.addEventListener('keyup', function() {
-  //   console.log(`${descriptionWriteArea.value}`)
-    // descriptionDisplayAreaB.innerHTML = `${descriptionWriteArea.value}`
   descriptionWriteArea.addEventListener('keyup', function() {
-    console.log(`${descriptionWriteArea.value}`)
     let inputText = descriptionWriteArea.value;
     descriptionDisplayAreaB.innerHTML = `${replace(inputText)}` //ここに関数からの戻りを
   })
@@ -878,7 +869,6 @@ const descriptionWriteFunc = () => {
 
 const styleChangeToolbar = () => {
   const descriptionDisplayAreaB = document.getElementById('descriptionDisplayAreaB');
-  // const descriptionWriteAreA = document.getElementById('descriptionWriteAreA');
   //text-align
   const styleLeft = document.getElementById('styleLeft');
   const styleCenter = document.getElementById('styleCenter');
@@ -923,7 +913,7 @@ const styleChangeToolbar = () => {
     setAriaExpanded(styleCenter)
     }
   }
-  // カーソルのある場所に文字列を挿入
+  // カーソルのある場所に文字列を挿入(タグを直接入力してしまうので辞める)
   // lineBreak.onclick = () => {
   //   let sentence = descriptionWriteAreA.value
   //   const textLength = sentence.length
@@ -978,10 +968,9 @@ const styleChangeToolbar = () => {
     }
   }
   styleColorPicker.addEventListener('change', (event) => {
-    const value = event.target.value;// 選択された色を確認
+    const value = event.target.value; // 選択された色を確認
     descriptionDisplayAreaB.style.color = value;
   })
-  //範囲を指定してタグで囲む仕様
 }
 // ***** Style change Toolbar *****
 
@@ -992,7 +981,6 @@ const finalConfirmModal = () => {
   const finishBtn = document.getElementById('finishBtn');
   const finishModalDone = document.getElementById('finishModalDone');
   const finishModalCancel = document.getElementById('finishModalCancel');
-
 
   finishBtn.onclick = () => {
       // モーダルの文言
@@ -1049,7 +1037,8 @@ const finalConfirmModal = () => {
       // アバター用img要素を生成、所定の位置に設置、名前を表示、クラスの追加
       var img = document.createElement('img');
       img.src = currentPlayer.avatar
-      img.alt = 'player_avatar_image';
+      img.alt = '先行プレーヤーのアバター画像';
+      img.title = '先行プレーヤーのアバター';
       const avatarImgA = document.getElementById('resultAvatarA'); // pにid
       avatarImgA.appendChild(img);
       // avatarImgA.classList.add('c-avatar');
@@ -1071,7 +1060,7 @@ const finalConfirmModal = () => {
       setSecondPlayer(); // 次プレイヤー用にcurrentPlayerの値をセット
       setSecondPlayerHandCards(); //次プレーヤーの手札をセット
 
-      console.log('Player2のターンへ');
+      // console.log('Player2のターンへ');
 
       // // 画面を一番上元に戻す
       // scrollTop(500);
@@ -1105,7 +1094,6 @@ const finalConfirmModal = () => {
           opacity: [1, 0, 1]
         }, {
           duration: 1700,
-          // direction: 'reverse',
           iterations: 1
         });
       }
@@ -1128,7 +1116,7 @@ const finalConfirmModal = () => {
 
     // **********２人目が終わったタイミング（判定ウィンドウへ）**********
     else if( currentPlayer.finishedPlayer == 1 ){
-      console.log('判定Windowへ');
+      // console.log('判定Windowへ');
 
       // // 作成した成果をresult-windowにセットする // //
       // const resultWindowDisplayA = document.getElementById('deliverablesA');
@@ -1145,21 +1133,18 @@ const finalConfirmModal = () => {
       const clonedDescB = document.querySelector('#deliverablesB > aside');
       clonedCardsB.removeAttribute('id');
       clonedDescB.removeAttribute('id');
-      // clonedCardsB.classList.remove('c-hand-card-large');
-      // clonedDescA.classList.remove('');
+
       //新たなid/classを付与
       clonedCardsB.setAttribute('id', 'resultCardsB');
       clonedDescB.setAttribute('id', 'resultDescB');
-      // clonedCardsB.classList.add('c-hand__result-window');
-      // clonedDescB.classList.add('c-desc__result-window');
 
       // アバター用img要素を生成、所定の位置に設置、名前を表示、クラスの追加
       var img = document.createElement('img');
       img.src = currentPlayer.avatar
-      img.alt = 'player_avatar_image';
+      img.alt = '後行プレーヤーのアバター画像';
+      img.title = '後行プレーヤーのアバター';
       const avatarImgB = document.getElementById('resultAvatarB');//pにid
       avatarImgB.appendChild(img);
-      // avatarImgB.classList.add('c-avatar');
       document.getElementById('resultAvatarB').appendChild(img);
       document.getElementById('resultPlayerNameB').classList.add('c-avatar__name');
       document.getElementById('resultPlayerNameB').innerHTML = currentPlayer.name;
@@ -1177,9 +1162,9 @@ const finalConfirmModal = () => {
       setDisplayDefault(); // 次プレイヤー用に現状復帰+a 表示の切り替え等
       isHidden(finishModal)
       setSecondPlayer(); // 次プレイヤー用にcurrentPlayerの値をセット
-      console.log(currentPlayer);
-      console.log(player1);
-      console.log(player2);
+      // console.log(currentPlayer);
+      // console.log(player1);
+      // console.log(player2);
 
       // gameStage更新
       currentPlayer.gameStage = 'resultStage'
@@ -1198,9 +1183,7 @@ const finalConfirmModal = () => {
 // *****最終確認モーダル*****
 
 const dataMove = () => {
-  // const changeTurnBtn = document.getElementById('changeTurnBtn');
   const description_Ele = document.getElementById('descriptionDisplayAreaB');
-  // currentPlayer.changesLeft = 0 ;// ここまでしっかり機能していれば不要
   currentPlayer.description = description_Ele;
   currentPlayer.acted = true;
 
@@ -1275,7 +1258,7 @@ const setDisplayDefault = () => {
   descriptionWriteArea.value = ''
 }
 
-// //画面をスクロールで一番上に戻す
+// //画面をスクロールで一番上に戻す(スピード変更可)
 //   function scrollTop(duration) {
 //     let currentY = window.pageYOffset;
 //     let step = duration/currentY > 1 ? 10 : 100;
@@ -1340,7 +1323,7 @@ const setSecondPlayerHandCards = () => {
   isHidden(changeStartBtn)
   setDisplay();
   info.innerHTML = `${currentPlayer.name}さん、手札を引いて下さい！`;
-  console.log(currentPlayer)
+  // console.log(currentPlayer)
 
   // 手札を引く ボタンを押した時
   setCardsBtn.onclick = () => {
@@ -1424,14 +1407,83 @@ const openResultModal = () => {
 
 // *****濁点*****
 
-
-
 const dakuten = () => {
+  const sortResetBtn = document.getElementById('sortResetBtn');
   const dakutenPopTarget = document.getElementById('dakutenPopTarget');
   const CP_HandCards = document.getElementById('currentPlayerSortAfter');
   const CP_HandCards_Elem_Li = document.getElementById('currentPlayerSortAfter').getElementsByTagName('li');
   const CP_HandCardsArray = Array.prototype.slice.call(CP_HandCards_Elem_Li);
 
+
+
+  // カードをクリックしたら、文字を判定する + 要素の情報を次の関数に渡す
+  CP_HandCardsArray.forEach (function FxA(ele,index) {
+    ele.addEventListener('click', () => {
+
+      // 出ているポップの(要素)を消す
+      while (dakutenPopTarget.firstChild) dakutenPopTarget.removeChild(dakutenPopTarget.firstChild);
+
+      // カードの文字の判定して、元文字と候補を次の関数に送る
+      switch ( ele.innerHTML ) {
+        case 'あ': openPop_dakuten('あ','','','ぁ',index);
+          break;
+        case 'い': openPop_dakuten('い','','','ぃ',index);
+          break;
+        case 'う': openPop_dakuten('う','ゔ','','ぅ',index);
+          break;
+        case 'え': openPop_dakuten('え','','','ぇ',index);
+          break;
+        case 'お': openPop_dakuten('お','','','ぉ',index);
+          break;
+        case 'か': openPop_dakuten('か','が','','',index);
+          break;
+        case 'き': openPop_dakuten('き','ぎ','','',index);
+          break;
+        case 'く': openPop_dakuten('く','ぐ','','',index);
+          break;
+        case 'け': openPop_dakuten('け','げ','','',index);
+          break;
+        case 'こ': openPop_dakuten('こ','ご','','',index);
+          break;
+        case 'さ': openPop_dakuten('さ','ざ','','',index);
+          break;
+        case 'し': openPop_dakuten('し','じ','','',index);
+          break;
+        case 'す': openPop_dakuten('す','ず','','',index);
+          break;
+        case 'せ': openPop_dakuten('せ','ぜ','','',index);
+          break;
+        case 'そ': openPop_dakuten('そ','ぞ','','',index);
+          break;
+        case 'た': openPop_dakuten('た','だ','','',index);
+          break;
+        case 'ち': openPop_dakuten('ち','ぢ','','',index);
+          break;
+        case 'つ': openPop_dakuten('つ','づ','','っ',index);
+          break;
+        case 'て': openPop_dakuten('て','で','','',index);
+          break;
+        case 'と': openPop_dakuten('と','ど','','',index);
+          break;
+        case 'は': openPop_dakuten('は','ば','ぱ','',index);
+          break;
+        case 'ひ': openPop_dakuten('ひ','び','ぴ','',index);
+          break;
+        case 'ふ': openPop_dakuten('ふ','ぶ','ぷ','',index);
+          break;
+        case 'へ': openPop_dakuten('へ','べ','ぺ','',index);
+          break;
+        case 'ほ': openPop_dakuten('ほ','ぼ','ぽ','',index);
+          break;
+        case 'や': openPop_dakuten('や','','','ゃ',index);
+          break;
+        case 'ゆ': openPop_dakuten('ゆ','','','ゅ',index);
+          break;
+        case 'よ': openPop_dakuten('よ','','','ょ',index);
+          break;
+      }
+    })
+  })
   function openPop_dakuten (moto,ten,maru,komoji,index) {
     // *要素の生成*
     // div 入れ物
@@ -1473,7 +1525,7 @@ const dakuten = () => {
     dakutenPopTarget.appendChild(Div);
 
     // 各選択肢をクリックした時
-    
+
       choiceOptions(optionDefault,index);
     if ( ten != '' ) {
       choiceOptions(optionA,index);
@@ -1487,109 +1539,16 @@ const dakuten = () => {
 
   }
 
+  //  ポップの文字をクリックした時にカードの文字を変える
   function choiceOptions (target,index) {
-
     target.addEventListener('click',() => {
       CP_HandCards.children[index].innerHTML = target.innerHTML;
-      //要素の削除
-      while (dakutenPopTarget.firstChild) dakutenPopTarget.removeChild(dakutenPopTarget.firstChild);
     })
-
   }
 
-
-  CP_HandCardsArray.forEach (function abcde(ele,index) {
-    ele.addEventListener('click', () => {
-
-      // カードの文字の判定して、元文字と候補を次の関数に送る
-      switch ( ele.innerHTML ){
-        case 'あ':
-          openPop_dakuten('あ','','','ぁ',index);
-          break;
-        case 'い':
-          openPop_dakuten('い','','','ぃ',index);
-          break;
-        case 'う':
-          openPop_dakuten('う','ゔ','','ぅ',index);
-          break;
-        case 'え':
-          openPop_dakuten('え','','','ぇ',index);
-          break;
-        case 'お':
-          openPop_dakuten('お','','','ぉ',index);
-          break;
-        case 'か':
-          openPop_dakuten('か','が','','',index);
-          break;
-        case 'き':
-          openPop_dakuten('き','ぎ','','',index);
-          break;
-        case 'く':
-          openPop_dakuten('く','ぐ','','',index);
-          break;
-        case 'け':
-          openPop_dakuten('け','げ','','',index);
-          break;
-        case 'こ':
-          openPop_dakuten('こ','ご','','',index);
-          break;
-        case 'さ':
-          openPop_dakuten('さ','ざ','','',index);
-          break;
-        case 'し':
-          openPop_dakuten('し','じ','','',index);
-          break;
-        case 'す':
-          openPop_dakuten('す','ず','','',index);
-          break;
-        case 'せ':
-          openPop_dakuten('せ','ぜ','','',index);
-          break;
-        case 'そ':
-          openPop_dakuten('そ','ぞ','','',index);
-          break;
-        case 'た':
-          openPop_dakuten('た','だ','','',index);
-          break;
-        case 'ち':
-          openPop_dakuten('ち','ぢ','','',index);
-          break;
-        case 'つ':
-          openPop_dakuten('つ','づ','','っ',index);
-          break;
-        case 'て':
-          openPop_dakuten('て','で','','',index);
-          break;
-        case 'と':
-          openPop_dakuten('と','ど','','',index);
-          break;
-        case 'は':
-          openPop_dakuten('は','ば','ぱ','',index);
-          break;
-        case 'ひ':
-          openPop_dakuten('ひ','び','ぴ','',index);
-          break;
-        case 'ふ':
-          openPop_dakuten('ふ','ぶ','ぷ','',index);
-          break;
-        case 'へ':
-          openPop_dakuten('へ','べ','ぺ','',index);
-          break;
-        case 'ほ':
-          openPop_dakuten('ほ','ぼ','ぽ','',index);
-          break;
-        case 'や':
-          openPop_dakuten('や','','','ゃ',index);
-          break;
-        case 'ゆ':
-          openPop_dakuten('ゆ','','','ゅ',index);
-          break;
-        case 'よ':
-          openPop_dakuten('よ','','','ょ',index);
-          break;
-
-      }
-    })
+  // 「もう一回並べ換える」ボタンを押した時、出ているポップを消す。
+  sortResetBtn.addEventListener('click', () => {
+    while (dakutenPopTarget.firstChild) dakutenPopTarget.removeChild(dakutenPopTarget.firstChild);
   })
 
 }
@@ -1601,6 +1560,8 @@ const dakuten = () => {
 // 勝ち数の記録を表示？
 // ネット対戦…？
 // Vueで作り直す…？
+
+
 
 
 

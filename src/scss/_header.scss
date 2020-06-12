@@ -382,15 +382,17 @@
 
 .p-requirements{
   width: 100%;
-  height: 100vh;
+  height: calc(100% - 50px);
   position: absolute;
   top: 50px;
   // left: 50%;
   background: #dddddde0;
   @include flex--center;
   transition: all .5s;
+  overflow-y: scroll;
 
   @media (max-width: $sp){
+    height: calc(100% - 60px);
     top: 60px;
     overflow-y: scroll;
   }
@@ -415,6 +417,7 @@
     }
     @media (max-width: $sp){
       grid-template-columns: 240px ;
+      overflow-y: scroll;
     }
 
     p{

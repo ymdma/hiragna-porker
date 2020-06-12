@@ -16,8 +16,16 @@
     box-shadow: inset 0 0 0 15px #fff;
     @include strongText($color:#000);
     z-index:101;
+
     @media (max-width:$sp) {
-    @include strongText($size:$large - 10px);
+      padding: 20px 0px 20px 0px;
+      @include strongText(
+        $color:#000,
+        $size:$large - 12px
+      );
+      .c-modal__question{
+        margin: 0 0 20px 0;
+      }
     }
   }
   .c-modal__select{
