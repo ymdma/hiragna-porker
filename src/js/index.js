@@ -1,5 +1,7 @@
+import { stAnime } from "./startAnime.js";
+
 // ひらがな５０音元配列( Length => 46 )
-const data=[
+const data = [
             "あ","い","う","え","お",
             "か","き","く","け","こ",
             "さ","し","す","せ","そ",
@@ -17,25 +19,30 @@ const data=[
 let cards = data.concat();
 
   // フィッシャー・イェーツのシャッフルにて配列内の順番をランダムに。
-for(var i = cards.length - 1; i > 0; i--){
-  var j = Math.floor(Math.random() * (i + 1));
+for ( var i = cards.length - 1; i  >  0 ; i-- ) {
+  var j = Math.floor( Math.random() * ( i + 1 ) );
   var tmp = cards[i];
   cards[i] = cards[j];
   cards[j] = tmp;
 }
 
-let firstPlayerArray = cards.slice(42,47);
-let secondPlayerArray = cards.slice(37,42);
+let firstPlayerArray = cards.slice(42, 47);
+let secondPlayerArray = cards.slice(37, 42);
 
 
 // 対戦記録
-let gameRecord = []
+// let gameRecord = []
 // 一回終わるごとにオブジェクトをpushしてく
 // 未実装
-let firstPlayer;
-let secondPlayer;
 
-// プレーヤー
+// 先行
+let firstPlayer;
+// 後行
+let secondPlayer;
+// (プレーヤー名を代入)
+
+
+// プレーヤーの定義
 let player1 = {
   name: 'とり',
   avatar: './image/tori.png',
@@ -56,17 +63,22 @@ let player2 = {
 // 行動中のプレイヤー
 let currentPlayer = {
   name: '',
-  player: player1,
-  avatar: '',
-  handCards: null,
+  player: null, // player object
+  avatar: '', // url
+  handCards: [],
   description: '',
   changesLeft: 4,
-  sortNow: false,
-  sortEnd: false,
-  // acted: false,
   finishedPlayer: 0,
   gameStage: 'firstStage',
   ReScrollPoint: 'first'
+}
+
+let GameState = {
+  gameStage: 'firstStage',
+  ReScrollPoint: 'first',
+  finishedPlayer: 0,
+  firstPlayer: null,
+  secondPlayer: null
 }
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -169,7 +181,8 @@ function GoToNextStage() {
 // ***Scroll***
 
 // ****** Class付与関数 ******
-// display:none
+// display:none 用
+
 function isHidden(ele) {
   if (ele.classList.contains('is-hidden')) {
     ele.classList.remove('is-hidden')
@@ -178,7 +191,8 @@ function isHidden(ele) {
     // console.log('isHidden作動')
   }
 };
-// 交換を希望するカードを選択時の表示
+
+// 交換希望カーの選択時
 function isSelect(ele) {
   if (currentPlayer.changesLeft != 0) { // 誤作動防止
     if (ele.classList.contains("is-select")) {
@@ -224,8 +238,9 @@ const pushStartBtn = () => {
   const startBtn = document.getElementById('startBtn');
   const toriFirst = document.getElementById('toriFirst');
   const inuFirst = document.getElementById('inuFirst');
+
   // スタートボタン押した時 → 先攻プレーヤーを選択
-  startBtn.addEventListener('click', function() {
+  startBtn.addEventListener('click', () => {
     const firstAttackSelectModal = document.getElementById('firstAttackSelectModal');
     isHidden(firstAttackSelectModal);
 
@@ -233,33 +248,8 @@ const pushStartBtn = () => {
     currentPlayer.gameStage = 'firstStage'
     currentPlayer.ReScrollPoint = 'first'
 
-    // ゲームスタート時のアニメーション
+    // ゲームスタート時のアニメーション用
     const startFlag = document.getElementById('startFlag')
-    // animation
-    function startFlagAppearance() {
-      startFlag.setAttribute('aria-expanded',true);
-    }
-    function startFlagIsHidden() {
-      startFlag.classList.add('is-hidden')
-    }
-    function anime_startFlagExit() {
-      startFlag.animate({
-        opacity: [1, 0, 1]
-      }, {
-        duration: 1700,
-        // direction: 'reverse',
-        iterations: 1
-      });
-    }
-    function anime_startFlagExit2() {
-      startFlag.animate({
-        opacity: [1, 0]
-      }, {
-        duration: 2000,
-        easing: 'ease-in-out',
-        fill: 'forwards'
-      })
-    }
 
     // とり先
     toriFirst.onclick = () => {
@@ -269,11 +259,8 @@ const pushStartBtn = () => {
       isHidden(startBtn.parentNode); // 画面を覆っている為parent
       isHidden(startFlag);
 
-      // animation  **** promiseの順次処理に書き換える ****
-      setTimeout(startFlagAppearance, 300); // ゲームスタートの帯出現
-      setTimeout(anime_startFlagExit, 1500);
-      setTimeout(anime_startFlagExit2, 4800);// 1700+1500+a
-      setTimeout(startFlagIsHidden, 6800);
+      // animation
+      stAnime();
 
     }
     // いぬ先
@@ -285,11 +272,9 @@ const pushStartBtn = () => {
       isHidden(startFlag);
 
       // animation
-      setTimeout(startFlagAppearance, 300); // ゲームスタートの帯出現
-      setTimeout(anime_startFlagExit, 1500);
-      setTimeout(anime_startFlagExit2, 4500);// 1700+1500+a
-      setTimeout(startFlagIsHidden, 6800);
+      stAnime();
     }
+
     // ***閉じる用の記述**
     document.addEventListener('keydown',
     event => {
@@ -307,7 +292,6 @@ const setFirstPlayerTori = () => {
   // currentPlayerにデータをセット
   currentPlayer.name = `${player1.name}`;
   currentPlayer.player = player1;
-  currentPlayer.sortNow = false;
   currentPlayer.changesLeft = 4;
   currentPlayer.avatar = './image/tori.png';
   currentPlayer.handCards = firstPlayerArray;
@@ -330,7 +314,6 @@ const setFirstPlayerInu = () => {
   // currentPlayerにデータをセット
   currentPlayer.name = `${player2.name}`;
   currentPlayer.player = player2;
-  currentPlayer.sortNow = false;
   currentPlayer.changesLeft = 4;
   currentPlayer.avatar = './image/inu.png';
   currentPlayer.handCards = firstPlayerArray;
@@ -400,9 +383,8 @@ const cardChange = () => {
 
     setDisplay(); //表示
 
-    // 要素をHTMLCollectionに
+    // 配列化
     const CP_HandCards_Elem_li = document.getElementById('currentPlayerHandCards').getElementsByTagName('li');
-    // HTMLCollectionを配列化
     let CP_handCardsArray = Array.prototype.slice.call(CP_HandCards_Elem_li);
 
     // クリックしたら is-selectクラスを付与する
@@ -464,6 +446,8 @@ const cardChangeDone = () => {
         selectElements.innerHTML = cards[num];
         // 3 今付いているisSelectを外す
         selectElements.classList.remove('is-select');
+        //
+        isDisabled(changeDoneBtn);
         // console.log("入れ替え関数動作！");
       };
         // discard(); // 捨てたカードを置いておく
@@ -703,12 +687,8 @@ function sortHandCards() {
       }
 
       if (num != 0 && num != 5 ) {
-        currentPlayer.sortNow = true; // 交換中の状態を付与 この値は現在不使用..
-        // console.log(currentPlayer.sortNow);
       }
       else if ( num === 5 ) {
-        currentPlayer.sortNow = false; // 交換中の状態を付与 この値は現在不使用..
-        // console.log(currentPlayer.sortNow);
 
         // 次に進む ボタンの無効化解除
         const toDescriptionBtn = document.getElementById('toDescriptionBtn');
@@ -727,7 +707,6 @@ function sortHandCards() {
 const sortReset = () => {
   const sortResetBtn = document.getElementById('sortResetBtn')
 
-  currentPlayer.sortNow = false
 
   // 並べ替えをやり直すボタンを押した時
   sortResetBtn.onclick = () => {
@@ -784,8 +763,6 @@ const toDescription = () => {
     // 配列の更新(currentPlayer.handsCard)
     sortAfterToArray();
 
-    // currentPlayer sortEnd ステートの変更
-    currentPlayer.sortEnd = true;
 
     //ボタンの非活性化
     isDisabled(toDescriptionBtn,true);
@@ -826,8 +803,6 @@ const backToSort = () => {
 
     // 現在ある要素の除去
     displayCards.parentNode.removeChild(displayCards);
-    // ステートの変更を戻す sortEnd
-    currentPlayer.sortEnd = false;
 
     // ボタンの活性化
     const toDescriptionBtn = document.getElementById('toDescriptionBtn')
@@ -1027,13 +1002,11 @@ const finalConfirmModal = () => {
       const clonedDescA = document.querySelector('#deliverablesA > aside');
       clonedCardsA.removeAttribute('id');
       clonedDescA.removeAttribute('id');
-      // clonedCardsA.classList.remove('c-hand-card-large');
-      // clonedDescA.classList.remove('');
+
       //新たなid/classを付与
       clonedCardsA.setAttribute('id', 'resultCardsA');
       clonedDescA.setAttribute('id', 'resultDescA');
-      // clonedCardsA.classList.add('c-hand__result-window');
-      // clonedDescA.classList.add('c-desc__result-window');
+
       // アバター用img要素を生成、所定の位置に設置、名前を表示、クラスの追加
       var img = document.createElement('img');
       img.src = currentPlayer.avatar
@@ -1189,14 +1162,12 @@ const dataMove = () => {
 
   if ( currentPlayer.player == player1 ) {
 
-    player1.sortNow = currentPlayer.sortNow,
     player1.changesLeft = currentPlayer.changesLeft, // 0
     player1.handCards = currentPlayer.handCards,
     player1.description = currentPlayer.description,
     player1.acted =  currentPlayer.acted
   }
   if ( currentPlayer.player == player2 ) {
-    player2.sortNow = currentPlayer.sortNow,
     player2.changesLeft = currentPlayer.changesLeft, // 0
     player2.handCards = currentPlayer.handCards,
     player2.description = currentPlayer.description,
@@ -1287,8 +1258,6 @@ const setSecondPlayer = () => {
     currentPlayer.handCards = secondPlayerArray;
     currentPlayer.description = '';
     currentPlayer.changesLeft = 4;
-    currentPlayer.sortNow = false;
-    currentPlayer.sortEnd = false;
     currentPlayer.acted = false;
     currentPlayer.finishedPlayer = 1;
     currentPlayer.gameStage = 'firstStage';
@@ -1304,8 +1273,6 @@ const setSecondPlayer = () => {
     currentPlayer.handCards = secondPlayerArray;
     currentPlayer.description = '';
     currentPlayer.changesLeft = 4;
-    currentPlayer.sortNow = false;
-    currentPlayer.sortEnd = false;
     currentPlayer.acted = false;
     currentPlayer.finishedPlayer = 1;
     currentPlayer.gameStage = 'firstStage';
@@ -1414,8 +1381,6 @@ const dakuten = () => {
   const CP_HandCards_Elem_Li = document.getElementById('currentPlayerSortAfter').getElementsByTagName('li');
   const CP_HandCardsArray = Array.prototype.slice.call(CP_HandCards_Elem_Li);
 
-
-
   // カードをクリックしたら、文字を判定する + 要素の情報を次の関数に渡す
   CP_HandCardsArray.forEach (function FxA(ele,index) {
     ele.addEventListener('click', () => {
@@ -1481,9 +1446,12 @@ const dakuten = () => {
           break;
         case 'よ': openPop_dakuten('よ','','','ょ',index);
           break;
+        case 'ー': openPop_dakuten('ー','〜','','-',index);
+          break;
       }
     })
   })
+
   function openPop_dakuten (moto,ten,maru,komoji,index) {
     // *要素の生成*
     // div 入れ物
@@ -1507,14 +1475,14 @@ const dakuten = () => {
       Ten.setAttribute('id', 'optionA');
     }
     // 丸
-    if ( maru != '' ){
+    if ( maru != '' ) {
       let Maru = document.createElement('p')
       Maru.innerHTML = maru
       Div.appendChild(Maru)
       Maru.setAttribute('id', 'optionB');
     }
     // 小文字
-    if ( komoji != '' ){
+    if ( komoji != '' ) {
       let Komoji = document.createElement('p')
       Komoji.innerHTML = komoji
       Div.appendChild(Komoji)
@@ -1526,7 +1494,7 @@ const dakuten = () => {
 
     // 各選択肢をクリックした時
 
-      choiceOptions(optionDefault,index);
+    choiceOptions(optionDefault,index);
     if ( ten != '' ) {
       choiceOptions(optionA,index);
     }

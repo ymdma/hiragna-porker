@@ -41,7 +41,7 @@ align-items: center;
 // border__なしの場合
 @mixin no-border {
   border: none;
-  box-shadow: 1 1 3px 1px $baseBlackColor;
+  // box-shadow: 1px 1px 3px 1px $baseBlackColor;
   @include border-radius();
 }
 // border__ありの場合
@@ -51,7 +51,7 @@ align-items: center;
   $width: 2px
 ){
   border: $style $color $width;
-  box-shadow: 1 1 3px 1px $baseBlackColor;
+  // box-shadow: 1px 1px 3px 1px $baseBlackColor;
   @include border-radius();
 }
 

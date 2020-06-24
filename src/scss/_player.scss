@@ -97,14 +97,15 @@
 
   }
   li{
-    text-align: center;
+    padding: 8px 0;
     @include card(
       $card-w:$handCardWidth,
       $card-h:$handCardHeight
     );
-    padding: 8px 0;
+    box-shadow: 0.5px 0.5px 1.5px 0px #33333388;
     @include with-border();
     @include strongText;
+    text-align: center;
   };
   cursor: pointer;
 }

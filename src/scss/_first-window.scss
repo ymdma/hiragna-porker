@@ -117,6 +117,7 @@
   @include flex--center;
   background: #000000aa;
   z-index:101;
+
   @media (max-width:$sp) {
     height: calc(100% - 60px);
     top: 60px;

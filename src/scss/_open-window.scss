@@ -11,6 +11,7 @@
   flex-direction: column;
   justify-content: space-around;
   align-items: center;
+  
   @media(min-width:$pc){
     min-height:640px;
   }
@@ -79,9 +80,9 @@
   height: 43px;
   position: absolute;
   top: 5px;
-  right: 23%;
+  right: auto;
   background: #fff;
-  outline: solid #00F 2px;
+  outline: solid rgb(34, 171, 235) 2px;
   @include mainText (
     $color: #000,
     $size: 26px,
