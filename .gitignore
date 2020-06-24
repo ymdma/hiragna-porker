@@ -4,3 +4,5 @@ node_modules
 public/js
 public/scss
 
+subcord_webpack_config.txt
+/src/js/subcord.js
