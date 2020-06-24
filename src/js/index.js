@@ -68,14 +68,12 @@ let currentPlayer = {
   handCards: [],
   description: '',
   changesLeft: 4,
-  finishedPlayer: 0,
-  gameStage: 'firstStage',
-  ReScrollPoint: 'first'
+  finishedPlayer: 0
 }
 
 let GameState = {
   stage: 'firstStage',
-  ReScrollPoint: 'first',
+  reScrollPoint: 'first',
   finishedPlayer: 0,
   firstPlayer: null,
   secondPlayer: null
@@ -123,7 +121,7 @@ window.addEventListener("resize", function(event) {
   let description = h * 2;
   let result = h * 3;
   // スコープの問題、また値が変動するため
-  switch ( currentPlayer.ReScrollPoint ) {
+  switch ( GameState.reScrollPoint ) {
     case 'first':
       scroll(first)
       break;
@@ -246,7 +244,7 @@ const pushStartBtn = () => {
 
     // ゲームステージ更新
     GameState.stage = 'firstStage'
-    currentPlayer.ReScrollPoint = 'first'
+    GameState.reScrollPoint = 'first'
 
     // ゲームスタート時のアニメーション用
     const startFlag = document.getElementById('startFlag')
@@ -337,7 +335,7 @@ const setDisplay = () => {
   document.getElementById('playerName').innerHTML = `${currentPlayer.name}`;
   document.getElementById('avatarImg').setAttribute('src', `${currentPlayer.avatar}`);
   // console.log(playerName)
-  if ( currentPlayer.finishedPlayer == 0 ) {
+  if ( GameState.finishedPlayer == 0 ) {
     isHidden(document.getElementById('avatarImg')); // ＊改善ポイント ここだけ隠しとくのはスマートじゃないと思う
   }
 }
@@ -456,7 +454,7 @@ const cardChangeDone = () => {
         const firstPlayerDiscardArea = document.getElementById('firstDiscard')
         const secondPlayerDiscardArea = document.getElementById('secondDiscard')
         let target = document.querySelector('#currentPlayerHandCards > .is-select')
-        switch (currentPlayer.finishedPlayer ){
+        switch (GameState.finishedPlayer ){
           case 0:
             let newCard = document.createElement('li');
             firstPlayerDiscardArea.appendChild(newCard);
@@ -661,7 +659,7 @@ const sortWindowAppearance = () => {
   toSortWindowBtn.onclick = () => {
     // gameStage更新
     GameState.stage = 'sortStage'
-    currentPlayer.ReScrollPoint = 'sort'
+    GameState.reScrollPoint = 'sort'
 
     // sortWindowへスクロール
     GoToNextStage();
@@ -769,7 +767,7 @@ const toDescription = () => {
 
     // gameStage更新
     GameState.stage = 'descriptionStage'
-    currentPlayer.ReScrollPoint = 'description'
+    GameState.reScrollPoint = 'description'
 
     // sortWindowへスクロール
     GoToNextStage();
@@ -810,7 +808,7 @@ const backToSort = () => {
 
     // gameStage更新
     GameState.stage = 'sortStage'
-    currentPlayer.ReScrollPoint = 'sort'
+    GameState.reScrollPoint = 'sort'
 
     // sortWindowへスクロール
     GoToNextStage();
@@ -962,7 +960,7 @@ const finalConfirmModal = () => {
   const finishModalTextFirst = document.getElementById('finishModalTextFirst');
   const finishModalTextSecond = document.getElementById('finishModalTextSecond');
 
-  switch ( currentPlayer.finishedPlayer ) {
+  switch ( GameState.finishedPlayer ) {
     case 0:
       isHidden(finishModalTextSecond);
 
@@ -986,7 +984,7 @@ const finalConfirmModal = () => {
   finishModalDone.onclick = () => {
 
     // **********１人目が終わったタイミング**********
-    if ( currentPlayer.finishedPlayer == 0 ){
+    if ( GameState.finishedPlayer == 0 ){
 
       // // ***** 作成した成果をresult-windowにセットする ***** // //
       const resultWindowDisplayA = document.getElementById('deliverablesA');
@@ -1042,7 +1040,7 @@ const finalConfirmModal = () => {
 
       // gameStage更新
       GameState.stage = 'firstStage'
-      currentPlayer.ReScrollPoint = 'first'
+      GameState.reScrollPoint = 'first'
 
       // sortWindowへスクロール
       GoToNextStage();
@@ -1088,7 +1086,7 @@ const finalConfirmModal = () => {
   }
 
     // **********２人目が終わったタイミング（判定ウィンドウへ）**********
-    else if( currentPlayer.finishedPlayer == 1 ){
+    else if( GameState.finishedPlayer == 1 ){
       // console.log('判定Windowへ');
 
       // // 作成した成果をresult-windowにセットする // //
@@ -1141,7 +1139,7 @@ const finalConfirmModal = () => {
 
       // gameStage更新
       GameState.stage = 'resultStage'
-      currentPlayer.ReScrollPoint = 'resultStage'
+      GameState.reScrollPoint = 'resultStage'
 
       // resultWindowへスクロール
       GoToNextStage();
@@ -1259,9 +1257,9 @@ const setSecondPlayer = () => {
     currentPlayer.description = '';
     currentPlayer.changesLeft = 4;
     currentPlayer.acted = false;
-    currentPlayer.finishedPlayer = 1;
+    GameState.finishedPlayer = 1;
     GameState.stage = 'firstStage';
-    currentPlayer.ReScrollPoint = 'first';
+    GameState.reScrollPoint = 'first';
 
   }
   else if (currentPlayer.player == player2) {
@@ -1274,9 +1272,9 @@ const setSecondPlayer = () => {
     currentPlayer.description = '';
     currentPlayer.changesLeft = 4;
     currentPlayer.acted = false;
-    currentPlayer.finishedPlayer = 1;
+    GameState.finishedPlayer = 1;
     GameState.stage = 'firstStage';
-    currentPlayer.ReScrollPoint = 'first';
+    GameState.reScrollPoint = 'first';
 
   }
 }
