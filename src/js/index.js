@@ -74,7 +74,7 @@ let currentPlayer = {
 }
 
 let GameState = {
-  gameStage: 'firstStage',
+  stage: 'firstStage',
   ReScrollPoint: 'first',
   finishedPlayer: 0,
   firstPlayer: null,
@@ -158,7 +158,7 @@ function GoToNextStage() {
 
 
   // ステージの振り分け（基準となる値を取得後、string→変数にして引数へ）
-  switch ( currentPlayer.gameStage ) {
+  switch ( GameState.stage ) {
     case 'firstStage':
       scrollNext(firstStage);
       break;
@@ -245,7 +245,7 @@ const pushStartBtn = () => {
     isHidden(firstAttackSelectModal);
 
     // ゲームステージ更新
-    currentPlayer.gameStage = 'firstStage'
+    GameState.stage = 'firstStage'
     currentPlayer.ReScrollPoint = 'first'
 
     // ゲームスタート時のアニメーション用
@@ -660,7 +660,7 @@ const sortWindowAppearance = () => {
 
   toSortWindowBtn.onclick = () => {
     // gameStage更新
-    currentPlayer.gameStage = 'sortStage'
+    GameState.stage = 'sortStage'
     currentPlayer.ReScrollPoint = 'sort'
 
     // sortWindowへスクロール
@@ -768,7 +768,7 @@ const toDescription = () => {
     isDisabled(toDescriptionBtn,true);
 
     // gameStage更新
-    currentPlayer.gameStage = 'descriptionStage'
+    GameState.stage = 'descriptionStage'
     currentPlayer.ReScrollPoint = 'description'
 
     // sortWindowへスクロール
@@ -809,7 +809,7 @@ const backToSort = () => {
     removeDisabled(toDescriptionBtn);
 
     // gameStage更新
-    currentPlayer.gameStage = 'sortStage'
+    GameState.stage = 'sortStage'
     currentPlayer.ReScrollPoint = 'sort'
 
     // sortWindowへスクロール
@@ -1041,7 +1041,7 @@ const finalConfirmModal = () => {
       // // 重さを考慮して↓に差し替え
 
       // gameStage更新
-      currentPlayer.gameStage = 'firstStage'
+      GameState.stage = 'firstStage'
       currentPlayer.ReScrollPoint = 'first'
 
       // sortWindowへスクロール
@@ -1140,7 +1140,7 @@ const finalConfirmModal = () => {
       // console.log(player2);
 
       // gameStage更新
-      currentPlayer.gameStage = 'resultStage'
+      GameState.stage = 'resultStage'
       currentPlayer.ReScrollPoint = 'resultStage'
 
       // resultWindowへスクロール
@@ -1260,7 +1260,7 @@ const setSecondPlayer = () => {
     currentPlayer.changesLeft = 4;
     currentPlayer.acted = false;
     currentPlayer.finishedPlayer = 1;
-    currentPlayer.gameStage = 'firstStage';
+    GameState.stage = 'firstStage';
     currentPlayer.ReScrollPoint = 'first';
 
   }
@@ -1275,7 +1275,7 @@ const setSecondPlayer = () => {
     currentPlayer.changesLeft = 4;
     currentPlayer.acted = false;
     currentPlayer.finishedPlayer = 1;
-    currentPlayer.gameStage = 'firstStage';
+    GameState.stage = 'firstStage';
     currentPlayer.ReScrollPoint = 'first';
 
   }
