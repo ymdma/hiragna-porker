@@ -1,4 +1,8 @@
 import { stAnime } from "./startAnime.js";
+import { Player } from "./class.js";
+import { dakuten } from "./dakuten.js";
+import { HBG_menu, onlyPortrait, zIndexFix } from "./others.js";
+
 
 // ひらがな５０音元配列( Length => 46 )
 const data = [
@@ -35,30 +39,11 @@ let secondPlayerArray = cards.slice(37, 42);
 // 一回終わるごとにオブジェクトをpushしてく
 // 未実装
 
-// 先行
-let firstPlayer;
-// 後行
-let secondPlayer;
-// (プレーヤー名を代入)
 
-
-// プレーヤーの定義
-let player1 = {
-  name: 'とり',
-  avatar: './image/tori.png',
-  handCards: [],
-  changesLeft: 4,
-  description: '',
-  winner: false
-}
-let player2 = {
-  name: 'いぬ',
-  avatar: './image/inu.png',
-  handCards: [],
-  changesLeft: 4,
-  description: '',
-  winner: false
-}
+// // プレーヤー
+// プレーヤーインスタンス作成
+let player1 = new Player( 'とり', 'image/tori.png', [], 4, '',  false );
+let player2 = new Player( 'いぬ', 'image/inu.png', [], 4, '',  false );
 
 // 行動中のプレイヤー
 let currentPlayer = {
@@ -67,22 +52,20 @@ let currentPlayer = {
   avatar: '', // url
   handCards: [],
   description: '',
-  changesLeft: 4,
-  finishedPlayer: 0,
-  gameStage: 'firstStage',
-  ReScrollPoint: 'first'
+  changesLeft: 4
 }
 
 let GameState = {
-  gameStage: 'firstStage',
-  ReScrollPoint: 'first',
-  finishedPlayer: 0,
+  stage: 'firstStage',
+  finishedPlayer: 0, // 改善案 =>turn: (pre or top or bottom or result) , として、表示の切り替えを分ける
+  // ゲームプレイヤー
   firstPlayer: null,
   secondPlayer: null
 }
 
 document.addEventListener('DOMContentLoaded', () => {
-  // geme
+
+  // geme main
   pushStartBtn();
   cardChange();
   moreCardChangeDone();
@@ -92,73 +75,55 @@ document.addEventListener('DOMContentLoaded', () => {
   sortReset();
   toDescription();
   backToSort();
-  finalConfirmModal();
   descriptionWriteFunc();
   styleChangeToolbar();
+  finalConfirmModal();
+  //dakuten.js
   dakuten();
-  // nav
+  // others.js
   HBG_menu();
+  onlyPortrait();
+  zIndexFix();
 });
+
 
 
 
 // ***** WindowEvent *****
 // ***Scroll***
 
-// 表示ブレのため、スクロールされたら戻す
-window.addEventListener('scroll', () => {
-  let timeoutId;
-  if ( timeoutId ) return;
-  timeoutId = setTimeout( function () {
-    timeoutId = 0;
-  GoToNextStage()}, 2000);
-});
-
-// ****リサイズに伴う表示のズレ補正****
-// ウィンドウサイズが変更された時
-window.addEventListener("resize", function(event) {
-  let h = document.documentElement.clientHeight
-  let first = 0;
-  let sort = h ;
-  let description = h * 2;
-  let result = h * 3;
-  // スコープの問題、また値が変動するため
-  switch ( currentPlayer.ReScrollPoint ) {
-    case 'first':
-      scroll(first)
-      break;
-    case 'sort':
-      scroll(sort)
-      break;
-    case 'description':
-      scroll(description)
-      break;
-    case 'result':
-      scroll(result)
-      break;
-  }
-  function scroll(target){
-    scrollTo(0, target);
-    console.log("スクロール動作 :補正")
-  }
-})
-// ***Scroll***
-
-// ***** Functions *****
-
-// ***Scroll***
 let stageStep = document.documentElement.clientHeight;
 let firstStage = 0;
 let sortStage = stageStep;
 let descriptionStage = stageStep * 2;
 let resultStage = stageStep * 3;
 
+
+// スクロールによる表示域のズレ矯正
+window.addEventListener('scroll', () => {
+  let timeoutId;
+  if ( timeoutId ) return;
+  timeoutId = setTimeout( () => {
+    timeoutId = 0;
+  GoToNextStage()}, 2000);
+});
+
+// ****リサイズに伴う表示のズレ補正****
+// ウィンドウサイズが変更された時
+window.addEventListener("resize", () => {
+  GoToNextStage();
+})
+
 // 次のウィンドウへ移動
 function GoToNextStage() {
-
-
+  // cliantHeightを最新情報に更新、移動ポイントを再設定
+  stageStep = document.documentElement.clientHeight;
+  // firstStage = 0;
+  sortStage = stageStep;
+  descriptionStage = stageStep * 2;
+  resultStage = stageStep * 3;
   // ステージの振り分け（基準となる値を取得後、string→変数にして引数へ）
-  switch ( currentPlayer.gameStage ) {
+  switch ( GameState.stage ) {
     case 'firstStage':
       scrollNext(firstStage);
       break;
@@ -181,8 +146,7 @@ function GoToNextStage() {
 // ***Scroll***
 
 // ****** Class付与関数 ******
-// display:none 用
-
+// display:none
 function isHidden(ele) {
   if (ele.classList.contains('is-hidden')) {
     ele.classList.remove('is-hidden')
@@ -215,7 +179,7 @@ function removeDisabled(target) {
 };
 
 // aria-expanded 切替
-function setAriaExpanded(target) {
+export function setAriaExpanded(target) {
   if ( target.getAttribute('aria-expanded') == 'false' ) {
     setAttr(target, 'true')
   }
@@ -224,10 +188,11 @@ function setAriaExpanded(target) {
   }
 };
 
-// setAttribute
-function setAttr(target,val) {
+// setAttribute(aria-expanded)
+export function setAttr(target,val) {
   target.setAttribute('aria-expanded', val)
-}
+};
+
 
 // ***** Functions *****
 
@@ -245,8 +210,7 @@ const pushStartBtn = () => {
     isHidden(firstAttackSelectModal);
 
     // ゲームステージ更新
-    currentPlayer.gameStage = 'firstStage'
-    currentPlayer.ReScrollPoint = 'first'
+    GameState.stage = 'firstStage'
 
     // ゲームスタート時のアニメーション用
     const startFlag = document.getElementById('startFlag')
@@ -296,11 +260,11 @@ const setFirstPlayerTori = () => {
   currentPlayer.avatar = './image/tori.png';
   currentPlayer.handCards = firstPlayerArray;
   currentPlayer.description = '';
-  currentPlayer.acted = false;
 
-  firstPlayer = player1.name;
-  secondPlayer = player2.name;
+  GameState.firstPlayer = player1.name;
+  GameState.secondPlayer = player2.name;
 
+  // console.log(GameState)
   // console.log(currentPlayer);
 
   setDisplay();
@@ -318,10 +282,9 @@ const setFirstPlayerInu = () => {
   currentPlayer.avatar = './image/inu.png';
   currentPlayer.handCards = firstPlayerArray;
   currentPlayer.description = '';
-  currentPlayer.acted = false;
 
-  firstPlayer = player2.name;
-  secondPlayer = player1.name;
+  GameState.firstPlayer = player2.name;
+  GameState.secondPlayer = player1.name;
 
   // console.log(currentPlayer);
 
@@ -337,7 +300,7 @@ const setDisplay = () => {
   document.getElementById('playerName').innerHTML = `${currentPlayer.name}`;
   document.getElementById('avatarImg').setAttribute('src', `${currentPlayer.avatar}`);
   // console.log(playerName)
-  if ( currentPlayer.finishedPlayer == 0 ) {
+  if ( GameState.finishedPlayer == 0 ) {
     isHidden(document.getElementById('avatarImg')); // ＊改善ポイント ここだけ隠しとくのはスマートじゃないと思う
   }
 }
@@ -456,7 +419,7 @@ const cardChangeDone = () => {
         const firstPlayerDiscardArea = document.getElementById('firstDiscard')
         const secondPlayerDiscardArea = document.getElementById('secondDiscard')
         let target = document.querySelector('#currentPlayerHandCards > .is-select')
-        switch (currentPlayer.finishedPlayer ){
+        switch (GameState.finishedPlayer ){
           case 0:
             let newCard = document.createElement('li');
             firstPlayerDiscardArea.appendChild(newCard);
@@ -659,9 +622,8 @@ const sortWindowAppearance = () => {
   const toSortWindowBtn = document.getElementById('toSortWindowBtn');
 
   toSortWindowBtn.onclick = () => {
-    // gameStage更新
-    currentPlayer.gameStage = 'sortStage'
-    currentPlayer.ReScrollPoint = 'sort'
+    // GameStage更新
+    GameState.stage = 'sortStage'
 
     // sortWindowへスクロール
     GoToNextStage();
@@ -696,7 +658,7 @@ function sortHandCards() {
 
         sortHandCards(); // リセット！ *[並べ直し]用
       }
-      console.log(`num: ${num}`)
+      // console.log(`num: ${num}`)
     }
   )
 };
@@ -767,9 +729,8 @@ const toDescription = () => {
     //ボタンの非活性化
     isDisabled(toDescriptionBtn,true);
 
-    // gameStage更新
-    currentPlayer.gameStage = 'descriptionStage'
-    currentPlayer.ReScrollPoint = 'description'
+    // GameStage更新
+    GameState.stage = 'descriptionStage'
 
     // sortWindowへスクロール
     GoToNextStage();
@@ -808,9 +769,8 @@ const backToSort = () => {
     const toDescriptionBtn = document.getElementById('toDescriptionBtn')
     removeDisabled(toDescriptionBtn);
 
-    // gameStage更新
-    currentPlayer.gameStage = 'sortStage'
-    currentPlayer.ReScrollPoint = 'sort'
+    // GameStage更新
+    GameState.stage = 'sortStage'
 
     // sortWindowへスクロール
     GoToNextStage();
@@ -962,7 +922,7 @@ const finalConfirmModal = () => {
   const finishModalTextFirst = document.getElementById('finishModalTextFirst');
   const finishModalTextSecond = document.getElementById('finishModalTextSecond');
 
-  switch ( currentPlayer.finishedPlayer ) {
+  switch ( GameState.finishedPlayer ) {
     case 0:
       isHidden(finishModalTextSecond);
 
@@ -986,7 +946,7 @@ const finalConfirmModal = () => {
   finishModalDone.onclick = () => {
 
     // **********１人目が終わったタイミング**********
-    if ( currentPlayer.finishedPlayer == 0 ){
+    if ( GameState.finishedPlayer == 0 ){
 
       // // ***** 作成した成果をresult-windowにセットする ***** // //
       const resultWindowDisplayA = document.getElementById('deliverablesA');
@@ -1035,14 +995,11 @@ const finalConfirmModal = () => {
 
       // console.log('Player2のターンへ');
 
-      // // 画面を一番上元に戻す
-      // scrollTop(500);
 
       // // 重さを考慮して↓に差し替え
 
-      // gameStage更新
-      currentPlayer.gameStage = 'firstStage'
-      currentPlayer.ReScrollPoint = 'first'
+      // GameStage更新
+      GameState.stage = 'firstStage'
 
       // sortWindowへスクロール
       GoToNextStage();
@@ -1053,7 +1010,7 @@ const finalConfirmModal = () => {
       const startFlag_ele_p = document.querySelector('#startFlag p');
       startFlag.classList.remove('is-hidden');
       startFlag.setAttribute('aria-expanded',false);
-      startFlag_ele_p.textContent = `${secondPlayer}さんのターン`;
+      startFlag_ele_p.textContent = `${GameState.secondPlayer}さんのターン`;
 
       // animation
       function startFlagAppearance() {
@@ -1088,7 +1045,7 @@ const finalConfirmModal = () => {
   }
 
     // **********２人目が終わったタイミング（判定ウィンドウへ）**********
-    else if( currentPlayer.finishedPlayer == 1 ){
+    else if( GameState.finishedPlayer == 1 ){
       // console.log('判定Windowへ');
 
       // // 作成した成果をresult-windowにセットする // //
@@ -1139,9 +1096,8 @@ const finalConfirmModal = () => {
       // console.log(player1);
       // console.log(player2);
 
-      // gameStage更新
-      currentPlayer.gameStage = 'resultStage'
-      currentPlayer.ReScrollPoint = 'resultStage'
+      // GameStage更新
+      GameState.stage = 'resultStage'
 
       // resultWindowへスクロール
       GoToNextStage();
@@ -1158,20 +1114,17 @@ const finalConfirmModal = () => {
 const dataMove = () => {
   const description_Ele = document.getElementById('descriptionDisplayAreaB');
   currentPlayer.description = description_Ele;
-  currentPlayer.acted = true;
 
   if ( currentPlayer.player == player1 ) {
 
     player1.changesLeft = currentPlayer.changesLeft, // 0
     player1.handCards = currentPlayer.handCards,
-    player1.description = currentPlayer.description,
-    player1.acted =  currentPlayer.acted
+    player1.description = currentPlayer.description
   }
   if ( currentPlayer.player == player2 ) {
     player2.changesLeft = currentPlayer.changesLeft, // 0
     player2.handCards = currentPlayer.handCards,
-    player2.description = currentPlayer.description,
-    player2.acted =  currentPlayer.acted
+    player2.description = currentPlayer.description
   }
 
 };
@@ -1229,28 +1182,10 @@ const setDisplayDefault = () => {
   descriptionWriteArea.value = ''
 }
 
-// //画面をスクロールで一番上に戻す(スピード変更可)
-//   function scrollTop(duration) {
-//     let currentY = window.pageYOffset;
-//     let step = duration/currentY > 1 ? 10 : 100;
-//     let timeStep = duration/currentY * step;
-//     let intervalID = setInterval(scrollUp, timeStep);
-
-//     function scrollUp(){
-//       currentY = window.pageYOffset;
-//       if(currentY === 0) {
-//           clearInterval(intervalID);
-//       } else {
-//           scrollBy( 0, -step );
-//       }
-//     }
-//   }
-
 
 const setSecondPlayer = () => {
 // 次プレイヤー用の値をオブジェクトにセットする
   if (currentPlayer.player == player1) {
-    player1.acted = true;
 
     currentPlayer.name = 'いぬ';
     currentPlayer.player = player2;
@@ -1258,14 +1193,11 @@ const setSecondPlayer = () => {
     currentPlayer.handCards = secondPlayerArray;
     currentPlayer.description = '';
     currentPlayer.changesLeft = 4;
-    currentPlayer.acted = false;
-    currentPlayer.finishedPlayer = 1;
-    currentPlayer.gameStage = 'firstStage';
-    currentPlayer.ReScrollPoint = 'first';
+    GameState.finishedPlayer = 1;
+    GameState.stage = 'firstStage';
 
   }
   else if (currentPlayer.player == player2) {
-    player2.acted = true;
 
     currentPlayer.name = 'とり';
     currentPlayer.player = player1;
@@ -1273,10 +1205,8 @@ const setSecondPlayer = () => {
     currentPlayer.handCards = secondPlayerArray;
     currentPlayer.description = '';
     currentPlayer.changesLeft = 4;
-    currentPlayer.acted = false;
-    currentPlayer.finishedPlayer = 1;
-    currentPlayer.gameStage = 'firstStage';
-    currentPlayer.ReScrollPoint = 'first';
+    GameState.finishedPlayer = 1;
+    GameState.stage = 'firstStage';
 
   }
 }
@@ -1320,7 +1250,7 @@ const openResultModal = () => {
     //モーダル２に質問文を挿入
     const resultModalSecond = document.getElementById('resultModalSecond');
     const RM_SecondText = resultModalSecond.querySelector('p');
-    RM_SecondText.innerHTML =  `${secondPlayer}さん、どちらが勝ったと思いますか？`
+    RM_SecondText.innerHTML =  `${GameState.secondPlayer}さん、どちらが勝ったと思いますか？`
 
     const secondPlayerResultA = document.getElementById('secondPlayerResultA');
     const secondPlayerResultB = document.getElementById('secondPlayerResultB');
@@ -1336,7 +1266,8 @@ const openResultModal = () => {
       secondPlayerResultA.onclick = () => {
         isHidden(resultModalSecond); // 開
         isHidden(lastResult); //開
-        lastResult.innerHTML = `${firstPlayer}さんの勝ち！`
+        lastResult.innerHTML = `${GameState.firstPlayer}さんの勝ち！`
+        console.log(player1,player2)
       }
       // 1:1
       secondPlayerResultB.onclick = () => {
@@ -1364,164 +1295,12 @@ const openResultModal = () => {
       secondPlayerResultB.onclick = () => {
         isHidden(resultModalSecond); // 開
         isHidden(lastResult); //開
-        lastResult.innerHTML = `${secondPlayer}さんの勝ち！`
+        lastResult.innerHTML = `${GameState.secondPlayer}さんの勝ち！`
       }
 
     }
   }
 }
-
-
-// *****濁点*****
-
-const dakuten = () => {
-  const sortResetBtn = document.getElementById('sortResetBtn');
-  const dakutenPopTarget = document.getElementById('dakutenPopTarget');
-  const CP_HandCards = document.getElementById('currentPlayerSortAfter');
-  const CP_HandCards_Elem_Li = document.getElementById('currentPlayerSortAfter').getElementsByTagName('li');
-  const CP_HandCardsArray = Array.prototype.slice.call(CP_HandCards_Elem_Li);
-
-  // カードをクリックしたら、文字を判定する + 要素の情報を次の関数に渡す
-  CP_HandCardsArray.forEach (function FxA(ele,index) {
-    ele.addEventListener('click', () => {
-
-      // 出ているポップの(要素)を消す
-      while (dakutenPopTarget.firstChild) dakutenPopTarget.removeChild(dakutenPopTarget.firstChild);
-
-      // カードの文字の判定して、元文字と候補を次の関数に送る
-      switch ( ele.innerHTML ) {
-        case 'あ': openPop_dakuten('あ','','','ぁ',index);
-          break;
-        case 'い': openPop_dakuten('い','','','ぃ',index);
-          break;
-        case 'う': openPop_dakuten('う','ゔ','','ぅ',index);
-          break;
-        case 'え': openPop_dakuten('え','','','ぇ',index);
-          break;
-        case 'お': openPop_dakuten('お','','','ぉ',index);
-          break;
-        case 'か': openPop_dakuten('か','が','','',index);
-          break;
-        case 'き': openPop_dakuten('き','ぎ','','',index);
-          break;
-        case 'く': openPop_dakuten('く','ぐ','','',index);
-          break;
-        case 'け': openPop_dakuten('け','げ','','',index);
-          break;
-        case 'こ': openPop_dakuten('こ','ご','','',index);
-          break;
-        case 'さ': openPop_dakuten('さ','ざ','','',index);
-          break;
-        case 'し': openPop_dakuten('し','じ','','',index);
-          break;
-        case 'す': openPop_dakuten('す','ず','','',index);
-          break;
-        case 'せ': openPop_dakuten('せ','ぜ','','',index);
-          break;
-        case 'そ': openPop_dakuten('そ','ぞ','','',index);
-          break;
-        case 'た': openPop_dakuten('た','だ','','',index);
-          break;
-        case 'ち': openPop_dakuten('ち','ぢ','','',index);
-          break;
-        case 'つ': openPop_dakuten('つ','づ','','っ',index);
-          break;
-        case 'て': openPop_dakuten('て','で','','',index);
-          break;
-        case 'と': openPop_dakuten('と','ど','','',index);
-          break;
-        case 'は': openPop_dakuten('は','ば','ぱ','',index);
-          break;
-        case 'ひ': openPop_dakuten('ひ','び','ぴ','',index);
-          break;
-        case 'ふ': openPop_dakuten('ふ','ぶ','ぷ','',index);
-          break;
-        case 'へ': openPop_dakuten('へ','べ','ぺ','',index);
-          break;
-        case 'ほ': openPop_dakuten('ほ','ぼ','ぽ','',index);
-          break;
-        case 'や': openPop_dakuten('や','','','ゃ',index);
-          break;
-        case 'ゆ': openPop_dakuten('ゆ','','','ゅ',index);
-          break;
-        case 'よ': openPop_dakuten('よ','','','ょ',index);
-          break;
-        case 'ー': openPop_dakuten('ー','〜','','-',index);
-          break;
-      }
-    })
-  })
-
-  function openPop_dakuten (moto,ten,maru,komoji,index) {
-    // *要素の生成*
-    // div 入れ物
-    let Div = document.createElement('div');
-    Div.className = 'p-pop__dakuten';
-    // 元の文字
-    let Moto = document.createElement('p')
-    Moto.innerHTML = moto
-    Div.appendChild(Moto)
-    Moto.setAttribute('id', 'optionDefault');
-    // ⇆
-    let Arrow = document.createElement('p')
-    // Arrow.innerHTML = '<i class="fas fa-long-arrow-alt-right"></i>'
-    Arrow.innerHTML = '<i class="fas fa-exchange-alt"></i>'
-    Div.appendChild(Arrow)
-    // 点
-    if ( ten != '' ){
-      let Ten = document.createElement('p')
-      Ten.innerHTML = ten
-      Div.appendChild(Ten)
-      Ten.setAttribute('id', 'optionA');
-    }
-    // 丸
-    if ( maru != '' ) {
-      let Maru = document.createElement('p')
-      Maru.innerHTML = maru
-      Div.appendChild(Maru)
-      Maru.setAttribute('id', 'optionB');
-    }
-    // 小文字
-    if ( komoji != '' ) {
-      let Komoji = document.createElement('p')
-      Komoji.innerHTML = komoji
-      Div.appendChild(Komoji)
-      Komoji.setAttribute('id', 'optionC');
-    }
-
-    // 完成した要素を挿入 '.p-pop__dakuten ＞ p*4'
-    dakutenPopTarget.appendChild(Div);
-
-    // 各選択肢をクリックした時
-
-    choiceOptions(optionDefault,index);
-    if ( ten != '' ) {
-      choiceOptions(optionA,index);
-    }
-    if ( maru != '' ) {
-      choiceOptions(optionB,index);
-    }
-    if ( komoji != '' ) {
-      choiceOptions(optionC,index);
-    }
-
-  }
-
-  //  ポップの文字をクリックした時にカードの文字を変える
-  function choiceOptions (target,index) {
-    target.addEventListener('click',() => {
-      CP_HandCards.children[index].innerHTML = target.innerHTML;
-    })
-  }
-
-  // 「もう一回並べ換える」ボタンを押した時、出ているポップを消す。
-  sortResetBtn.addEventListener('click', () => {
-    while (dakutenPopTarget.firstChild) dakutenPopTarget.removeChild(dakutenPopTarget.firstChild);
-  })
-
-}
-
-// *****濁点*****
 
 
 
@@ -1531,60 +1310,41 @@ const dakuten = () => {
 
 
 
+// // ********** HBG **********
+// export const HBG_menu = () =>{
 
+//   const hamburgerBtn = document.getElementById('hamburgerBtn');
+//   const navList = document.getElementById('navList');
 
+//   hamburgerBtn.addEventListener('click', function() {
+//     setAriaExpanded(hamburgerBtn);
+//     setAriaExpanded(navList);
+//   })
 
-// ********** HBG **********
-const HBG_menu = () =>{
+//   const toRules = document.getElementById('toRules');
+//   const Rules = document.getElementById('Rules');
+//   const closeRules = document.getElementById('closeRules');
+//   const toRequirements = document.getElementById('toRequirements');
+//   const Requirements = document.getElementById('Requirements');
+//   const closeRequirements = document.getElementById('closeRequirements');
 
-  const hamburgerBtn = document.getElementById('hamburgerBtn');
-  const navList = document.getElementById('navList');
+//   toRules.onclick = () => {
+//     setAriaExpanded(Rules);
+//     setAttr(Requirements, false)
+//     // setAttr(hamburgerBtn, false);
+//     // setAttr(navList, false);
+//   };
+//   closeRules.onclick = () => {
+//     setAriaExpanded(Rules);
+//   };
+//   toRequirements.onclick = () => {
+//     setAriaExpanded(Requirements);
+//     setAttr(Rules, false)
+//     // setAttr(hamburgerBtn, false);
+//     // setAttr(navList, false);
+//   };
+//   closeRequirements.onclick = () => {
+//     setAriaExpanded(Requirements);
+//   };
 
-  hamburgerBtn.addEventListener('click', function() {
-    setAriaExpanded(hamburgerBtn);
-    setAriaExpanded(navList);
-  })
-
-  const toRules = document.getElementById('toRules');
-  const Rules = document.getElementById('Rules');
-  const closeRules = document.getElementById('closeRules');
-  const toRequirements = document.getElementById('toRequirements');
-  const Requirements = document.getElementById('Requirements');
-  const closeRequirements = document.getElementById('closeRequirements');
-
-  toRules.onclick = () => {
-    setAriaExpanded(Rules);
-    setAttr(Requirements, false)
-    // setAttr(hamburgerBtn, false);
-    // setAttr(navList, false);
-  };
-  closeRules.onclick = () => {
-    setAriaExpanded(Rules);
-  };
-  toRequirements.onclick = () => {
-    setAriaExpanded(Requirements);
-    setAttr(Rules, false)
-    // setAttr(hamburgerBtn, false);
-    // setAttr(navList, false);
-  };
-  closeRequirements.onclick = () => {
-    setAriaExpanded(Requirements);
-  };
-
-
-}
-
-// スマホの横置き時、「縦でお願いします」のダイアログを出す。
-window.onorientationchange = () => {
-  switch ( window.orientation ) {
-    case 0:
-      break;
-    case 90:
-      alert('スマホでは画面を縦にしてプレイしてください');
-      break;
-    case -90:
-      alert('スマホでは画面を縦にしてプレイしてください２');
-      break;
-  }
-}
-
+// }
