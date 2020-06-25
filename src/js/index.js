@@ -39,11 +39,6 @@ let secondPlayerArray = cards.slice(37, 42);
 // 一回終わるごとにオブジェクトをpushしてく
 // 未実装
 
-// 先行
-let firstPlayer;
-// 後行
-let secondPlayer;
-// (プレーヤー名を代入)
 
 // // プレーヤー
 // プレーヤーインスタンス作成
@@ -62,8 +57,8 @@ let currentPlayer = {
 
 let GameState = {
   stage: 'firstStage',
-  reScrollPoint: 'first',
-  finishedPlayer: 0,
+  finishedPlayer: 0, // 改善案 =>turn: (pre or top or bottom or result) , として、表示の切り替えを分ける
+  // ゲームプレイヤー
   firstPlayer: null,
   secondPlayer: null
 }
@@ -97,7 +92,14 @@ document.addEventListener('DOMContentLoaded', () => {
 // ***** WindowEvent *****
 // ***Scroll***
 
-// 表示ブレのため、スクロールされたら戻す
+let stageStep = document.documentElement.clientHeight;
+let firstStage = 0;
+let sortStage = stageStep;
+let descriptionStage = stageStep * 2;
+let resultStage = stageStep * 3;
+
+
+// スクロールによる表示域のズレ矯正
 window.addEventListener('scroll', () => {
   let timeoutId;
   if ( timeoutId ) return;
@@ -108,47 +110,18 @@ window.addEventListener('scroll', () => {
 
 // ****リサイズに伴う表示のズレ補正****
 // ウィンドウサイズが変更された時
-window.addEventListener("resize", function(event) {
-  let h = document.documentElement.clientHeight
-  let first = 0;
-  let sort = h ;
-  let description = h * 2;
-  let result = h * 3;
-  // スコープの問題、また値が変動するため
-  switch ( GameState.reScrollPoint ) {
-    case 'first':
-      scroll(first)
-      break;
-    case 'sort':
-      scroll(sort)
-      break;
-    case 'description':
-      scroll(description)
-      break;
-    case 'result':
-      scroll(result)
-      break;
-  }
-  function scroll(target){
-    scrollTo(0, target);
-    // console.log("スクロール動作 :補正")
-  }
+window.addEventListener("resize", () => {
+  GoToNextStage();
 })
-// ***Scroll***
-
-
-// ***** Functions *****
-
-// ***Scroll***
-let stageStep = document.documentElement.clientHeight;
-let firstStage = 0;
-let sortStage = stageStep;
-let descriptionStage = stageStep * 2;
-let resultStage = stageStep * 3;
 
 // 次のウィンドウへ移動
 function GoToNextStage() {
-
+  // cliantHeightを最新情報に更新、移動ポイントを再設定
+  stageStep = document.documentElement.clientHeight;
+  // firstStage = 0;
+  sortStage = stageStep;
+  descriptionStage = stageStep * 2;
+  resultStage = stageStep * 3;
   // ステージの振り分け（基準となる値を取得後、string→変数にして引数へ）
   switch ( GameState.stage ) {
     case 'firstStage':
@@ -238,7 +211,6 @@ const pushStartBtn = () => {
 
     // ゲームステージ更新
     GameState.stage = 'firstStage'
-    GameState.reScrollPoint = 'first'
 
     // ゲームスタート時のアニメーション用
     const startFlag = document.getElementById('startFlag')
@@ -289,9 +261,10 @@ const setFirstPlayerTori = () => {
   currentPlayer.handCards = firstPlayerArray;
   currentPlayer.description = '';
 
-  firstPlayer = player1.name;
-  secondPlayer = player2.name;
+  GameState.firstPlayer = player1.name;
+  GameState.secondPlayer = player2.name;
 
+  // console.log(GameState)
   // console.log(currentPlayer);
 
   setDisplay();
@@ -310,8 +283,8 @@ const setFirstPlayerInu = () => {
   currentPlayer.handCards = firstPlayerArray;
   currentPlayer.description = '';
 
-  firstPlayer = player2.name;
-  secondPlayer = player1.name;
+  GameState.firstPlayer = player2.name;
+  GameState.secondPlayer = player1.name;
 
   // console.log(currentPlayer);
 
@@ -651,7 +624,6 @@ const sortWindowAppearance = () => {
   toSortWindowBtn.onclick = () => {
     // GameStage更新
     GameState.stage = 'sortStage'
-    GameState.reScrollPoint = 'sort'
 
     // sortWindowへスクロール
     GoToNextStage();
@@ -759,7 +731,6 @@ const toDescription = () => {
 
     // GameStage更新
     GameState.stage = 'descriptionStage'
-    GameState.reScrollPoint = 'description'
 
     // sortWindowへスクロール
     GoToNextStage();
@@ -800,7 +771,6 @@ const backToSort = () => {
 
     // GameStage更新
     GameState.stage = 'sortStage'
-    GameState.reScrollPoint = 'sort'
 
     // sortWindowへスクロール
     GoToNextStage();
@@ -1030,7 +1000,6 @@ const finalConfirmModal = () => {
 
       // GameStage更新
       GameState.stage = 'firstStage'
-      GameState.reScrollPoint = 'first'
 
       // sortWindowへスクロール
       GoToNextStage();
@@ -1041,7 +1010,7 @@ const finalConfirmModal = () => {
       const startFlag_ele_p = document.querySelector('#startFlag p');
       startFlag.classList.remove('is-hidden');
       startFlag.setAttribute('aria-expanded',false);
-      startFlag_ele_p.textContent = `${secondPlayer}さんのターン`;
+      startFlag_ele_p.textContent = `${GameState.secondPlayer}さんのターン`;
 
       // animation
       function startFlagAppearance() {
@@ -1129,7 +1098,6 @@ const finalConfirmModal = () => {
 
       // GameStage更新
       GameState.stage = 'resultStage'
-      GameState.reScrollPoint = 'resultStage'
 
       // resultWindowへスクロール
       GoToNextStage();
@@ -1227,7 +1195,6 @@ const setSecondPlayer = () => {
     currentPlayer.changesLeft = 4;
     GameState.finishedPlayer = 1;
     GameState.stage = 'firstStage';
-    GameState.reScrollPoint = 'first';
 
   }
   else if (currentPlayer.player == player2) {
@@ -1240,7 +1207,6 @@ const setSecondPlayer = () => {
     currentPlayer.changesLeft = 4;
     GameState.finishedPlayer = 1;
     GameState.stage = 'firstStage';
-    GameState.reScrollPoint = 'first';
 
   }
 }
@@ -1284,7 +1250,7 @@ const openResultModal = () => {
     //モーダル２に質問文を挿入
     const resultModalSecond = document.getElementById('resultModalSecond');
     const RM_SecondText = resultModalSecond.querySelector('p');
-    RM_SecondText.innerHTML =  `${secondPlayer}さん、どちらが勝ったと思いますか？`
+    RM_SecondText.innerHTML =  `${GameState.secondPlayer}さん、どちらが勝ったと思いますか？`
 
     const secondPlayerResultA = document.getElementById('secondPlayerResultA');
     const secondPlayerResultB = document.getElementById('secondPlayerResultB');
@@ -1300,7 +1266,7 @@ const openResultModal = () => {
       secondPlayerResultA.onclick = () => {
         isHidden(resultModalSecond); // 開
         isHidden(lastResult); //開
-        lastResult.innerHTML = `${firstPlayer}さんの勝ち！`
+        lastResult.innerHTML = `${GameState.firstPlayer}さんの勝ち！`
         console.log(player1,player2)
       }
       // 1:1
@@ -1329,7 +1295,7 @@ const openResultModal = () => {
       secondPlayerResultB.onclick = () => {
         isHidden(resultModalSecond); // 開
         isHidden(lastResult); //開
-        lastResult.innerHTML = `${secondPlayer}さんの勝ち！`
+        lastResult.innerHTML = `${GameState.secondPlayer}さんの勝ち！`
       }
 
     }
