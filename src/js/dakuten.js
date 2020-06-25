@@ -120,15 +120,15 @@ export const dakuten = () => {
 
     // 各選択肢をクリックした時
 
-    choiceOptions(optionDefault,index);
+    choiceOptions(optionDefault, index);
     if ( ten != '' ) {
-      choiceOptions(optionA,index);
+      choiceOptions(optionA, index);
     }
     if ( maru != '' ) {
-      choiceOptions(optionB,index);
+      choiceOptions(optionB, index);
     }
     if ( komoji != '' ) {
-      choiceOptions(optionC,index);
+      choiceOptions(optionC, index);
     }
 
   }

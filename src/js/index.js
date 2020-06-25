@@ -1,7 +1,7 @@
 import { stAnime } from "./startAnime.js";
 import { Player } from "./class.js";
 import { dakuten } from "./dakuten.js";
-import { HBG_menu, onlyPortrait } from "./others.js";
+import { HBG_menu, onlyPortrait, zIndexFix } from "./others.js";
 
 
 // ひらがな５０音元配列( Length => 46 )
@@ -69,8 +69,8 @@ let GameState = {
 }
 
 document.addEventListener('DOMContentLoaded', () => {
-  // geme
-  onlyPortrait();
+
+  // geme main
   pushStartBtn();
   cardChange();
   moreCardChangeDone();
@@ -80,13 +80,17 @@ document.addEventListener('DOMContentLoaded', () => {
   sortReset();
   toDescription();
   backToSort();
-  finalConfirmModal();
   descriptionWriteFunc();
   styleChangeToolbar();
+  finalConfirmModal();
+  //dakuten.js
   dakuten();
-  // nav
+  // others.js
   HBG_menu();
+  onlyPortrait();
+  zIndexFix();
 });
+
 
 
 
@@ -127,10 +131,11 @@ window.addEventListener("resize", function(event) {
   }
   function scroll(target){
     scrollTo(0, target);
-    console.log("スクロール動作 :補正")
+    // console.log("スクロール動作 :補正")
   }
 })
 // ***Scroll***
+
 
 // ***** Functions *****
 
@@ -143,7 +148,6 @@ let resultStage = stageStep * 3;
 
 // 次のウィンドウへ移動
 function GoToNextStage() {
-
 
   // ステージの振り分け（基準となる値を取得後、string→変数にして引数へ）
   switch ( GameState.stage ) {
@@ -169,8 +173,7 @@ function GoToNextStage() {
 // ***Scroll***
 
 // ****** Class付与関数 ******
-// display:none 用
-
+// display:none
 function isHidden(ele) {
   if (ele.classList.contains('is-hidden')) {
     ele.classList.remove('is-hidden')
@@ -203,7 +206,7 @@ function removeDisabled(target) {
 };
 
 // aria-expanded 切替
-function setAriaExpanded(target) {
+export function setAriaExpanded(target) {
   if ( target.getAttribute('aria-expanded') == 'false' ) {
     setAttr(target, 'true')
   }
@@ -212,10 +215,11 @@ function setAriaExpanded(target) {
   }
 };
 
-// setAttribute
-function setAttr(target,val) {
+// setAttribute(aria-expanded)
+export function setAttr(target,val) {
   target.setAttribute('aria-expanded', val)
-}
+};
+
 
 // ***** Functions *****
 
@@ -682,7 +686,7 @@ function sortHandCards() {
 
         sortHandCards(); // リセット！ *[並べ直し]用
       }
-      console.log(`num: ${num}`)
+      // console.log(`num: ${num}`)
     }
   )
 };
@@ -1339,3 +1343,42 @@ const openResultModal = () => {
 // Vueで作り直す…？
 
 
+
+// // ********** HBG **********
+// export const HBG_menu = () =>{
+
+//   const hamburgerBtn = document.getElementById('hamburgerBtn');
+//   const navList = document.getElementById('navList');
+
+//   hamburgerBtn.addEventListener('click', function() {
+//     setAriaExpanded(hamburgerBtn);
+//     setAriaExpanded(navList);
+//   })
+
+//   const toRules = document.getElementById('toRules');
+//   const Rules = document.getElementById('Rules');
+//   const closeRules = document.getElementById('closeRules');
+//   const toRequirements = document.getElementById('toRequirements');
+//   const Requirements = document.getElementById('Requirements');
+//   const closeRequirements = document.getElementById('closeRequirements');
+
+//   toRules.onclick = () => {
+//     setAriaExpanded(Rules);
+//     setAttr(Requirements, false)
+//     // setAttr(hamburgerBtn, false);
+//     // setAttr(navList, false);
+//   };
+//   closeRules.onclick = () => {
+//     setAriaExpanded(Rules);
+//   };
+//   toRequirements.onclick = () => {
+//     setAriaExpanded(Requirements);
+//     setAttr(Rules, false)
+//     // setAttr(hamburgerBtn, false);
+//     // setAttr(navList, false);
+//   };
+//   closeRequirements.onclick = () => {
+//     setAriaExpanded(Requirements);
+//   };
+
+// }

@@ -1,4 +1,6 @@
 
+import { setAriaExpanded, setAttr } from "./index.js";
+
 // ********** HBG **********
 export const HBG_menu = () =>{
 
@@ -36,7 +38,6 @@ export const HBG_menu = () =>{
     setAriaExpanded(Requirements);
   };
 
-
 }
 
 // スマホの横置き時、「縦でお願いします」のダイアログを出す。
@@ -54,6 +55,28 @@ export const onlyPortrait = () => {
       case -90:
         alert('スマホでは画面を縦にしてプレイしてください２');
         break;
+    }
+  }
+}
+
+
+// spにて、z-indexが指定通りにはたらかないバグ対策(startBtn)
+export const zIndexFix = () => {
+
+  const HBG = document.getElementById('hamburgerBtn');
+  const screen = document.getElementById('startBtn').parentElement;
+  const firstModal = document.getElementById('firstAttackSelectModal');
+  const startFlag = document.getElementById('startFlag');
+
+  HBG.onclick = () => {
+    if ( HBG.getAttribute('aria-expanded') == 'true' ) {
+      screen.setAttribute('state', 'hide');
+      firstModal.setAttribute('state', 'hide');
+      startFlag.setAttribute('state', 'hide');
+    } else{
+      screen.setAttribute('state', 'show');
+      firstModal.setAttribute('state', 'show');
+      startFlag.setAttribute('state', 'show');
     }
   }
 }
