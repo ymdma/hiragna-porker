@@ -11,6 +11,7 @@
   flex-direction: column;
   justify-content: space-around;
   align-items: center;
+  
   @media(min-width:$pc){
     min-height:640px;
   }
@@ -24,15 +25,13 @@
     }
   }
 }
-
-.l-playerA,
-.l-playerB {
-  width: 80%;
-  max-height: 400px;
+[class^="l-player"]{
+  width: 100%;
   display: flex;
   align-items: flex-start;
-  background: transparent;
+  background: #ffffff;
   // background: #007788;
+
 }
 
 .l-playerB{

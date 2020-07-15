@@ -1,52 +1,50 @@
-.wrap {
+.wrap{
   width: 100%;
   height: 100%;
+
 }
 
-.first-modal {
-  &[state="hide"] {
-    display: none;
-  }
-  .c-modal__greenback {
+// 後ほどリファクタリングするべし
+
+.first-modal{
+  .c-modal__greenback{
     width: 100%;
     height: 45%;
     padding: 20px 0 20px 0;
     @include flex--center();
-    background: $baseWhiteColor;
-    border-style: solid;
-    border-color: $baseBlackColor;
-    border-width: 45px 0 45px 0;
-    outline: double #666 4px;
+    background: $baseGreenColor;
+    box-shadow: inset 0 0 0 15px #fff;
     @include strongText($color:#000);
-    z-index: 101;
+    z-index:101;
 
     @media (max-width:$sp) {
       padding: 20px 0px 20px 0px;
       @include strongText(
-        $color: #000,
-        $size: $large - 12px );
-      .c-modal__question {
+        $color:#000,
+        $size:$large - 12px
+      );
+      .c-modal__question{
         margin: 0 0 20px 0;
       }
     }
   }
-  .c-modal__select {
+  .c-modal__select{
     width: 100%;
     display: flex;
     align-items: center;
     justify-content: center;
     @include mainText();
-    @media (max-width: $sp) {
+    @media (max-width:$sp) {
 
     }
-    figure {
+    figure{
       margin-block-start: 0em;
       margin-block-end: 0em;
       margin-inline-start: 0px;
       margin-inline-end: 0px;
       cursor: pointer;
     }
-    figure:nth-of-type(2) {
+    figure:nth-of-type(2){
       margin-inline-start: 40px;
       margin-inline-end: 40px;
       @media (max-width:$sp) {
@@ -57,19 +55,19 @@
 
     }
   }
-  .c-image__vs {
-    img {
+  .c-image__vs{
+    img{
       width: 200px;
-      @media (max-width: $sp) {
+      @media (max-width:$sp) {
         width: 100px;
         margin: 0;
       }
     }
   }
-  .c-avatar__tori:hover {
+  .c-avatar__tori:hover{
     transform: translateY(-10px);
   }
-  .c-avatar__inu:hover {
+  .c-avatar__inu:hover{
     transform: translateY(-10px);
   }
   // 時間があれば選んだ時のぴょんぴょん動作つける
@@ -78,7 +76,7 @@
 
 
 // ゲームスタート
-.p-start-flag {
+.p-start-flag{
   width: 100%;
   height: 60px;
   position: absolute;
@@ -90,7 +88,7 @@
   transform: translateX(100%);
   transition: all .3s ease-in;
   opacity: 0;
-  Z-index: 101;
+  Z-index:101;
   &[aria-expanded="true"] {
     // display: block;
     transform: translateX(0);
@@ -101,25 +99,16 @@
     transform: translateX(100%);
     opacity: 0;
   }
-  &[state="hide"] {
-    display: none;
-  }
-  p {
+  p{
     width: fit-content;
-    @include strongText($color: $baseWhiteColor);
-    @media (max-width: $sp) {
-      @include strongText(
-        $color: $baseWhiteColor,
-        $size: $large - 12px,
-        $line-height: $large - 12px );
-    }
+    @include strongText($color:$baseWhiteColor);
   }
 }
 
 
 
 // Click to start!
-.l-screen {
+.l-screen{
   width: 100%;
   height: calc(100% - 50px);
   // padding: 5px 0;
@@ -127,46 +116,43 @@
   top: 50px;
   @include flex--center;
   background: #000000aa;
-  z-index: 101;
+  z-index:101;
 
-  @media (max-width: $sp) {
-    height: calc( 100% - 60px );
+  @media (max-width:$sp) {
+    height: calc(100% - 60px);
     top: 60px;
-    &[state="hide"] {
-      display: none;
-    }
   }
-  &:hover {
+  &:hover{
     background: #00000066;
   }
 
-  .start-button {
+  .start-button{
     width: 100%;
     height: 50px;
     position: absolute;
     top: 30%;
     background: #00000000;
-    border: none;
+    border:none;
     box-shadow: none;
     @include strongText();
     cursor: pointer;
 
-    @media (max-width: $sp) {
+    @media (max-width:$sp) {
       padding: 0% 1% 0%;
       top: 20%;
     }
 
-    &:hover {
+    &:hover{
       color: #cccccc;
       text-shadow: 0 0 10px #961717;
       // background: #00000033;
       box-shadow: none;
     }
-    &:active {
+    &:active{
       color: #cccccc;
       // box-shadow: inset 0 0 2px 0 rgba(0,0,0,0.7);
     }
-    &:disabled {
+    &:disabled{
       opacity: 0;
     }
   }
@@ -174,31 +160,31 @@
 
 
 
-// // information // //
-
-.l-information-area {
+// information  ***間借り中***
+.l-information-area{
   // width: 500px;
   width: 100%;
   height: 60px;
   // margin: 10px 0 0;
   padding: 0 10% 0;
-  @include flex--center( $text:center );
+  @include flex--center($text:center);
   background: #777777dd;
   @include with-border();
   border-style: none;
   @include mainText(
     $color: $baseWhiteColor,
     $size: 20px,
-    $line-height: 20px );
+    $line-height: 20px);
   z-index: 21;
 
-  @media (max-width: $sp) {
+
+  @media (max-width:$sp) {
     height: 42px;
     padding: 0 10px 0;
     @include mainText(
       $color: $baseWhiteColor,
       $size: 18px,
       $line-height: 18px,
-      $letter-spacing: 0.8px );
+      $letter-spacing: 0.8px);
   }
 }

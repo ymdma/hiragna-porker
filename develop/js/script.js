@@ -1,7 +1,7 @@
 import { stAnime } from "./startAnime.js";
 import { Player } from "./class.js";
 import { dakuten } from "./dakuten.js";
-import { HBG_menu, onlyPortrait, zIndexFix } from "./others.js";
+import { HBG_menu, onlyPortrait } from "./others.js";
 
 
 // ひらがな５０音元配列( Length => 46 )
@@ -33,12 +33,11 @@ for ( var i = cards.length - 1; i  >  0 ; i-- ) {
 let firstPlayerArray = cards.slice(42, 47);
 let secondPlayerArray = cards.slice(37, 42);
 
-
-// 対戦記録
-// let gameRecord = []
-// 一回終わるごとにオブジェクトをpushしてく
-// 未実装
-
+// 先行
+let firstPlayer;
+// 後行
+let secondPlayer;
+// (プレーヤー名を代入)
 
 // // プレーヤー
 // プレーヤーインスタンス作成
@@ -57,49 +56,37 @@ let currentPlayer = {
 
 let GameState = {
   stage: 'firstStage',
-  finishedPlayer: 0, // 改善案 =>turn: (pre or top or bottom or result) , として、表示の切り替えを分ける
-  // ゲームプレイヤー
+  reScrollPoint: 'first',
+  finishedPlayer: 0,
   firstPlayer: null,
   secondPlayer: null
 }
 
 document.addEventListener('DOMContentLoaded', () => {
-
-  // geme main
+  // geme
+  onlyPortrait();
   pushStartBtn();
   cardChange();
   moreCardChangeDone();
   changeSkip();
-  sortHandCards();
   sortWindowAppearance();
   sortReset();
   toDescription();
   backToSort();
+  finalConfirmModal();
   descriptionWriteFunc();
   styleChangeToolbar();
-  finalConfirmModal();
-  //dakuten.js
   dakuten();
-  // others.js
+  // nav
   HBG_menu();
-  onlyPortrait();
-  zIndexFix();
 });
-
 
 
 
 // ***** WindowEvent *****
 // ***Scroll***
 
-let stageStep = document.documentElement.clientHeight;
-let firstStage = 0;
-let sortStage = stageStep;
-let descriptionStage = stageStep * 2;
-let resultStage = stageStep * 3;
-
-
-// スクロールによる表示域のズレ矯正
+// 表示ブレのため、スクロールされたら戻す
 window.addEventListener('scroll', () => {
   let timeoutId;
   if ( timeoutId ) return;
@@ -110,18 +97,46 @@ window.addEventListener('scroll', () => {
 
 // ****リサイズに伴う表示のズレ補正****
 // ウィンドウサイズが変更された時
-window.addEventListener("resize", () => {
-  GoToNextStage();
+window.addEventListener("resize", event => {
+  let h = document.documentElement.clientHeight
+  let first = 0;
+  let sort = h ;
+  let description = h * 2;
+  let result = h * 3;
+  // スコープの問題、また値が変動するため
+  switch ( GameState.reScrollPoint ) {
+    case 'first':
+      scroll(first)
+      break;
+    case 'sort':
+      scroll(sort)
+      break;
+    case 'description':
+      scroll(description)
+      break;
+    case 'result':
+      scroll(result)
+      break;
+  }
+  function scroll(target){
+    scrollTo(0, target);
+  }
 })
+// ***Scroll***
+
+// ***** Functions *****
+
+// ***Scroll***
+let stageStep = document.documentElement.clientHeight;
+let firstStage = 0;
+let sortStage = stageStep;
+let descriptionStage = stageStep * 2;
+let resultStage = stageStep * 3;
 
 // 次のウィンドウへ移動
 function GoToNextStage() {
-  // cliantHeightを最新情報に更新、移動ポイントを再設定
-  stageStep = document.documentElement.clientHeight;
-  // firstStage = 0;
-  sortStage = stageStep;
-  descriptionStage = stageStep * 2;
-  resultStage = stageStep * 3;
+
+
   // ステージの振り分け（基準となる値を取得後、string→変数にして引数へ）
   switch ( GameState.stage ) {
     case 'firstStage':
@@ -139,31 +154,28 @@ function GoToNextStage() {
   }
   function scrollNext(target) {
     scrollTo(0, target);
-    // console.log("スクロール動作:ジャンプ");
-    // console.log(sortStage);
   }
 }
 // ***Scroll***
 
 // ****** Class付与関数 ******
-// display:none
+// display:none 用
+
 function isHidden(ele) {
   if (ele.classList.contains('is-hidden')) {
     ele.classList.remove('is-hidden')
   } else {
     ele.classList.add('is-hidden')
-    // console.log('isHidden作動')
   }
 };
 
-// 交換希望カーの選択時
+// 交換希望カードの選択時
 function isSelect(ele) {
   if (currentPlayer.changesLeft != 0) { // 誤作動防止
     if (ele.classList.contains("is-select")) {
       ele.classList.remove('is-select')
     } else {
       ele.classList.add('is-select')
-      // console.log("is-select作動")
     }
   }
 };
@@ -179,7 +191,7 @@ function removeDisabled(target) {
 };
 
 // aria-expanded 切替
-export function setAriaExpanded(target) {
+function setAriaExpanded(target) {
   if ( target.getAttribute('aria-expanded') == 'false' ) {
     setAttr(target, 'true')
   }
@@ -188,11 +200,10 @@ export function setAriaExpanded(target) {
   }
 };
 
-// setAttribute(aria-expanded)
-export function setAttr(target,val) {
+// setAttribute
+function setAttr(target,val) {
   target.setAttribute('aria-expanded', val)
-};
-
+}
 
 // ***** Functions *****
 
@@ -211,6 +222,7 @@ const pushStartBtn = () => {
 
     // ゲームステージ更新
     GameState.stage = 'firstStage'
+    GameState.reScrollPoint = 'first'
 
     // ゲームスタート時のアニメーション用
     const startFlag = document.getElementById('startFlag')
@@ -252,20 +264,17 @@ const pushStartBtn = () => {
 
 // 先攻プレーヤーの選択で「とり先」
 const setFirstPlayerTori = () => {
-  // console.log("とり開始");
   // currentPlayerにデータをセット
   currentPlayer.name = `${player1.name}`;
   currentPlayer.player = player1;
   currentPlayer.changesLeft = 4;
-  currentPlayer.avatar = './image/tori.png';
+  currentPlayer.avatar = '../assets/images/tori.png';
   currentPlayer.handCards = firstPlayerArray;
   currentPlayer.description = '';
 
-  GameState.firstPlayer = player1.name;
-  GameState.secondPlayer = player2.name;
+  firstPlayer = player1.name;
+  secondPlayer = player2.name;
 
-  // console.log(GameState)
-  // console.log(currentPlayer);
 
   setDisplay();
   setCards();
@@ -274,19 +283,17 @@ const setFirstPlayerTori = () => {
 
 // 先攻プレーヤーの選択で「いぬ先」
 const setFirstPlayerInu = () => {
-  // console.log("いぬ開始");
   // currentPlayerにデータをセット
   currentPlayer.name = `${player2.name}`;
   currentPlayer.player = player2;
   currentPlayer.changesLeft = 4;
-  currentPlayer.avatar = './image/inu.png';
+  currentPlayer.avatar = '../assets/images/inu.png';
   currentPlayer.handCards = firstPlayerArray;
   currentPlayer.description = '';
 
-  GameState.firstPlayer = player2.name;
-  GameState.secondPlayer = player1.name;
+  firstPlayer = player2.name;
+  secondPlayer = player1.name;
 
-  // console.log(currentPlayer);
 
   // 二週目の為に3つに分けて記述
   setDisplay();
@@ -299,7 +306,6 @@ const setDisplay = () => {
   // 名前とアバターを画面上に表示
   document.getElementById('playerName').innerHTML = `${currentPlayer.name}`;
   document.getElementById('avatarImg').setAttribute('src', `${currentPlayer.avatar}`);
-  // console.log(playerName)
   if ( GameState.finishedPlayer == 0 ) {
     isHidden(document.getElementById('avatarImg')); // ＊改善ポイント ここだけ隠しとくのはスマートじゃないと思う
   }
@@ -314,7 +320,7 @@ const setFirstInfo = () => {
 const setCards = () => {
   const CP_HandCards = document.getElementById('currentPlayerHandCards');
     let num = 0;
-    currentPlayer.handCards.forEach(function(i) {
+    currentPlayer.handCards.forEach((i) => {
       CP_HandCards.children[num].innerHTML = `${i}`;
       num++;
     });
@@ -363,17 +369,14 @@ const cardChange = () => {
         if( document.querySelectorAll('.js_handCards > .is-select').length === 1 ) {
           removeDisabled(changeDoneBtn);
           info.innerHTML = 'カードを決めたら「交換する」ボタンを押そう';
-          // console.log("カード選択数 １ (OK)");
         }
         else if( document.querySelectorAll('.js_handCards > .is-select').length === 0 ) {
           isDisabled(changeDoneBtn, true);
           info.innerHTML = '交換するカードを選ぼう！';
-          // console.log("カード未選択");
         }
         else{
           isDisabled(changeDoneBtn, true);
           info.innerHTML = '選ぶのは一枚だけだよ！';
-          // console.log("カード選択数２〜５");
         }
       }
     )
@@ -395,8 +398,6 @@ const cardChangeDone = () => {
 
     // 選んだカードを[交換する] ボタンを押した時
     changeDoneBtn.onclick = () => {
-      // console.log("cardChangeDone発動。残り交換数⤵︎");
-      // console.log(currentPlayer.changesLeft);
 
       // *****選択したカードを交換する関数******
       // SWITCH文で条件分岐して呼び出される。（山札から引くカードをダブらないようにする）
@@ -411,39 +412,36 @@ const cardChangeDone = () => {
         selectElements.classList.remove('is-select');
         //
         isDisabled(changeDoneBtn);
-        // console.log("入れ替え関数動作！");
       };
         // discard(); // 捨てたカードを置いておく
 
       function discard() {
-        const firstPlayerDiscardArea = document.getElementById('firstDiscard')
-        const secondPlayerDiscardArea = document.getElementById('secondDiscard')
-        let target = document.querySelector('#currentPlayerHandCards > .is-select')
-        switch (GameState.finishedPlayer ){
+        const firstPlayerDiscardArea = document.getElementById('firstDiscard');
+        const secondPlayerDiscardArea = document.getElementById('secondDiscard');
+        let target = document.querySelector('#currentPlayerHandCards > .is-select');
+        switch (GameState.finishedPlayer ) {
           case 0:
             let newCard = document.createElement('li');
             firstPlayerDiscardArea.appendChild(newCard);
             let lastAdd = firstPlayerDiscardArea.lastElementChild;
-            lastAdd.innerHTML = target.textContent
+            lastAdd.innerHTML = target.textContent;
           break;
           case 1:
             let newCard2 = document.createElement('li');
             secondPlayerDiscardArea.appendChild(newCard2);
             let lastAdd2 = secondPlayerDiscardArea.lastElementChild;
-            lastAdd2.innerHTML = target.textContent
+            lastAdd2.innerHTML = target.textContent;
           break;
         }
       }
       // カードを一枚選択している時のみボタンを使用可能にする
-      const changeDoneBtn = document.getElementById('changeDoneBtn')
+      const changeDoneBtn = document.getElementById('changeDoneBtn');
 
       // Player1のターンの場合
       // 山札から引くカードをダブらないようにする為の条件分岐
       switch (currentPlayer.changesLeft) {
         case 4:
           discard();
-          // console.log('case4: 現在のプレイヤーの状態⤵︎');
-          // console.log(currentPlayer);
           // 各プレーヤーが山札からランダムに引くロジック
           if ( currentPlayer.name === 'とり' ) {
             removeAndAdd(0);
@@ -453,13 +451,12 @@ const cardChangeDone = () => {
           }
           currentPlayer.changesLeft = 3;
           // 「選んでね」のアナウンスを出す。
-          info.innerHTML = '交換したいカードを選ぼう！ あと４回！';
+          info.innerHTML = '交換は あと３回！';
           break;
 
         case 3:
           discard();
-          // console.log('SWITCH文内 LEFT:3')
-          info.innerHTML = "交換したいカードを選ぼう！ あと３回！"
+          info.innerHTML = "交換はあと２回！"
           if ( currentPlayer.name === 'とり' ) {
             removeAndAdd(1);
           }
@@ -471,8 +468,7 @@ const cardChangeDone = () => {
 
         case 2:
           discard();
-          // console.log('SWITCH文内 LEFT:2')
-          info.innerHTML = "交換したいカードを選ぼう！ あと２回！"
+          info.innerHTML = "交換はあと１回だけ！"
           // moreCardChangeOnclickDone();
           if ( currentPlayer.name === 'とり' ) {
             removeAndAdd(2);
@@ -485,8 +481,7 @@ const cardChangeDone = () => {
 
         case 1:
           discard();
-          // console.log('SWITCH文内 LEFT:1')
-          info.innerHTML = "交換したいカードを選ぼう！ これがラスチャン！"
+
           // moreCardChangeOnclickDone()
           if ( currentPlayer.name === 'とり' ) {
             removeAndAdd(3);
@@ -506,11 +501,9 @@ const cardChangeDone = () => {
         // 5 「もう一度交換する」ボタンを表示
         isHidden(changeStartBtn2);
         // 6 次の行動をアナウンス
-        info.innerHTML = 'まだ交換する場合はボタンを押してね';
-        // console.log("if Left >= 1");
+        // info.innerHTML = 'まだ交換する場合はボタンを押してね';
       }
       else{
-        // console.log("else");
         // isHidden(changeStartBtn2);
         changeSkipBtn.classList.add('is-hidden'); // 完全に隠れて欲しい（is-hiddenの数が増えないかを後ほど確認）
       }
@@ -524,8 +517,7 @@ const moreCardChangeDone = () => {
   const changeDoneBtn = document.getElementById('changeDoneBtn');
   const changeStartBtn2 = document.getElementById('changeStartBtn2');
 
-  changeStartBtn2.onclick = () =>{
-    // console.log("moreCardChangeDone発動");
+  changeStartBtn2.onclick = () => {
 
     const info = document.getElementById('information').children[0];
     // 「もう一度交換する」ボタンを隠す
@@ -555,7 +547,6 @@ const changeSkip = () => {
     isHidden(changeSkipBtn)
     // isHidden(toSortWindowBtn)
     currentPlayer.changesLeft = 0;
-    // console.log('changeSkip発動')
   }
 }
 //   // ******* [交換スキップ] を押した時の処理 *******
@@ -574,16 +565,15 @@ function changeEndFunc() {
   isDisabled(changeDoneBtn,true);
   // isHidden(changeDoneBtn);
   changeDoneBtn.classList.add('is-hidden')
-  info.innerHTML = '交換終了！<ここに次のアナウンス>';
+  info.innerHTML = '交換終了！ 並び替えに移ろう！';
   isHidden(toSortWindowBtn);
 
   arrayFix();
 
-  // console.log('changeEnd関数 発動');
 
   // 今付いているisSelectを外す
   const selectElements = document.querySelectorAll('.js_handCards > .is-select');
-  if ( selectElements ){
+  if ( selectElements ) {
     selectElements.forEach (ele =>
       ele.classList.remove('is-select')
     );
@@ -599,16 +589,15 @@ function arrayFix() {
     currentPlayer.handCards = [];
     // 現状のカードを取得→配列へ
     num = 0;
-    for( let n = 5 ; n-- ; n != 0) {
+    for( let n = 5 ; n-- ; n != 0 ) {
       let str = CP_HandCards.children[num].textContent;
       num++;
       // currentPlayer.handCards.splice(num - 1,0,str)
       currentPlayer.handCards.push(str)
     }
-    // console.log(currentPlayer.handCards)
     // 並び替え （before） に値を挿入
     num = 0
-    currentPlayer.handCards.forEach(function(i) {
+    currentPlayer.handCards.forEach((i) => {
       currentPlayerSortBefore.children[num].innerHTML = `${i}`;
       num++;
     });
@@ -624,9 +613,11 @@ const sortWindowAppearance = () => {
   toSortWindowBtn.onclick = () => {
     // GameStage更新
     GameState.stage = 'sortStage'
+    GameState.reScrollPoint = 'sort'
 
     // sortWindowへスクロール
     GoToNextStage();
+    sortHandCards();
   };
 };
 // *****[並べ替える]押した時の処理(次画面出現)*****
@@ -642,13 +633,13 @@ function sortHandCards() {
   sortBeforeCardsArray.forEach(ele =>
     // カードをクリックした時
     ele.onclick = () => {
-      if ( sortArray.length < 5 ) {
+      if ( sortArray.length < 5 && !sortArray.includes(ele.innerHTML) ) {
         sortArray.splice(num,0,ele.textContent);
         document.getElementById('currentPlayerSortAfter').children[num].innerHTML = `${sortArray[num]}`;
         num++;
       }
-
-      if (num != 0 && num != 5 ) {
+      
+      if ( num != 0 && num != 5 ) {
       }
       else if ( num === 5 ) {
 
@@ -656,21 +647,20 @@ function sortHandCards() {
         const toDescriptionBtn = document.getElementById('toDescriptionBtn');
         removeDisabled(toDescriptionBtn);
 
-        sortHandCards(); // リセット！ *[並べ直し]用
+        // sortHandCar</ds(); // リセット！ *[並べ直し]用
       }
-      // console.log(`num: ${num}`)
     }
   )
 };
 // *****手札の並べ替え（交換終了後）*****
 
 
-// *****[手札の並べ替えをリセットする]ボタンを押した時の処理*****
+// *****[もう一回並べ換える]ボタンを押した時の処理*****
 const sortReset = () => {
   const sortResetBtn = document.getElementById('sortResetBtn')
 
 
-  // 並べ替えをやり直すボタンを押した時
+  // もう一回ならべ換えるボタンを押した時
   sortResetBtn.onclick = () => {
 
     // 次に進む ボタンの無効化
@@ -686,11 +676,10 @@ const sortReset = () => {
     sortAfterCardsArray.forEach (ele =>
       ele.innerHTML = ''
       )
-    // console.log("並べ替えやり直し")
 
   }
 };
-// *****[手札の並べ替えをリセットする]ボタンを押した時の処理*****
+// *****[もう一回ならべ換える]ボタンを押した時の処理*****
 
 
 // *****[次に進む] ボタン(toDescriptionBtn)を押した時の処理*****
@@ -731,6 +720,7 @@ const toDescription = () => {
 
     // GameStage更新
     GameState.stage = 'descriptionStage'
+    GameState.reScrollPoint = 'description'
 
     // sortWindowへスクロール
     GoToNextStage();
@@ -771,6 +761,7 @@ const backToSort = () => {
 
     // GameStage更新
     GameState.stage = 'sortStage'
+    GameState.reScrollPoint = 'sort'
 
     // sortWindowへスクロール
     GoToNextStage();
@@ -783,7 +774,7 @@ const descriptionWriteFunc = () => {
   const descriptionWriteArea = document.getElementById('descriptionWriteArea')
   const descriptionDisplayAreaB = document.getElementById('descriptionDisplayAreaB')
 
-  descriptionWriteArea.addEventListener('keyup', function() {
+  descriptionWriteArea.addEventListener('keyup', () => {
     let inputText = descriptionWriteArea.value;
     descriptionDisplayAreaB.innerHTML = `${replace(inputText)}` //ここに関数からの戻りを
   })
@@ -954,7 +945,6 @@ const finalConfirmModal = () => {
       const descriptionDisp = document.getElementById('descriptionDisplayAreaB');
       const cloneCards = cardsDisp.cloneNode(true);
       const cloneDesc = descriptionDisp.cloneNode(true);
-      console.log(resultWindowDisplayA)
       resultWindowDisplayA.appendChild(cloneCards);
       resultWindowDisplayA.appendChild(cloneDesc);
       //コピーされてしまうid/classを消す
@@ -993,13 +983,13 @@ const finalConfirmModal = () => {
       setSecondPlayer(); // 次プレイヤー用にcurrentPlayerの値をセット
       setSecondPlayerHandCards(); //次プレーヤーの手札をセット
 
-      // console.log('Player2のターンへ');
 
 
       // // 重さを考慮して↓に差し替え
 
       // GameStage更新
       GameState.stage = 'firstStage'
+      GameState.reScrollPoint = 'first'
 
       // sortWindowへスクロール
       GoToNextStage();
@@ -1010,7 +1000,7 @@ const finalConfirmModal = () => {
       const startFlag_ele_p = document.querySelector('#startFlag p');
       startFlag.classList.remove('is-hidden');
       startFlag.setAttribute('aria-expanded',false);
-      startFlag_ele_p.textContent = `${GameState.secondPlayer}さんのターン`;
+      startFlag_ele_p.textContent = `${secondPlayer}さんのターン`;
 
       // animation
       function startFlagAppearance() {
@@ -1045,8 +1035,7 @@ const finalConfirmModal = () => {
   }
 
     // **********２人目が終わったタイミング（判定ウィンドウへ）**********
-    else if( GameState.finishedPlayer == 1 ){
-      // console.log('判定Windowへ');
+    else if ( GameState.finishedPlayer == 1 ) {
 
       // // 作成した成果をresult-windowにセットする // //
       // const resultWindowDisplayA = document.getElementById('deliverablesA');
@@ -1092,12 +1081,10 @@ const finalConfirmModal = () => {
       setDisplayDefault(); // 次プレイヤー用に現状復帰+a 表示の切り替え等
       isHidden(finishModal)
       setSecondPlayer(); // 次プレイヤー用にcurrentPlayerの値をセット
-      // console.log(currentPlayer);
-      // console.log(player1);
-      // console.log(player2);
 
       // GameStage更新
       GameState.stage = 'resultStage'
+      GameState.reScrollPoint = 'resultStage'
 
       // resultWindowへスクロール
       GoToNextStage();
@@ -1189,24 +1176,26 @@ const setSecondPlayer = () => {
 
     currentPlayer.name = 'いぬ';
     currentPlayer.player = player2;
-    currentPlayer.avatar = './image/inu.png';
+    currentPlayer.avatar = '../assets/images/inu.png';
     currentPlayer.handCards = secondPlayerArray;
     currentPlayer.description = '';
     currentPlayer.changesLeft = 4;
     GameState.finishedPlayer = 1;
     GameState.stage = 'firstStage';
+    GameState.reScrollPoint = 'first';
 
   }
   else if (currentPlayer.player == player2) {
 
     currentPlayer.name = 'とり';
     currentPlayer.player = player1;
-    currentPlayer.avatar = './image/tori.png';
+    currentPlayer.avatar = '../assets/images/tori.png';
     currentPlayer.handCards = secondPlayerArray;
     currentPlayer.description = '';
     currentPlayer.changesLeft = 4;
     GameState.finishedPlayer = 1;
     GameState.stage = 'firstStage';
+    GameState.reScrollPoint = 'first';
 
   }
 }
@@ -1220,7 +1209,6 @@ const setSecondPlayerHandCards = () => {
   isHidden(changeStartBtn)
   setDisplay();
   info.innerHTML = `${currentPlayer.name}さん、手札を引いて下さい！`;
-  // console.log(currentPlayer)
 
   // 手札を引く ボタンを押した時
   setCardsBtn.onclick = () => {
@@ -1250,7 +1238,7 @@ const openResultModal = () => {
     //モーダル２に質問文を挿入
     const resultModalSecond = document.getElementById('resultModalSecond');
     const RM_SecondText = resultModalSecond.querySelector('p');
-    RM_SecondText.innerHTML =  `${GameState.secondPlayer}さん、どちらが勝ったと思いますか？`
+    RM_SecondText.innerHTML =  `${secondPlayer}さん、どちらが勝ったと思いますか？`
 
     const secondPlayerResultA = document.getElementById('secondPlayerResultA');
     const secondPlayerResultB = document.getElementById('secondPlayerResultB');
@@ -1266,8 +1254,7 @@ const openResultModal = () => {
       secondPlayerResultA.onclick = () => {
         isHidden(resultModalSecond); // 開
         isHidden(lastResult); //開
-        lastResult.innerHTML = `${GameState.firstPlayer}さんの勝ち！`
-        console.log(player1,player2)
+        lastResult.innerHTML = `${firstPlayer}さんの勝ち！`
       }
       // 1:1
       secondPlayerResultB.onclick = () => {
@@ -1295,7 +1282,7 @@ const openResultModal = () => {
       secondPlayerResultB.onclick = () => {
         isHidden(resultModalSecond); // 開
         isHidden(lastResult); //開
-        lastResult.innerHTML = `${GameState.secondPlayer}さんの勝ち！`
+        lastResult.innerHTML = `${secondPlayer}さんの勝ち！`
       }
 
     }
@@ -1303,48 +1290,3 @@ const openResultModal = () => {
 }
 
 
-
-// 勝ち数の記録を表示？
-// ネット対戦…？
-// Vueで作り直す…？
-
-
-
-// // ********** HBG **********
-// export const HBG_menu = () =>{
-
-//   const hamburgerBtn = document.getElementById('hamburgerBtn');
-//   const navList = document.getElementById('navList');
-
-//   hamburgerBtn.addEventListener('click', function() {
-//     setAriaExpanded(hamburgerBtn);
-//     setAriaExpanded(navList);
-//   })
-
-//   const toRules = document.getElementById('toRules');
-//   const Rules = document.getElementById('Rules');
-//   const closeRules = document.getElementById('closeRules');
-//   const toRequirements = document.getElementById('toRequirements');
-//   const Requirements = document.getElementById('Requirements');
-//   const closeRequirements = document.getElementById('closeRequirements');
-
-//   toRules.onclick = () => {
-//     setAriaExpanded(Rules);
-//     setAttr(Requirements, false)
-//     // setAttr(hamburgerBtn, false);
-//     // setAttr(navList, false);
-//   };
-//   closeRules.onclick = () => {
-//     setAriaExpanded(Rules);
-//   };
-//   toRequirements.onclick = () => {
-//     setAriaExpanded(Requirements);
-//     setAttr(Rules, false)
-//     // setAttr(hamburgerBtn, false);
-//     // setAttr(navList, false);
-//   };
-//   closeRequirements.onclick = () => {
-//     setAriaExpanded(Requirements);
-//   };
-
-// }
