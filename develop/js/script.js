@@ -86,14 +86,14 @@ document.addEventListener('DOMContentLoaded', () => {
 // ***** WindowEvent *****
 // ***Scroll***
 
-// // 表示ブレのため、スクロールされたら戻す
-// window.addEventListener('scroll', () => {
-//   let timeoutId;
-//   if ( timeoutId ) return;
-//   timeoutId = setTimeout( () => {
-//     timeoutId = 0;
-//   GoToNextStage()}, 2000);
-// });
+// 表示ブレのため、スクロールされたら戻す
+window.addEventListener('scroll', () => {
+  let timeoutId;
+  if ( timeoutId ) return;
+  timeoutId = setTimeout( () => {
+    timeoutId = 0;
+  GoToNextStage()}, 2000);
+});
 
 // ****リサイズに伴う表示のズレ補正****
 // ウィンドウサイズが変更された時
