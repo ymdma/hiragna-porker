@@ -118,7 +118,7 @@ window.addEventListener("resize", event => {
       scroll(result)
       break;
   }
-  function scroll(target){
+  function scroll(target) {
     scrollTo(0, target);
   }
 })
@@ -135,8 +135,6 @@ let resultStage = stageStep * 3;
 
 // 次のウィンドウへ移動
 function GoToNextStage() {
-
-
   // ステージの振り分け（基準となる値を取得後、string→変数にして引数へ）
   switch ( GameState.stage ) {
     case 'firstStage':
@@ -158,9 +156,9 @@ function GoToNextStage() {
 }
 // ***Scroll***
 
+
 // ****** Class付与関数 ******
 // display:none 用
-
 function isHidden(ele) {
   if (ele.classList.contains('is-hidden')) {
     ele.classList.remove('is-hidden')
@@ -191,21 +189,22 @@ function removeDisabled(target) {
 };
 
 // aria-expanded 切替
-function setAriaExpanded(target) {
+export function setAriaExpanded(target) {
   if ( target.getAttribute('aria-expanded') == 'false' ) {
     setAttr(target, 'true')
   }
-  else{
+  else {
     setAttr(target, 'false')
   }
 };
 
 // setAttribute
-function setAttr(target,val) {
+export function setAttr(target,val) {
   target.setAttribute('aria-expanded', val)
 }
 
 // ***** Functions *****
+
 
 
 
@@ -982,10 +981,6 @@ const finalConfirmModal = () => {
       isHidden(finishModal)
       setSecondPlayer(); // 次プレイヤー用にcurrentPlayerの値をセット
       setSecondPlayerHandCards(); //次プレーヤーの手札をセット
-
-
-
-      // // 重さを考慮して↓に差し替え
 
       // GameStage更新
       GameState.stage = 'firstStage'

@@ -1,8 +1,7 @@
 
 node_modules
 .vscode
-public/js
-public/scss
+public/assets
 
 subcord_webpack_config.txt
 /src/js/subcord.js

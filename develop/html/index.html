@@ -15,7 +15,7 @@
 
 <body>
 
-  <content class="wrap">
+  <div class="wrap">
 
     <!-- HEADER -->
     <header class="l-header">
@@ -40,73 +40,72 @@
       </nav>
       <!-- __G-NAV -->
     </header>
-  <!-- HEADER -->
+    <!-- HEADER -->
 
-  <!-- 動作環境 -->
-
-  <div id="Requirements" class="p-requirements" aria-expanded="false">
-    <button id="closeRequirements" class="c-close-button__x" role="button" tabindex="0">
-      ×
-    </button>
-    <h2> 制作・動作確認環境 </h2>
-    <div class="requirements-grids">
-      <p>
-        <span class="u-span-text__mac-black">Mac</span><br>
-        GoogleChrome(Latest)
-      </p>
-      <p>
-        <span class="u-span-text__pink">iOS13</span><br>
-        GoogleChrome
-      </p>
-      <p>
-        <span class="u-span-text__pink">iOS13</span><br>
-        safari
-      </p>
-      <p>
-        <span class="u-span-text__black">PCブラウザ縦幅 :</span><br>
-        640px以上推奨
-      </p>
-      <p>
-        <span class="u-span-text__black">スマホ画面サイズ :</span><br>
-        iPhone6/7/8~
-      </p>
-      <p>
-        <span class="u-span-text__black">スマホ画面縦横 :</span><br>
-        ポートレート(縦)のみ対応
-      </p>
+    <!-- 動作環境 -->
+    <div id="Requirements" class="p-requirements" aria-expanded="false">
+      <button id="closeRequirements" class="c-close-button__x" role="button" tabindex="0">
+        ×
+      </button>
+      <h2> 制作・動作確認環境 </h2>
+      <div class="requirements-grids">
+        <p>
+          <span class="u-span-text__mac-black">Mac</span><br>
+          GoogleChrome(Latest)
+        </p>
+        <p>
+          <span class="u-span-text__pink">iOS13</span><br>
+          GoogleChrome
+        </p>
+        <p>
+          <span class="u-span-text__pink">iOS13</span><br>
+          safari
+        </p>
+        <p>
+          <span class="u-span-text__black">PCブラウザ縦幅 :</span><br>
+          640px以上推奨
+        </p>
+        <p>
+          <span class="u-span-text__black">スマホ画面サイズ :</span><br>
+          iPhone6/7/8~
+        </p>
+        <p>
+          <span class="u-span-text__black">スマホ画面縦横 :</span><br>
+          ポートレート(縦)のみ対応
+        </p>
+      </div>
     </div>
-  </div>
 
-  <!-- 動作環境 -->
+    <!-- 動作環境 -->
 
-  <!-- ルール -->
-  <div id="Rules" class="p-requirements" aria-expanded="false">
-    <div id="closeRules" class="c-close-button__x" role="button" tabindex="0">
-      ×
+    <!-- ルール -->
+    <div id="Rules" class="p-requirements" aria-expanded="false">
+      <div id="closeRules" class="c-close-button__x" role="button" tabindex="0">
+        ×
+      </div>
+      <h2>
+        ゲームルール
+      </h2>
+      <p>このコンテンツは現在製作中です</p>
     </div>
-    <h2>
-      ゲームルール
-    </h2>
-    <p>このコンテンツは現在製作中です</p>
-  </div>
-  <section class="p-rule-1">
-  </section>
-  <section class="p-rule-2">
-  </section>
-  <section class="p-rule-3">
-  </section>
-  <!-- ルール -->
+    <!-- <section class="p-rule-1">
+    </section>
+    <section class="p-rule-2">
+    </section>
+    <section class="p-rule-3">
+    </section> -->
+    <!-- ルール -->
 
     <!-- START BUTTON -->
-    <section class="l-screen" >
+    <div id="startBtnScreen" class="l-screen" state="show">
       <button id="startBtn" class="c-button start-button">
         Click to start!
       </button>
-    </section>
+    </div>
     <!-- START BUTTON -->
 
     <!-- FIRST MODAL -->
-    <div id="firstAttackSelectModal" class="c-modal first-modal is-hidden">
+    <div id="firstAttackSelectModal" class="c-modal first-modal is-hidden" state="show">
       <div class="c-modal__greenback">
         <p class="c-modal__question">どちらが先にプレイする？</p>
         <!-- <button id="toriFirst" class="c-first-btn__tori"></button>
@@ -138,7 +137,7 @@
 
 
     <!-- FIRST FLAG -->
-    <div id="startFlag" class="p-start-flag is-hidden" aria-expanded="false">
+    <div id="startFlag" class="p-start-flag is-hidden" aria-expanded="false" state="show">
       <p>
         ゲームスタート
       </p>
@@ -171,7 +170,6 @@
             <li class="no4" role="figure" ></li>
             <li class="no5" role="figure" ></li>
           </ul>
-        </div>
         </div>
       </div>
 
@@ -356,7 +354,7 @@
       <div id="resultModalSecond" class="p-modal__result is-hidden">
         <p>
         </p>
-      <!-- resultModal 2 -->
+        <!-- resultModal 2 -->
         <div>
           <button id="secondPlayerResultA" tubindex="0"></button>
           <button id="secondPlayerResultB" tubindex="0"></button>
@@ -365,6 +363,6 @@
       <div id="lastResult" class="l-last-result is-hidden"></div>
 
     </section>
-  </content>
+  </div>
 </body>
 </html>

@@ -1,5 +1,5 @@
 
-// import { setAriaExpanded, setAttr } from "./script.js";
+import { setAriaExpanded, setAttr } from "./script.js";
 
 // ********** HBG **********
 export const HBG_menu = () =>{
@@ -10,6 +10,7 @@ export const HBG_menu = () =>{
   hamburgerBtn.addEventListener('click', function() {
     setAriaExpanded(hamburgerBtn);
     setAriaExpanded(navList);
+    zIndexFix();
   })
 
   const toRules = document.getElementById('toRules');
@@ -41,9 +42,39 @@ export const HBG_menu = () =>{
 
 }
 
+
+// menu のz-indexバグfix
+const changeState = (target, val) => {
+  target.setAttribute('state', val);
+
+// if ( target.getAttribute('state') = 'show' ) {
+//   target.setAttribute('state', val);
+// }
+// else {
+//   target.setAttribute('state', val);
+// }
+};
+
+const zIndexFix = () => {
+const startBtnScreen = document.getElementById('startBtnScreen');
+const firstAttackSelectModal = document.getElementById('firstAttackSelectModal');
+const startFlag = document.getElementById('startFlag');
+const hamburgerBtn = document.getElementById('hamburgerBtn');
+
+if ( hamburgerBtn.getAttribute('aria-expanded') == 'true' ) {
+  changeState(startBtnScreen, 'hide');
+  changeState(firstAttackSelectModal, 'hide');
+  changeState(startFlag, 'hide');
+}
+else {
+  changeState(startBtnScreen, 'show');
+  changeState(firstAttackSelectModal, 'show');
+  changeState(startFlag, 'show');
+}
+};
+
+
 // スマホの横置き時、「縦でお願いします」のダイアログを出す。
-
-
 export const onlyPortrait = () => {
 
   window.onorientationchange = () => {
