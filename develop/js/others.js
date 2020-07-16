@@ -2,12 +2,12 @@
 import { setAriaExpanded, setAttr } from "./script.js";
 
 // ********** HBG **********
-export const HBG_menu = () =>{
+export const HBG_menu = () => {
 
   const hamburgerBtn = document.getElementById('hamburgerBtn');
   const navList = document.getElementById('navList');
 
-  hamburgerBtn.addEventListener('click', function() {
+  hamburgerBtn.addEventListener('click', () => {
     setAriaExpanded(hamburgerBtn);
     setAriaExpanded(navList);
     zIndexFix();
@@ -56,21 +56,21 @@ const changeState = (target, val) => {
 };
 
 const zIndexFix = () => {
-const startBtnScreen = document.getElementById('startBtnScreen');
-const firstAttackSelectModal = document.getElementById('firstAttackSelectModal');
-const startFlag = document.getElementById('startFlag');
-const hamburgerBtn = document.getElementById('hamburgerBtn');
+  const startBtnScreen = document.getElementById('startBtnScreen');
+  const firstAttackSelectModal = document.getElementById('firstAttackSelectModal');
+  const startFlag = document.getElementById('startFlag');
+  const hamburgerBtn = document.getElementById('hamburgerBtn');
 
-if ( hamburgerBtn.getAttribute('aria-expanded') == 'true' ) {
-  changeState(startBtnScreen, 'hide');
-  changeState(firstAttackSelectModal, 'hide');
-  changeState(startFlag, 'hide');
-}
-else {
-  changeState(startBtnScreen, 'show');
-  changeState(firstAttackSelectModal, 'show');
-  changeState(startFlag, 'show');
-}
+  if ( hamburgerBtn.getAttribute('aria-expanded') == 'true' ) {
+    changeState(startBtnScreen, 'hide');
+    changeState(firstAttackSelectModal, 'hide');
+    changeState(startFlag, 'hide');
+  }
+  else {
+    changeState(startBtnScreen, 'show');
+    changeState(firstAttackSelectModal, 'show');
+    changeState(startFlag, 'show');
+  }
 };
 
 

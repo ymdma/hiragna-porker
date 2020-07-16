@@ -189,7 +189,7 @@ function removeDisabled(target) {
 };
 
 // aria-expanded 切替
-export function setAriaExpanded(target) {
+export const setAriaExpanded = (target) => {
   if ( target.getAttribute('aria-expanded') == 'false' ) {
     setAttr(target, 'true')
   }
