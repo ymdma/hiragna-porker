@@ -4,4 +4,4 @@ node_modules
 public/assets
 
 subcord_webpack_config.txt
-/src/js/subcord.js
+/develop/js/subcord.js
