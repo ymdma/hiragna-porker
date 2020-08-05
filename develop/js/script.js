@@ -1216,7 +1216,6 @@ const setSecondPlayerHandCards = () => {
 
 
 
-
 // 決着をつける！
 const openResultModal = () => {
   const openResultModalBtn = document.getElementById('openResultModalBtn');
