@@ -3,6 +3,10 @@
       "titleBar.activeBackground": "#c4750d",
       "titleBar.activeForeground": "#000000",
       "activityBar.background": "#132333",
-      "activityBar.foreground": "#ffffff"
+      "activityBar.foreground": "#ffffff",
+      // scrholl
+      "scrollbarSlider.activeBackground": "#c4750d",
+      "scrollbarSlider.background": "#c4750d55",
+      "scrollbarSlider.hoverBackground": "#c4750d"
   }
 }

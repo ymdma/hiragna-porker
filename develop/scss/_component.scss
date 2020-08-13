@@ -1,4 +1,4 @@
-
+// // mixin & Class  // //
 
 // モーダル
 .c-modal{
@@ -21,13 +21,11 @@
   border-radius: 50%;
   font-size: 27px;
   line-height: 26px;
-  // @include flex--center;
   text-align: center;
   cursor: pointer;
 }
 
 // アバター
-
 $avatar-size__normal: 100px;
 $avatar-size__large: 200px;
 
@@ -48,8 +46,6 @@ $avatar-size__large: 200px;
 .c-avatar,
 .c-avatar__tori,
 .c-avatar__inu {
-  // display: block;
-  // width: fit-content;
   @include avatar-img();
   margin: 0;
   @include flex--center();
@@ -86,7 +82,6 @@ $largeCardHeight:100px;
   height: $card-h;
   // margin: $card-margin;
   background: $baseWhiteColor;
-  // background: transparent;
 }
 
 @mixin card__large(
@@ -99,7 +94,6 @@ $largeCardHeight:100px;
   height: $card-h;
   // margin: $card-margin;
   background: $baseWhiteColor;
-  // background: transparent;
 
   @media (max-width:$sp) {
     width: $largeCardWidth - 9px;
@@ -170,8 +164,6 @@ $largeCardHeight:100px;
   }
 }
 .c-button:hover{
-  // background: $basePinkColor;
-
   background: #9acbea;
 }
 .c-button:disabled{
@@ -193,6 +185,7 @@ $largeCardHeight:100px;
   font-weight: 400;
   text-align: center;
   cursor: pointer;
+
   @media (max-width:$sp) {
     width: 35px;
     height: 35px;
@@ -259,23 +252,6 @@ $largeCardHeight:100px;
       margin: 0;
     }
   }
-  // &:before{
-  //   content: "変換候補";
-  //   // width: 80px;
-  //   height: 40px;
-  //   padding: 10px 20px 10px 0;
-  //   position: absolute;
-  //   top: 72%;
-  //   left: 0%;
-  //   background: #fff;
-  //   border-style: solid;
-  //   border-width: 2px 2px 2px 0;
-  //   border-color: #000;
-  //   border-radius: 2px;
-
-  //   word-break: keep-all;
-
-  // }
 }
 
 
@@ -288,6 +264,7 @@ $largeCardHeight:100px;
   width:90px;
   height:90px;
   fill: #d36d24;
+
   @media (max-width:$sp) {
     width:70px;
     height:70px;

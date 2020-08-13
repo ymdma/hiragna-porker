@@ -3,7 +3,6 @@
 .is-active{
   display: block !important;
 }
-
 .is-hidden{
   display: none !important;
 }
@@ -16,6 +15,7 @@ display: flex;
 justify-content: space-between;
 align-items: center;
 }
+
 // center
 @mixin flex--center(
   $text: left,
@@ -101,7 +101,7 @@ $small: 12px;
   animation-fill-mode: forwards;
 }
 
-@keyframes sort-window-height {
+@keyframes sort-window-height{
   0%   {top: 100%;}
   20%  {top: 20%;}
   50%  {top: 0%;}
@@ -115,17 +115,15 @@ $small: 12px;
 // p[role="title"]
 @mixin role-title(
   $shadow: none
-) {
+){
   width: fit-content;
   height: 40px;
-
-  // margin: 0 0 40px 0;
   @include strongText(
     $color: #000,
     $size: $large - 3px,
     $line-height: $large - 3px
     );
-    text-shadow:$shadow;
+  text-shadow:$shadow;
 }
 
 
@@ -135,7 +133,6 @@ $small: 12px;
 .u-span-text__mac-black{
   color: #1d1d1f;
 }
-
 .u-span-text__pink{
   color: #e05e7a;
 }

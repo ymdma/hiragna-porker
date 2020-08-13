@@ -1,15 +1,14 @@
-
+// HEADER
 
 .l-header{
   width: 100%;
   height: 50px;
-  // padding: 0 20px 0 20px ;
-  // position: fixed;
   position: absolute;
   top: 0;
   @include flex--space-between;
   background: #777777dd;
   z-index:101;
+
   @media (max-width: $sp) {
     height:60px;
     padding: 2px 10px 2px 10px ;
@@ -18,15 +17,16 @@
 
 // **** LOGO [h1] ****
 .p-logo{
-  // width: fit-content;
-
   background: transparent;
   display: flex;
+  z-index: 111;
 
   @media (max-width:$sp) {
-    width: 150px;
+    width: 130px;
     margin-left: 10px;
     flex-direction: column;
+    font-size: $large - 15px;
+    line-height: 30px;
   }
   @media (min-width:$pc) {
     width: 330px;
@@ -34,28 +34,23 @@
     justify-content: space-between;
   }
 
-  z-index: 111;
-  @media (max-width: $sp) {
-    font-size: $large - 15px;
-    width: 130px;
-    line-height: 30px;
-  }
   p{
     display: inline;
-    // @media (max-width:$sp) {
-
-    // }
   }
+
   .c-logo-text {
     font-size: $large;
     font-family: "Nico Moji";
+
     @media (max-width:$sp) {
       height: 22px;
       line-height: $large - 18px;
       font-size: $large - 10px;
     }
   }
+
   p:nth-of-type(3):after{
+
     @media (max-width:$sp) {
       content: "★";
       color: #f2c820;
@@ -68,13 +63,16 @@
       opacity: 0.8;
     }
   }
+
   p:nth-of-type(3){
     margin-left: 36px;
   }
+
   .c-de {
     position: absolute;
     top: -6px;
     left: 158px;
+
     @media (max-width:$sp) {
       top: 28px;
       left: 10px;
@@ -87,25 +85,28 @@
       font-size: $large;
       transform: rotate(3deg);
       animation:
-      anime-span-opacity 100s linear infinite ;
+          anime-span-opacity 100s linear infinite ;
+
       @media (max-width:$sp) {
         font-size: $large - 17px;
         // transform: rotate(8deg);
         transform: rotate(0deg);
       }
     }
+
     .c-de__E{
       display: inline-block;
       color: #ff0000;
       font-size: 34px;
       transform: rotate(17deg);
       transform-origin: 30% 65%;
+
       @media (max-width: $sp) {
         font-size: 22px;
-        // transform: rotate(20deg) translateX(-8px) translateY(8px);
         transform: rotate(0deg) translateX(-7px);
+      }
     }
-  }
+
   .star{
     width: 0;
     height: 0;
@@ -118,24 +119,25 @@
     border-bottom: 28px solid #f2c820;
     z-index: 111;
     animation:
-    anime-star-rotate 30s linear infinite,
-    anime-star-opacity 100s linear infinite ;
+        anime-star-rotate 30s linear infinite,
+        anime-star-opacity 100s linear infinite;
+
     @media (max-width:$sp) {
       display:none;
     }
 
     &:before,
     &:after {
-      border-left: 40px solid transparent;
-      border-right: 40px solid transparent;
-      border-bottom: 28px solid #f2c820;
       content: '';
       display: block;
+      width: 0;
       height: 0;
       left: -40px;
       position: absolute;
       top: 0;
-      width: 0;
+      border-left: 40px solid transparent;
+      border-right: 40px solid transparent;
+      border-bottom: 28px solid #f2c820;
     }
     &:before {
       transform: rotate(71deg);
@@ -147,79 +149,81 @@
 }
 
 
-// ☆ keyflames
+// // keyflames
 @keyframes anime-star-rotate {
   from { transform: rotate(35deg);}
-  to { transform: rotate(395deg);}
+  to   { transform: rotate(395deg);}
 }
+
 @keyframes anime-star-opacity {
-    1%  {opacity: 0.5;}
-    2%  {opacity: 0.18;}
-    3%  {opacity: 0.5;}
-    4%  {opacity: 0.5;}
-    5%  {opacity: 0.18;}
-    6%  {opacity: 0.5;}
-    7%  {opacity: 0.5;}
-    8%  {opacity: 0.5;}
-    9%  {opacity: 0.18;}
-    10%  {opacity: 0.45;}
-    11%  {opacity: 0.18;}
-    12%  {opacity: 0.4;}
-    13%  {opacity: 0;}
-    99%  {opacity: 0;}
+    1%    {opacity: 0.5;}
+    2%    {opacity: 0.18;}
+    3%    {opacity: 0.5;}
+    4%    {opacity: 0.5;}
+    5%    {opacity: 0.18;}
+    6%    {opacity: 0.5;}
+    7%    {opacity: 0.5;}
+    8%    {opacity: 0.5;}
+    9%    {opacity: 0.18;}
+    10%   {opacity: 0.45;}
+    11%   {opacity: 0.18;}
+    12%   {opacity: 0.4;}
+    13%   {opacity: 0;}
+    99%   {opacity: 0;}
     100%  {opacity: 0.5;}
 }
+
 @keyframes anime-span-opacity {
-    1%  {opacity: 0.35;}
-    2%  {opacity: 0.7;}
-    3%  {opacity: 0.35;}
-    4%  {opacity: 0.35;}
-    5%  {opacity: 0.7;}
-    6%  {opacity: 0.35;}
-    7%  {opacity: 0.35;}
-    8%  {opacity: 0.35;}
-    9%  {opacity: 0.7;}
-    10%  {opacity: 0.35;}
-    11%  {opacity: 0.7;}
-    12%  {opacity: 0.35;}
-    13%  {opacity: 0.7;}
-    99%  {opacity: 0.7;}
+    1%    {opacity: 0.35;}
+    2%    {opacity: 0.7;}
+    3%    {opacity: 0.35;}
+    4%    {opacity: 0.35;}
+    5%    {opacity: 0.7;}
+    6%    {opacity: 0.35;}
+    7%    {opacity: 0.35;}
+    8%    {opacity: 0.35;}
+    9%    {opacity: 0.7;}
+    10%   {opacity: 0.35;}
+    11%   {opacity: 0.7;}
+    12%   {opacity: 0.35;}
+    13%   {opacity: 0.7;}
+    99%   {opacity: 0.7;}
     100%  {opacity: 0.35;}
 }
 
 
-// **** HBG ****
-
+// **** 以下HBG ****
 
 .p-nav{
-
   height: 50px;
   display: flex;
   align-items: center;
   overflow: hidden;
   cursor: pointer;
+
   @media (min-width:$pc){
     width: 250px;
   }
   @media (max-width:$sp){
     width: fit-content;
   }
+
   .c-hamburger-button {
     width: 40px;
     height: 40px;
     position: absolute;
-    // position: fixed; // バージョンアップ用
+    right: 10px;
+    background: transparent;
+    @include no-border();
+    z-index:102;
+    cursor: pointer;
+
     @media (min-width:$pc){
       top: 5px;
     }
     @media (max-width:$sp){
       top: 10px;
     }
-    right: 10px;
-    background: transparent;
-    @include no-border();
-    z-index:102;
-    cursor: pointer;
 
     &__line{
       display: block;
@@ -257,8 +261,8 @@
 .c-hamburger-button[aria-expanded="true"] {
 
   .c-hamburger-button__line{
-
     background: transparent;
+
     &:before{
       top: 0;
       transform: rotate(45deg);
@@ -286,7 +290,9 @@
     width: 100%;
     height: 100%;
   }
+
   @media (min-width:$pc){
+
     &[aria-expanded="false"] {
       width: fit-content;
       height: 0;
@@ -297,7 +303,7 @@
       flex-direction: nowrap;
       opacity: 0;
       transition: all .3s;
-      // display:none;
+
       li{
         width: 95px;
         height: fit-content;
@@ -309,20 +315,19 @@
         text-align: center;
       }
     }
+
     &[aria-expanded="true"] {
       width: fit-content;
       height: 100%;
       position: relative;
       top: 0px;
       right: 0px;
-
       display: flex;
       flex-direction: nowrap;
       opacity: 1;
       transition: all .3s;
-      // justify-content: center;
-      // align-items: center;
       z-index:200;
+
       li{
         width: 95px;
         height: fit-content;
@@ -333,19 +338,18 @@
         );
         text-align: center;
       }
+
       li:hover{
         color:$basePinkColor;
         font-weight: 600;
       }
-      // li:last-of-type{
-      // }
     }
   }
+
   @media(max-width:$sp){
 
     &[aria-expanded="false"] {
       display:none;
-
     }
     &[aria-expanded="true"] {
       width: 100%;
@@ -358,7 +362,8 @@
       flex-direction: column;
       justify-content: center;
       align-items: center;
-          z-index:200;
+      z-index:200;
+
       li{
         width: fit-content;
         height: fit-content;
@@ -366,15 +371,14 @@
         @include strongText(
           $size:30px
         );
+
+        &:hover{
+          color:#3177a0;
+        }
+        &:last-of-type{
+          margin-bottom: 100px;
+        }
       }
-      li:hover{
-        color:#3177a0;
-      }
-      li:last-of-type{
-        margin-bottom: 100px;
-      }
-      // opacity: 1;
-      // transition: all .3s;
     }
   }
 }
@@ -385,7 +389,6 @@
   height: calc(100% - 50px);
   position: absolute;
   top: 50px;
-  // left: 50%;
   background: #dddddde0;
   @include flex--center;
   transition: all .5s;
@@ -401,20 +404,24 @@
     margin: -40px 0 30px 0;
     @include strongText(
       $size: 30px,
-      $line-height: 30px);
+      $line-height: 30px
+    );
 
-      @media (max-width: $sp){
-        @include strongText(
-          $size: 25px,
-          $line-height: 25px);
-      }
-
+    @media (max-width: $sp){
+      @include strongText(
+        $size: 25px,
+        $line-height: 25px
+      );
+    }
   }
+
   .requirements-grids{
     display: grid;
+
     @media (min-width: $pc){
       grid-template-columns: 230px 230px 230px;
     }
+
     @media (max-width: $sp){
       grid-template-columns: 240px ;
       overflow-y: scroll;
@@ -428,6 +435,7 @@
       color: #d9480f;
     }
   }
+
   .c-close-button__x{
     position: absolute;
     top: 15px;

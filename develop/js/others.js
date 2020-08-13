@@ -1,5 +1,4 @@
-
-import { setAriaExpanded, setAttr } from "./script.js";
+import { setAriaExpanded, setAttrAE } from "./script.js";
 
 // ********** HBG **********
 export const HBG_menu = () => {
@@ -22,37 +21,24 @@ export const HBG_menu = () => {
 
   toRules.onclick = () => {
     setAriaExpanded(Rules);
-    setAttr(Requirements, false)
-    // setAttr(hamburgerBtn, false);
-    // setAttr(navList, false);
+    setAttrAE(Requirements, false)
   };
   closeRules.onclick = () => {
     setAriaExpanded(Rules);
   };
   toRequirements.onclick = () => {
     setAriaExpanded(Requirements);
-    setAttr(Rules, false)
-    // setAttr(hamburgerBtn, false);
-    // setAttr(navList, false);
+    setAttrAE(Rules, false)
   };
   closeRequirements.onclick = () => {
     setAriaExpanded(Requirements);
   };
-
-
 }
 
 
 // menu のz-indexバグfix
 const changeState = (target, val) => {
   target.setAttribute('state', val);
-
-// if ( target.getAttribute('state') = 'show' ) {
-//   target.setAttribute('state', val);
-// }
-// else {
-//   target.setAttribute('state', val);
-// }
 };
 
 const zIndexFix = () => {

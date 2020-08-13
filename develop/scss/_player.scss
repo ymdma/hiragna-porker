@@ -5,16 +5,14 @@
   height: 160px;
   margin: 10px 0 0 0; //仮
   padding: 0px 15px 0px 15px;
-
   background: #6b2d00;
   box-shadow: inset 0 0 20px 0 rgba(0,0,0,0.7);
-  // display: flex;
-  // justify-content: center;
-  // align-items: center;
+
   @media (max-width:$sp) {
     height: 140px;
     padding: 0px 5px 0px 5px;
   }
+
   .p-player-area{
     width: 100%;
     height: 100%;
@@ -22,6 +20,7 @@
     display: flex;
     justify-content: center;
     align-items: center;
+
     // 左
     .c-avatar{
       background: $baseWhiteColor;
@@ -36,18 +35,16 @@
 }
 
 
-
 // 右
 .c-control-area{
-  // width: 500px;
   width: 100%;
   height: 138px;
   display: flex;
   flex-direction: column;
-  // background: #ded5ac;
   background: $baseYellowColor;
   @include with-border();
   box-shadow: inset 0 0 50px 0 rgba(0,0,0,0.1);
+
   @media (min-width:$pc) {
     padding: 0 5%;
   }
@@ -55,9 +52,6 @@
     height: 133px;
     padding: 0px 5px 0px 5px;
   }
-  // @media (max-width:$sp) {
-  //   height: 121px;
-  // }
 
   .c-buttons{
     width: inherit;
@@ -81,10 +75,10 @@
 //詳細度下げるためツリーから独立
 .c-hand-cards{
   order:2;
-  // width: inherit;
-
   display: flex;
   justify-content: space-around;
+  cursor: pointer;
+
   @media (min-width:$pc) {
     height: 84px;
     padding: 0 10%;
@@ -94,8 +88,8 @@
     height: 64px;
     margin: 10px 0;
     align-items: flex-end;
-
   }
+
   li{
     padding: 8px 0;
     @include card(
@@ -107,7 +101,6 @@
     @include strongText;
     text-align: center;
   };
-  cursor: pointer;
 }
 
 .js_handCards > .is-select{

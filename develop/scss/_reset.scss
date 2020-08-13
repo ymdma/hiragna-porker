@@ -1,12 +1,4 @@
-
-// figure {
-// 	display: block;
-// 	margin-block-start: 0em;
-// 	margin-block-end: 0em;
-// 	margin-inline-start: 0px;
-// 	margin-inline-end: 0px;
-// }
-// YUIベースのリセットCSS
+// YUIベース リセットCSS
 *{
 	box-sizing: border-box;
 	font-family: "Hiragino Kaku Gothic Pro", Meiryo, Osaka, "MS PGothic", sans-serif;
@@ -123,3 +115,10 @@ select {
 legend {
 	color:#000;
 }
+// figure {
+// 	display: block;
+// 	margin-block-start: 0em;
+// 	margin-block-end: 0em;
+// 	margin-inline-start: 0px;
+// 	margin-inline-end: 0px;
+// }

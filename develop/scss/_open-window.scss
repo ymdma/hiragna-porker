@@ -1,17 +1,16 @@
-// cardOpenWindow
+// OPEN-CARD WINDOW
 .open-window{
   position: absolute;
   top: 300%;
   left: 0;
   width: 100%;
   height: 100%;
-
   padding: 2em 1em;
   display: flex;
   flex-direction: column;
   justify-content: space-around;
   align-items: center;
-  
+
   @media(min-width:$pc){
     min-height:640px;
   }
@@ -25,16 +24,16 @@
     }
   }
 }
-[class^="l-player"]{
+
+[class^="l-player"] {
   width: 100%;
   display: flex;
   align-items: flex-start;
   background: #ffffff;
-  // background: #007788;
-
 }
 
 .l-playerB{
+
   .c-avatar{
     order: 2;
   }
@@ -64,11 +63,8 @@
     .c-display-hand-cards{
       @media(max-width:$sp){
         width: 60%;
-
       }
       @media(min-width:$pc){
-        // width: 100%;
-        // padding: 0 20%;
         width: 60%;
       }
     }
@@ -90,8 +86,6 @@
     $weight: 600
     );
   letter-spacing: 1.5px;
-  // font-family: "Nico Moji";
-  // z-index: 101;
   cursor: pointer;
 
   @media (max-width:$sp){
@@ -116,9 +110,11 @@
   background: #000000bb;
   @include with-border;
   @include mainText($color:$baseWhiteColor);
+
   p{
     margin: 0 0 40px 0;
   }
+
   div{
     display: flex;
     button{
@@ -131,6 +127,7 @@
         );
       cursor: pointer;
     }
+
     button:nth-child(1){
       margin: 0 20px 0 0;
       background: #aa4444;
@@ -154,6 +151,7 @@
 .l-last-result{
   @include flex--center($text:center);
   text-align: center;
+
   p{
     transform: translateX(-50%) translateY(-50%);
   }

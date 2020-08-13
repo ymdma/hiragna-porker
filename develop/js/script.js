@@ -22,7 +22,7 @@ const data = [
 // 元配列からコピーして使用
 let cards = data.concat();
 
-  // フィッシャー・イェーツのシャッフルにて配列内の順番をランダムに。
+  // フィッシャー・イェーツのシャッフル  配列内の順番をランダムに。
 for ( var i = cards.length - 1; i  >  0 ; i-- ) {
   var j = Math.floor( Math.random() * ( i + 1 ) );
   var tmp = cards[i];
@@ -191,15 +191,15 @@ function removeDisabled(target) {
 // aria-expanded 切替
 export const setAriaExpanded = (target) => {
   if ( target.getAttribute('aria-expanded') == 'false' ) {
-    setAttr(target, 'true')
+    setAttrAE(target, 'true')
   }
   else {
-    setAttr(target, 'false')
+    setAttrAE(target, 'false')
   }
 };
 
 // setAttribute
-export function setAttr(target,val) {
+export function setAttrAE(target,val) {
   target.setAttribute('aria-expanded', val)
 }
 
@@ -838,21 +838,6 @@ const styleChangeToolbar = () => {
     setAriaExpanded(styleCenter)
     }
   }
-  // カーソルのある場所に文字列を挿入(タグを直接入力してしまうので辞める)
-  // lineBreak.onclick = () => {
-  //   let sentence = descriptionWriteAreA.value
-  //   const textLength = sentence.length
-  //   const cursorPosition = descriptionWriteAreA.selectionStart
-  //   const cursorBefore = sentence.substr(0, cursorPosition);
-  //   const addBrTag = '</br>'
-  //   const cursorAfter = sentence.substr(cursorPosition, textLength);
-
-  //   sentence = cursorBefore + addBrTag + cursorAfter
-  //   descriptionWriteAreA.value = sentence
-
-  //   descriptionDisplayAreaB.innerHTML = `${descriptionWriteAreA.value}`
-  //   descriptionWriteAreA.focus()
-  // }
 
   openPopFontsize.addEventListener('click', (event) => {
     isHidden(popToolbarFontsize);
@@ -1285,5 +1270,3 @@ const openResultModal = () => {
     }
   }
 }
-
-

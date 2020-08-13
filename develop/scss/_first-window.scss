@@ -1,10 +1,7 @@
 .wrap {
   width: 100%;
   height: 100%;
-
 }
-
-// 後ほどリファクタリングするべし
 
 .first-modal{
   @media (max-width: $sp) {
@@ -28,20 +25,20 @@
         $color:#000,
         $size:$large - 12px
       );
+
       .c-modal__question{
         margin: 0 0 20px 0;
       }
     }
   }
+
   .c-modal__select{
     width: 100%;
     display: flex;
     align-items: center;
     justify-content: center;
     @include mainText();
-    @media (max-width:$sp) {
 
-    }
     figure{
       margin-block-start: 0em;
       margin-block-end: 0em;
@@ -49,34 +46,37 @@
       margin-inline-end: 0px;
       cursor: pointer;
     }
+
     figure:nth-of-type(2){
       margin-inline-start: 40px;
       margin-inline-end: 40px;
+      cursor: default;
+
       @media (max-width:$sp) {
         margin-inline-start: 20px;
         margin-inline-end: 20px;
       }
-      cursor: default;
-
     }
   }
+
   .c-image__vs{
+
     img{
       width: 200px;
+
       @media (max-width:$sp) {
         width: 100px;
         margin: 0;
       }
     }
   }
+
   .c-avatar__tori:hover{
     transform: translateY(-10px);
   }
   .c-avatar__inu:hover{
     transform: translateY(-10px);
   }
-  // 時間があれば選んだ時のぴょんぴょん動作つける
-  // keyflames組む→classにセット→jsの流れの中でclass付与→setTimeout（次の処理）
 }
 
 
@@ -94,16 +94,16 @@
   transition: all .3s ease-in;
   opacity: 0;
   Z-index:101;
+
   &[aria-expanded="true"] {
-    // display: block;
     transform: translateX(0);
     opacity: 1;
   }
   &[aria-expanded="false"] {
-    // display: block;
     transform: translateX(100%);
     opacity: 0;
   }
+
   p{
     width: fit-content;
     @include strongText($color:$baseWhiteColor);
@@ -121,7 +121,6 @@
 .l-screen{
   width: 100%;
   height: calc(100% - 50px);
-  // padding: 5px 0;
   position: absolute;
   top: 50px;
   @include flex--center;
@@ -131,10 +130,12 @@
   @media (max-width:$sp) {
     height: calc(100% - 60px);
     top: 60px;
+
     &[state="hide"]{
       display:none
     }
   }
+
   &:hover{
     background: #00000066;
   }
@@ -161,10 +162,12 @@
       // background: #00000033;
       box-shadow: none;
     }
+
     &:active{
       color: #cccccc;
       // box-shadow: inset 0 0 2px 0 rgba(0,0,0,0.7);
     }
+
     &:disabled{
       opacity: 0;
     }
@@ -172,13 +175,10 @@
 }
 
 
-
 // information  ***間借り中***
 .l-information-area{
-  // width: 500px;
   width: 100%;
   height: 60px;
-  // margin: 10px 0 0;
   padding: 0 10% 0;
   @include flex--center($text:center);
   background: #777777dd;
@@ -189,7 +189,6 @@
     $size: 20px,
     $line-height: 20px);
   z-index: 21;
-
 
   @media (max-width:$sp) {
     height: 42px;

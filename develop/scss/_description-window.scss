@@ -6,12 +6,11 @@
   left: 0;
   width: 100%;
   height: 100%;
-
   @include flex__center($text: center);
   @include with-border();
-  // background:  #333333cc;
   background: $baseYellowColor;
   box-shadow: inset 0 0 60px 0 rgba(0,0,0,0.5);
+
   @media(min-width:$pc){
     min-height:630px;
   }
@@ -19,18 +18,17 @@
   [role="title"]{
     @include role-title();
     margin: 0 0 30px 0;
+
     @media (max-width:$sp) {
       font-size: 30px;
     }
   }
+
   textarea{
     width: 64%;
     padding: 2px 8px;
-    // margin: 0 18%;
-    // height: auto;
   }
   .p-desc-toolbar{
-    // width: 64%;
     width: fit-content;
     height: fit-content;
     margin: 0px 0 30px 0;
@@ -42,19 +40,21 @@
     align-items: center;
     justify-content: center;
     flex-wrap: wrap;
-    // border: double #919191b4 2px;
     border-radius: 2px;
+
     .c-color-picker{
       width: 35px;
       height: 35px;
       margin: 0px 1px;
       border-width: 1px;
       border-radius: 1px;
+
       @media (max-width:$sp){
         width: 30px;
         height: 30px;
       }
     }
+
     .c-icon{
       margin: 0px 1px;
     }
@@ -72,18 +72,20 @@
   .c-button{
     height: 30px;
     width: 30px;
-    // background: transparent;
     background: #ffffffcb;
     @include no-border;
     border-radius: 50%;
     box-shadow: inset 0 0 0.5px 1.5px $baseGrayColor;
     overflow: hidden;
+
     &:nth-of-type(1){
       color:red;
       transform: rotate(-22deg) translateX(-50px) translateY(-53px);
+
       @media (max-width:$sp){
         transform: rotate(-1deg) translateX(-66.5px) translateY(40px);
         }
+
       &:hover{
         box-shadow: inset 0 0 0.5px 2.5px $basePinkColor;
       }
@@ -91,19 +93,24 @@
     &:nth-of-type(2){
       color:green;
       transform: rotate(1deg) translateX(-68px) translateY(-34px);//1deg入れないとhoverが動作しない
+
       @media (max-width:$sp){
         transform: rotate(1deg) translateX(-66px) translateY(41.5px);//1deg入れないとhoverが動作しない
       }
+
       &:hover{
         box-shadow: inset 0 0 0.5px 2.5px $basePinkColor;
       }
     }
+
     &:nth-of-type(3){
       color:blue;
       transform: rotate(22deg) translateX(-75px) translateY(-3px) ;
+
       @media (max-width:$sp){
         transform: rotate(1deg) translateX(-67.5px) translateY(41.5px);
       }
+
       &:hover{
         box-shadow: inset 0 0 0.5px 2.5px $basePinkColor;
       }
@@ -118,16 +125,19 @@
   display: flex;
   align-items: center;
   justify-content: space-around;
+
   .p-avatar-box{
     width: 100px;
     height: 100px;
     display: flex;
     justify-content: center;
     align-items: center;
+
     @media (min-width:$pc) {
       margin-right: 20px; // 吹き出し分のズレ
     }
   }
+
   .p-display__set{
     width: calc(100% - 200px);
     height: 220px;
@@ -145,25 +155,16 @@
     @media (max-width:$sp) {
       width: 90%;
     }
-    // ul{
-    //   margin-block-start: 0em;
-    //   margin-block-end: 0em;
-    //   margin-inline-start: 0px;
-    //   margin-inline-end: 0px;
-    //   padding-inline-start: 00px;
-    // }
+
     .hand-cards_outer{
       width: 100%;
-      // height: 40px;
       background: transparent;
-
     }
 
     .c-display-description{
       width: 100%;
       height:fit-content;
       min-height: 3em;
-      // padding: 0 18%;
       max-height: 5em;
       padding: 2px 0;
       background: transparent;
@@ -179,6 +180,7 @@
 
 //吹き出し
 .l-display:before{
+
   @media (min-width:$pc) {
     content:"";
     width: 0px;
@@ -195,6 +197,7 @@
 }
 
 .finish-modal{
+
   > div{
     width: fit-content;
     height: fit-content;
@@ -203,12 +206,14 @@
     background: #ffffffee;
     @include with-border();
     @include mainText();
+
     p{
       width: fit-content;
       height: fit-content;
       margin: 0 0 30px 0;
       // text-align: center;
     }
+
     .button-outer{
       width:200px;
       display: flex;

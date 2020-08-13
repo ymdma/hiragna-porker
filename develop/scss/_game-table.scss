@@ -1,4 +1,5 @@
-// ゲームテーブル
+// ゲームテーブル (FIRST WINDOW 上部)
+
 .first-window{
   widows: 100%;
   height: 100%;
@@ -8,13 +9,13 @@
   @include flex--center($jc:flex-start);
   box-shadow: inset 0 0 500px 300px rgba(0,0,0,0.5);
   overflow: hidden;
+
   @media(min-width:$pc){
     min-height:640px;
   }
 }
 
 .l-game-table{
-
   width: 100%;
   height: 350px;
   margin: 50px 0 0 0;
@@ -25,6 +26,7 @@
               inset 0 0 300px rgba(0,0,0,0.2);
   z-index: 10;
   overflow: hidden;
+
   @media(max-width: $sp){
     height: 330px;
   }
@@ -62,7 +64,6 @@
     top: +3px;
     left: +2.5px;
     z-index: 1;
-
   }
 }
 
@@ -82,6 +83,7 @@
 
   .c-game-table-hand-cards{
     display: flex;
+
     li{
       @include card(
         $card-w: $tableHandCardWidth,
@@ -91,11 +93,11 @@
       @include with-border();
       box-shadow: 0.5px 22px 0.5px 0.5px rgba(0,0,0,0.2);
     }
-    .no1{z-index:15; transform: rotate(-26deg) translateY(17px) translateX(3px); }
-    .no2{z-index:14; transform: rotate(-13deg) translateY( 4px) translateX(3px); }
-    .no3{z-index:13; transform: rotate();}
-    .no4{z-index:12; transform: rotate( 13deg) translateY(4px) translateX(-3px); }
-    .no5{z-index:11; transform: rotate(26deg) translateY(17px) translateX(-3px); }
+    .no1 {z-index:15; transform: rotate(-26deg) translateY(17px) translateX(3px); }
+    .no2 {z-index:14; transform: rotate(-13deg) translateY( 4px) translateX(3px); }
+    .no3 {z-index:13; transform: rotate();}
+    .no4 {z-index:12; transform: rotate( 13deg) translateY(4px) translateX(-3px); }
+    .no5 {z-index:11; transform: rotate(26deg) translateY(17px) translateX(-3px); }
   }
 }
 
@@ -127,11 +129,11 @@
       @include with-border();
       box-shadow: 0.5px 22px 0.5px 0.5px rgba(0,0,0,0.2);
     }
-    .no1{z-index:15; transform: rotate(-26deg) translateY(17px) translateX(3px); }
-    .no2{z-index:14; transform: rotate(-13deg) translateY( 4px) translateX(3px); }
-    .no3{z-index:13; transform: rotate();}
-    .no4{z-index:12; transform: rotate( 13deg) translateY(4px) translateX(-3px); }
-    .no5{z-index:11; transform: rotate(26deg) translateY(17px) translateX(-3px); }
+    .no1 {z-index:15; transform: rotate(-26deg) translateY(17px) translateX(3px); }
+    .no2 {z-index:14; transform: rotate(-13deg) translateY( 4px) translateX(3px); }
+    .no3 {z-index:13; transform: rotate();}
+    .no4 {z-index:12; transform: rotate( 13deg) translateY(4px) translateX(-3px); }
+    .no5 {z-index:11; transform: rotate(26deg) translateY(17px) translateX(-3px); }
   }
 }
 
@@ -146,10 +148,10 @@
   background:transparent;
   border: dotted $baseGrayColor 2px;
   z-index: 10;
+
   li{
     margin: 0 5px 0 5px;
     padding: 11px 0;
-
     @include mainText(
       $size: $medium + 12px,
       $line-height: $medium + 12px
@@ -169,6 +171,7 @@
   position: absolute;
   top: 332px;
   left: 72.5px;
+
   @media (max-width:$sp) {
     top: 312px;
   }
@@ -178,6 +181,7 @@
   position: absolute;
   top: 58px;
   right: 72.5px;
+
   @media (max-width:$sp) {
     right: calc((100vw - 230px)/2);
   }
@@ -185,5 +189,3 @@
     top: 68px;
   }
 }
-
-
